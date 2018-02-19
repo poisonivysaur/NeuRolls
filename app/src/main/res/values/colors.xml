@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#009624</color>
     <color name="colorPrimaryLight">#5efc82</color>
     <color name="colorAccent">#ff9100</color>
+
+    <color name="bg_delete_background">#fa315b</color>
+    <color name="item_name">#535353</color>
+    <color name="year">#999999</color>
+    <color name="name">#222222</color>
+    <color name="description">#a9a9a9</color>
 </resources>
