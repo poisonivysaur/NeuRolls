@@ -12,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    FloatingActionButton menu1,menu2,menu3 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,22 +82,55 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_home) {
+            // Handle the home action
+        } else if (id == R.id.nav_films) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_books) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_games) {
 
-        } else if (id == R.id.nav_share) {
+        } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setupFABs(){
+        // FAB Menus
+        menu1 = (FloatingActionButton)findViewById(R.id.subFloatingMenu1) ;
+        menu2 = (FloatingActionButton)findViewById(R.id.subFloatingMenu2) ;
+        menu3 = (FloatingActionButton)findViewById(R.id.subFloatingMenu3) ;
+        menu1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MainActivity.this , " Alarm Icon clicked ", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        menu2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MainActivity.this , "BackUp Icon clicked", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        menu3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MainActivity.this , "Settings Icon clicked", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }
