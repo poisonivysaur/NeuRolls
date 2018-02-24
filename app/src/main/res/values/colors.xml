@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#009624</color>
     <color name="colorPrimaryLight">#5efc82</color>
     <color name="colorAccent">#ff9100</color>
+    <color name="colorAccentDark">#c56200</color>
+    <color name="colorAccentLight">#ffc246</color>
 
     <color name="bg_delete_background">#fa315b</color>
     <color name="item_name">#535353</color>
