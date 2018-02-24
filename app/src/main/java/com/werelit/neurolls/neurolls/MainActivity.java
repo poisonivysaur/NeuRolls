@@ -1,5 +1,6 @@
 package com.werelit.neurolls.neurolls;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the home action
+            Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+            startActivity(intent);
         } else if (id == R.id.nav_films) {
 
         } else if (id == R.id.nav_books) {
@@ -106,6 +109,11 @@ public class MainActivity extends AppCompatActivity
         menu1 = (FloatingActionButton)findViewById(R.id.subFloatingMenu1) ;
         menu2 = (FloatingActionButton)findViewById(R.id.subFloatingMenu2) ;
         menu3 = (FloatingActionButton)findViewById(R.id.subFloatingMenu3) ;
+
+        menu1.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        menu2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        menu3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
         menu1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
