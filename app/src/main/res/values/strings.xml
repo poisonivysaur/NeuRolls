@@ -9,4 +9,8 @@
 
     <string name="delete">DELETE</string>
 
+    <string name="menu_item_films">Films</string>
+    <string name="menu_item_books">Books</string>
+    <string name="menu_item_games">Games</string>
+
 </resources>
