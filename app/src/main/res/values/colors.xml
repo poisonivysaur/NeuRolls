@@ -13,7 +13,7 @@
     <color name="name">#222222</color>
     <color name="description">#a9a9a9</color>
 
-    <color name="films">#673ab7</color>
+    <color name="films">#e91e63</color>
     <color name="books">#03a9f4</color>
-    <color name="games">#8bc34a</color>
+    <color name="games">#673ab7</color>
 </resources>
