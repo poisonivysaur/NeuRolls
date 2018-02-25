@@ -12,4 +12,8 @@
     <color name="year">#999999</color>
     <color name="name">#222222</color>
     <color name="description">#a9a9a9</color>
+
+    <color name="films">#673ab7</color>
+    <color name="books">#03a9f4</color>
+    <color name="games">#8bc34a</color>
 </resources>
