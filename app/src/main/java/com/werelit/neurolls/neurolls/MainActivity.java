@@ -14,10 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import io.github.yavski.fabspeeddial.FabSpeedDial;
-import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
+import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
+//
+//import io.github.yavski.fabspeeddial.FabSpeedDial;
+//import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -110,6 +114,31 @@ public class MainActivity extends AppCompatActivity
 
     public void setupFABs(){
 
+        FabSpeedDial fab = (FabSpeedDial) findViewById(R.id.fab);
+        fab.addOnStateChangeListener(new FabSpeedDial.OnStateChangeListener() {
+            @Override
+            public void onStateChange(boolean open) {
+                // do something
+            }
+        });
+
+        fab.addOnMenuItemClickListener(new FabSpeedDial.OnMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(FloatingActionButton fab, TextView textView, int id) {
+                // do something
+                if (id == R.id.action_films) {
+                    // Handle the home action
+                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+                    startActivity(intent);
+                } else if (id == R.id.action_books) {
+                    Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
+
+                } else if (id == R.id.action_games) {
+                    Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        /*
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
@@ -136,41 +165,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
-
-        // FAB Menus
-/*
-        menu1 = (FloatingActionButton)findViewById(R.id.sub_button_1) ;
-        menu2 = (FloatingActionButton)findViewById(R.id.sub_button_2) ;
-        menu3 = (FloatingActionButton)findViewById(R.id.sub_button_3) ;
-
-        menu1.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        menu2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        menu3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-
-        menu1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(MainActivity.this , " Alarm Icon clicked ", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        menu2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(MainActivity.this , "BackUp Icon clicked", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-        menu3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(MainActivity.this , "Settings Icon clicked", Toast.LENGTH_LONG).show();
-
-            }
-        });*/
+        */
     }
 }

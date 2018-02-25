@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:floatingMenuActionButton="http://github.com/rjsvieira/floatingMenu"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:floatingMenuActionButton="http://github.com/rjsvieira/floatingMenu"
     tools:context="com.werelit.neurolls.neurolls.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -22,24 +22,33 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-<!--
-    <android.support.design.widget.FloatingActionButton
+    <!--
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
+
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/fab_speed_dial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:fabGravity="bottom_end"
+            app:fabMenu="@menu/fab_menu"
+            app:fabBackgroundTint="?attr/colorAccent"
+            app:miniFabBackgroundTintList="@array/fab_menu_item_colors"
+            app:miniFabDrawableTint="@android:color/white"
+            app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
+        -->
+    <io.github.kobakei.materialfabspeeddial.FabSpeedDial
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
--->
-    <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:id="@+id/fab_speed_dial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:fabGravity="bottom_end"
-        app:fabMenu="@menu/fab_menu"
-        app:fabBackgroundTint="?attr/colorAccent"
-        app:miniFabBackgroundTintList="@array/fab_menu_item_colors"
-        app:miniFabDrawableTint="@android:color/white"
-        app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:fab_menu="@menu/fab_menu"
+        app:fab_miniFabBackgroundColorList="@array/fab_menu_item_colors"
+        app:fab_miniFabDrawableTint="@android:color/white"
+        app:fab_miniFabTextColor="@android:color/white" />
 </android.support.design.widget.CoordinatorLayout>

@@ -24,7 +24,8 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     // FAB
-    compile 'io.github.yavski:fab-speed-dial:1.0.6'
+    // compile 'io.github.yavski:fab-speed-dial:1.0.6'
+    compile 'com.github.kobakei:MaterialFabSpeedDial:master-SNAPSHOT'
     // CardView
     compile 'com.android.support:cardview-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
