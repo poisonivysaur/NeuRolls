@@ -1,6 +1,7 @@
 package com.werelit.neurolls.neurolls;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
@@ -33,24 +34,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/      setupFABs();
+        setupFABs();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        setupNavigationDrawer();
     }
 
     @Override
@@ -166,5 +157,18 @@ public class MainActivity extends AppCompatActivity
             }
         });
         */
+    }
+
+    public void setupNavigationDrawer(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setItemIconTintList(null);
+        //For each icon
+        navigationView.getMenu().findItem(R.id.nav_home).getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.nav_films).getIcon().setColorFilter(getResources().getColor(R.color.films), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.nav_books).getIcon().setColorFilter(getResources().getColor(R.color.books), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.nav_games).getIcon().setColorFilter(getResources().getColor(R.color.games), PorterDuff.Mode.SRC_IN);
+
     }
 }
