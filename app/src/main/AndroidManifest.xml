@@ -22,8 +22,7 @@
 
         <activity
             android:name=".EntertainmentRoll"
-            android:label="Restaurant Randomizer"
-            android:parentActivityName=".MainActivity" />
+            android:label="Restaurant Randomizer"/>
     </application>
 
 </manifest>

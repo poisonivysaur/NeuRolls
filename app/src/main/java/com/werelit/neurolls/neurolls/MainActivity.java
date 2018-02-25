@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent i = new Intent();
         if (id == R.id.nav_home) {
             // Handle the home action
-            Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
-            startActivity(intent);
+            i.setClass(getBaseContext(),EntertainmentRoll.class);
         } else if (id == R.id.nav_films) {
 
         } else if (id == R.id.nav_books) {
