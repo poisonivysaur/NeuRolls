@@ -48,7 +48,7 @@ public class EntertainmentRoll extends AppCompatActivity implements RecyclerItem
         prepareEntertainments();
 
         // prepare the buttons in the UI
-        prepareButtons();
+        //prepareButtons();
     }
 
     /**
@@ -104,7 +104,7 @@ public class EntertainmentRoll extends AppCompatActivity implements RecyclerItem
     /**
      * This method setups the buttons to be displayed in the Entertainment activity UI
      */
-    public void prepareButtons(){
+    /*public void prepareButtons(){
 
         // ADD Button to go to add a new Entertainment activity
         Button add = (Button) findViewById(R.id.add);
@@ -147,7 +147,7 @@ public class EntertainmentRoll extends AppCompatActivity implements RecyclerItem
                 mEmptyStateTextView.setVisibility(View.VISIBLE);
             }
         });
-    }
+    }*/
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {

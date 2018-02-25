@@ -82,7 +82,7 @@ public class NumbersFragment extends Fragment implements RecyclerItemTouchHelper
 
         return rootView;
     }
-    
+
     /**
      * This method setups the recycler view
      * - setting the adapter
