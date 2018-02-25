@@ -2,6 +2,7 @@ package com.werelit.neurolls.neurolls;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-*/
+*/      setupFABs();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -105,8 +109,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setupFABs(){
-        // FAB Menus
 
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+            @Override
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                // TODO: Do something with yout menu items, or return false if you don't want to show them
+                return true;
+            }
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                //TODO: Start some activity
+                // Handle navigation view item clicks here.
+                int id = menuItem.getItemId();
+
+                if (id == R.id.action_films) {
+                    // Handle the home action
+                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+                    startActivity(intent);
+                } else if (id == R.id.action_books) {
+                    Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
+
+                } else if (id == R.id.action_games) {
+                    Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            }
+        });
+
+        // FAB Menus
+/*
         menu1 = (FloatingActionButton)findViewById(R.id.sub_button_1) ;
         menu2 = (FloatingActionButton)findViewById(R.id.sub_button_2) ;
         menu3 = (FloatingActionButton)findViewById(R.id.sub_button_3) ;
@@ -139,6 +171,6 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this , "Settings Icon clicked", Toast.LENGTH_LONG).show();
 
             }
-        });
+        });*/
     }
 }

@@ -31,52 +31,15 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 -->
-
-    <!--<rjsv.floatingmenu.floatingmenubutton.FloatingMenuButton
-        android:id="@+id/my_floating_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        floatingMenuActionButton:anchored="false"
-        floatingMenuActionButton:animationType="radial"
-        floatingMenuActionButton:dispositionEndAngle="360"
-        floatingMenuActionButton:dispositionStartAngle="0"
-        floatingMenuActionButton:subActionButtonRadius="100">
-
-        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
-            android:id="@+id/sub_button_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_movie_black_24dp" />
-
-        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
-            android:id="@+id/sub_button_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_book_black_24dp" />
-
-        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
-            android:id="@+id/sub_button_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_videogame_asset_black_24dp" />
-
-
-    </rjsv.floatingmenu.floatingmenubutton.FloatingMenuButton>-->
-
     <io.github.yavski.fabspeeddial.FabSpeedDial
+        android:id="@+id/fab_speed_dial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         app:fabGravity="bottom_end"
         app:fabMenu="@menu/fab_menu"
-        app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="?attr/colorPrimaryDark"
+        app:fabBackgroundTint="?attr/colorAccent"
+        app:miniFabBackgroundTintList="@array/fab_menu_item_colors"
+        app:miniFabDrawableTint="@android:color/white"
         app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
 </android.support.design.widget.CoordinatorLayout>
