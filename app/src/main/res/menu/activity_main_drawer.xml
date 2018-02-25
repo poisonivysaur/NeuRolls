@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -8,22 +7,18 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
-            android:orderInCategory="0"
             android:title="@string/home" />
         <item
             android:id="@+id/nav_films"
             android:icon="@drawable/ic_movie_black_24dp"
-            android:orderInCategory="1"
             android:title="@string/menu_item_films" />
         <item
             android:id="@+id/nav_books"
             android:icon="@drawable/ic_book_black_24dp"
-            android:orderInCategory="2"
             android:title="@string/menu_item_books" />
         <item
             android:id="@+id/nav_games"
             android:icon="@drawable/ic_videogame_asset_black_24dp"
-            android:orderInCategory="3"
             android:title="@string/menu_item_games" />
     </group>
 
