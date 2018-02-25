@@ -43,6 +43,7 @@
             app:miniFabDrawableTint="@android:color/white"
             app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
         -->
+
     <io.github.kobakei.materialfabspeeddial.FabSpeedDial
         android:id="@+id/fab"
         android:layout_width="match_parent"
