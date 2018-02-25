@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_films"
             android:icon="@drawable/ic_movie_black_24dp"
-            android:title="Films" />
+            android:title="@string/menu_item_films" />
         <item
             android:id="@+id/nav_books"
             android:icon="@drawable/ic_book_black_24dp"
-            android:title="Books" />
+            android:title="@string/menu_item_books" />
         <item
             android:id="@+id/nav_games"
             android:icon="@drawable/ic_videogame_asset_black_24dp"
-            android:title="Games" />
+            android:title="@string/menu_item_games" />
     </group>
 
     <!--
