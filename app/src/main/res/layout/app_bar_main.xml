@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:floatingMenuActionButton="http://github.com/rjsvieira/floatingMenu"
     tools:context="com.werelit.neurolls.neurolls.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -112,20 +113,42 @@
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </RelativeLayout>-->
-    <com.dekoservidoni.omfm.OneMoreFabMenu
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <rjsv.floatingmenu.floatingmenubutton.FloatingMenuButton
+        android:id="@+id/my_floating_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_gravity="bottom|end"
-        app:content_options="@menu/omfm_content_options"
-        app:close_on_click="true"
-        app:color_main_button="@color/colorPrimaryDark"
-        app:color_secondary_buttons="@color/colorPrimary"
-        app:expanded_background_color="@color/omfm_expanded_background_sample"
-        app:rotate_main_button="false"
-        app:size_main_button="@integer/omfm_fab_size_normal"
-        app:size_secondary_buttons="@integer/omfm_fab_size_mini"
-        app:label_text_color="@color/colorPrimary"
-        app:enable_main_as_action="true"
-        app:main_action_drawable="@mipmap/ic_launcher"/>
+        android:layout_margin="@dimen/fab_margin"
+        floatingMenuActionButton:anchored="false"
+        floatingMenuActionButton:animationType="radial"
+        floatingMenuActionButton:dispositionEndAngle="360"
+        floatingMenuActionButton:dispositionStartAngle="0"
+        floatingMenuActionButton:subActionButtonRadius="100">
+
+        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
+            android:id="@+id/sub_button_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_movie_black_24dp" />
+
+        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
+            android:id="@+id/sub_button_2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_book_black_24dp" />
+
+        <rjsv.floatingmenu.floatingmenubutton.subbutton.FloatingSubButton
+            android:id="@+id/sub_button_3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_videogame_asset_black_24dp" />
+
+
+    </rjsv.floatingmenu.floatingmenubutton.FloatingMenuButton>
+
 </android.support.design.widget.CoordinatorLayout>

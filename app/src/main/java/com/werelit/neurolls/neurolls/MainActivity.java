@@ -106,9 +106,10 @@ public class MainActivity extends AppCompatActivity
 
     public void setupFABs(){
         // FAB Menus
-        menu1 = (FloatingActionButton)findViewById(R.id.subFloatingMenu1) ;
-        menu2 = (FloatingActionButton)findViewById(R.id.subFloatingMenu2) ;
-        menu3 = (FloatingActionButton)findViewById(R.id.subFloatingMenu3) ;
+
+        menu1 = (FloatingActionButton)findViewById(R.id.sub_button_1) ;
+        menu2 = (FloatingActionButton)findViewById(R.id.sub_button_2) ;
+        menu3 = (FloatingActionButton)findViewById(R.id.sub_button_3) ;
 
         menu1.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         menu2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
