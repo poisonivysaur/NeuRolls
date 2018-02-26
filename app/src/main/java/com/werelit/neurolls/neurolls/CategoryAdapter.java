@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * {@link CategoryAdapter} is a {@link FragmentPagerAdapter} that can provide the layout for
  * each list item based on a data source which is a list of {@link Entertainment} objects.
@@ -13,6 +16,8 @@ public class CategoryAdapter extends FragmentPagerAdapter {
 
     /** Context of the app */
     private Context mContext;
+    private final List<Fragment> mFragments = new ArrayList<>();
+    private final List<String> mFragmentTitles = new ArrayList<>();
 
     /**
      * Create a new {@link CategoryAdapter} object.
@@ -24,6 +29,12 @@ public class CategoryAdapter extends FragmentPagerAdapter {
     public CategoryAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
+
+    }
+
+    public void addFragment(Fragment fragment, String title) {
+        mFragments.add(fragment);
+        mFragmentTitles.add(title);
     }
 
     /**
@@ -31,15 +42,7 @@ public class CategoryAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return new TestFragment();
-        } else if (position == 1) {
-            return new TestFragment();
-        } else if (position == 2) {
-            return new TestFragment();
-        } else {
-            return new TestFragment();
-        }
+        return mFragments.get(position);
     }
 
     /**
@@ -47,19 +50,11 @@ public class CategoryAdapter extends FragmentPagerAdapter {
      */
     @Override
     public int getCount() {
-        return 4;
+        return mFragments.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return mContext.getString(R.string.menu_item_all);
-        } else if (position == 1) {
-            return mContext.getString(R.string.menu_item_films);
-        } else if (position == 2) {
-            return mContext.getString(R.string.menu_item_books);
-        } else {
-            return mContext.getString(R.string.menu_item_games);
-        }
+        return mFragmentTitles.get(position);
     }
 }

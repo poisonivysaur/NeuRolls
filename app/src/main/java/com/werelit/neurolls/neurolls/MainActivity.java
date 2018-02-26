@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity
 
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
 
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
@@ -165,34 +169,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        /*
-        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
-        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
-            @Override
-            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                // TODO: Do something with yout menu items, or return false if you don't want to show them
-                return true;
-            }
-            @Override
-            public boolean onMenuItemSelected(MenuItem menuItem) {
-                //TODO: Start some activity
-                // Handle navigation view item clicks here.
-                int id = menuItem.getItemId();
-
-                if (id == R.id.action_films) {
-                    // Handle the home action
-                    Intent intent = new Intent(MainActivity.this, TestActivity.class);
-                    startActivity(intent);
-                } else if (id == R.id.action_books) {
-                    Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
-
-                } else if (id == R.id.action_games) {
-                    Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
-                }
-                return true;
-            }
-        });
-        */
     }
 
     public void setupNavigationDrawer(){
