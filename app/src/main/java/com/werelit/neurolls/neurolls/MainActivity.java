@@ -44,30 +44,9 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
         setupNavigationDrawer();
-
-        // Find the view pager that will allow the user to swipe between fragments
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-        // Create an adapter that knows which fragment should be shown on each page
-        CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
-        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
-
-        // Set the adapter onto the view pager
-        viewPager.setAdapter(adapter);
-
-        // Find the tab layout that shows the tabs
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        // Connect the tab layout with the view pager. This will
-        //   1. Update the tab layout when the view pager is swiped
-        //   2. Update the view pager when a tab is selected
-        //   3. Set the tab layout's tab names with the view pager's adapter's titles
-        //      by calling onPageTitle()
-        tabLayout.setupWithViewPager(viewPager);
+        setupFragments();
     }
 
     @Override
@@ -184,5 +163,30 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().findItem(R.id.nav_books).getIcon().setColorFilter(getResources().getColor(R.color.books), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.nav_games).getIcon().setColorFilter(getResources().getColor(R.color.games), PorterDuff.Mode.SRC_IN);
 
+    }
+
+    public void setupFragments(){
+        // Find the view pager that will allow the user to swipe between fragments
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_films).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_books).toUpperCase());
+        adapter.addFragment(new TestFragment(), getResources().getString(R.string.menu_item_games).toUpperCase());
+
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
+
+        // Find the tab layout that shows the tabs
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        // Connect the tab layout with the view pager. This will
+        //   1. Update the tab layout when the view pager is swiped
+        //   2. Update the view pager when a tab is selected
+        //   3. Set the tab layout's tab names with the view pager's adapter's titles
+        //      by calling onPageTitle()
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

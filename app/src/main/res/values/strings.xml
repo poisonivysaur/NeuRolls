@@ -20,4 +20,10 @@
     <string name="menu_item_books">Books</string>
     <string name="menu_item_games">Games</string>
 
+
+    <string name="menu_night_mode">Night mode</string>
+    <string name="menu_night_mode_system">Follow system</string>
+    <string name="menu_night_mode_day">Day (always)</string>
+    <string name="menu_night_mode_night">Night (always)</string>
+    <string name="menu_night_mode_auto">Auto</string>
 </resources>
