@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class TestFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    /** The list containing Entertainment objects */               private List<Entertainment> entertainments = new ArrayList<>();
-    /** The recycler view containing the Entertainment items */    private RecyclerView mRecyclerView;
-    /** The adapter used for the recycler view */               private EntertainmentAdapter mAdapter;
+    /** The list containing Media objects */               private List<Media> entertainments = new ArrayList<>();
+    /** The recycler view containing the Media items */    private RecyclerView mRecyclerView;
+    /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
@@ -43,8 +43,8 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         // setup the recycler view adapter, layout, etc.
         prepareRecyclerView(rootView);
 
-        // add Entertainment items into the Entertainments list
-        prepareEntertainments();
+        // add Media items into the Medias list
+        prepareMedias();
 
         // prepare the buttons in the UI
         prepareButtons(rootView);
@@ -73,7 +73,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // specify an adapter (see also next example)
-        mAdapter = new EntertainmentAdapter(entertainments);
+        mAdapter = new MediaAdapter(entertainments);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -85,29 +85,29 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
     }
 
     /**
-     * This method adds the dummy Entertainment data into the Entertainments list.
+     * This method adds the dummy Media data into the Medias list.
      */
-    private void prepareEntertainments() {
-        entertainments.add(new Entertainment("Pericos", "Canteen @ LS building DLSU", 5));
-        entertainments.add(new Entertainment("La Casita @ 6th Andrew", "Canteen @ Andrew building DLSU", 9));
-        entertainments.add(new Entertainment("La Casita @ 2nd Razon", "Canteen @ Razon building DLSU", 3));
-        entertainments.add(new Entertainment("first resto", "Canteen @ LS building DLSU", 5));
-        entertainments.add(new Entertainment("second resto", "Canteen @ Andrew building DLSU", 9));
-        entertainments.add(new Entertainment("third resto", "Canteen @ Razon building DLSU", 3));
-        entertainments.add(new Entertainment("fourth resto", "Canteen @ LS building DLSU", 5));
-        entertainments.add(new Entertainment("5th rest", "Canteen @ Andrew building DLSU", 9));
-        entertainments.add(new Entertainment("6th resto", "Canteen @ Razon building DLSU", 3));
-        entertainments.add(new Entertainment("seventh resto", "Canteen @ LS building DLSU", 5));
-        entertainments.add(new Entertainment("eighth resto", "Canteen @ Andrew building DLSU", 9));
-        entertainments.add(new Entertainment("9th", "Canteen @ Razon building DLSU", 3));
+    private void prepareMedias() {
+        entertainments.add(new Media("Pericos", "Canteen @ LS building DLSU", 5));
+        entertainments.add(new Media("La Casita @ 6th Andrew", "Canteen @ Andrew building DLSU", 9));
+        entertainments.add(new Media("La Casita @ 2nd Razon", "Canteen @ Razon building DLSU", 3));
+        entertainments.add(new Media("first resto", "Canteen @ LS building DLSU", 5));
+        entertainments.add(new Media("second resto", "Canteen @ Andrew building DLSU", 9));
+        entertainments.add(new Media("third resto", "Canteen @ Razon building DLSU", 3));
+        entertainments.add(new Media("fourth resto", "Canteen @ LS building DLSU", 5));
+        entertainments.add(new Media("5th rest", "Canteen @ Andrew building DLSU", 9));
+        entertainments.add(new Media("6th resto", "Canteen @ Razon building DLSU", 3));
+        entertainments.add(new Media("seventh resto", "Canteen @ LS building DLSU", 5));
+        entertainments.add(new Media("eighth resto", "Canteen @ Andrew building DLSU", 9));
+        entertainments.add(new Media("9th", "Canteen @ Razon building DLSU", 3));
     }
 
     /**
-     * This method setups the buttons to be displayed in the Entertainment activity UI
+     * This method setups the buttons to be displayed in the Media activity UI
      */
     public void prepareButtons(final View rootView){
 
-        // ADD Button to go to add a new Entertainment activity
+        // ADD Button to go to add a new Media activity
         Button add = (Button) rootView.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +117,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
             }
         });
 
-        // SURPRISE button to pick a random Entertainment
+        // SURPRISE button to pick a random Media
         Button surprise = (Button) rootView.findViewById(R.id.surprise);
         surprise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +127,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 mAdapter.notifyDataSetChanged(); //enable this to view the shuffling animation
 
                 if(entertainments.size() != 0){
-                    Snackbar snackbar = Snackbar.make(view, "Go for... " + entertainments.get(entertainments.size()/2).getmEntertainmentName() + "!!!", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, "Go for... " + entertainments.get(entertainments.size()/2).getmMediaName() + "!!!", Snackbar.LENGTH_LONG);
                     snackbar.setAction("Action", null).show();
                     TextView snackbarActionTextView =  snackbar.getView().findViewById( android.support.design.R.id.snackbar_text );
                     snackbarActionTextView.setTextSize( 30 );
@@ -136,7 +136,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
             }
         });
 
-        // CLEAR Button to go to add a new Entertainment activity
+        // CLEAR Button to go to add a new Media activity
         Button clear = (Button) rootView.findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +144,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 entertainments.clear();
                 //mAdapter.notifyDataSetChanged();
                 mRecyclerView.setVisibility(View.GONE);
-                mEmptyStateTextView.setText("No Entertainments. :(");
+                mEmptyStateTextView.setText("No Medias. :(");
                 mEmptyStateTextView.setVisibility(View.VISIBLE);
             }
         });
@@ -152,19 +152,19 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof EntertainmentAdapter.MyViewHolder) {
+        if (viewHolder instanceof MediaAdapter.MyViewHolder) {
             // get the removed item name to display it in snack bar
-            String name = entertainments.get(viewHolder.getAdapterPosition()).getmEntertainmentName();
+            String name = entertainments.get(viewHolder.getAdapterPosition()).getmMediaName();
 
             // backup of removed item for undo purpose
-            final Entertainment deletedItem = entertainments.get(viewHolder.getAdapterPosition());
+            final Media deletedItem = entertainments.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
             mAdapter.removeItem(viewHolder.getAdapterPosition());
             if(entertainments.size() == 0 ){
                 mRecyclerView.setVisibility(View.GONE);
-                mEmptyStateTextView.setText("No Entertainments. :(");
+                mEmptyStateTextView.setText("No Medias. :(");
                 mEmptyStateTextView.setVisibility(View.VISIBLE);
             }
 

@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdapter.MyViewHolder> {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder> {
 
-    private List<Entertainment> entertainments;
+    private List<Media> mediaList;
 
-    public EntertainmentAdapter(List<Entertainment> restaurantList) {
-        this.entertainments = restaurantList;
+    public MediaAdapter(List<Media> restaurantList) {
+        this.mediaList = restaurantList;
     }
 
     @Override
@@ -31,21 +31,21 @@ public class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Entertainment entertainment = entertainments.get(position);
-        holder.name.setText(entertainment.getmEntertainmentName());
-        holder.desc.setText(entertainment.getmEntertainmentAuthor());
-        holder.year.setText("" + entertainment.getmEntertainmentYear());
+        Media entertainment = mediaList.get(position);
+        holder.name.setText(entertainment.getmMediaName());
+        holder.desc.setText(entertainment.getmMediaAuthor());
+        holder.year.setText("" + entertainment.getmMediaYear());
         holder.modelIndex = position;
 
     }
 
     @Override
     public int getItemCount() {
-        return entertainments.size();
+        return mediaList.size();
     }
 
     public void removeItem(int position) {
-        entertainments.remove(position);
+        mediaList.remove(position);
         // notify the item removed by position
         // to perform recycling
         // for view delete animations
@@ -53,8 +53,8 @@ public class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdap
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Entertainment item, int position) {
-        entertainments.add(position, item);
+    public void restoreItem(Media item, int position) {
+        mediaList.add(position, item);
         // notify item added by position
         notifyItemInserted(position);
     }
