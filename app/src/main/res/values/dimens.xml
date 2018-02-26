@@ -28,4 +28,5 @@
 
     <dimen name="navigation_icon_size">24dp</dimen>
     <dimen name ="subheading_label">16sp</dimen>
+    <dimen name ="caption_label">12sp</dimen>
 </resources>
