@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity
         Intent i = new Intent();
         if (id == R.id.nav_home) {
             // Handle the home action
-            i.setClass(getBaseContext(),EntertainmentRoll.class);
+            i.setClass(getBaseContext(),TestActivity.class);
         } else if (id == R.id.nav_films) {
-            i.setClass(getBaseContext(),EntertainmentRoll.class);
+            i.setClass(getBaseContext(),TestActivity.class);
         } else if (id == R.id.nav_books) {
-            i.setClass(getBaseContext(),EntertainmentRoll.class);
+            i.setClass(getBaseContext(),TestActivity.class);
         } else if (id == R.id.nav_games) {
-            i.setClass(getBaseContext(),EntertainmentRoll.class);
+            i.setClass(getBaseContext(),TestActivity.class);
         } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                 // do something
                 if (id == R.id.action_films) {
                     // Handle the home action
-//                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+//                    Intent intent = new Intent(MainActivity.this, TestActivity.class);
 //                    startActivity(intent);
                 } else if (id == R.id.action_books) {
                     Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (id == R.id.action_films) {
                     // Handle the home action
-                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+                    Intent intent = new Intent(MainActivity.this, TestActivity.class);
                     startActivity(intent);
                 } else if (id == R.id.action_books) {
                     Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();

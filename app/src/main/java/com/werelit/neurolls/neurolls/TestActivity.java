@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class TestActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     /** The list containing Entertainment objects */               private List<Entertainment> entertainments = new ArrayList<>();
     /** The recycler view containing the Entertainment items */    private RecyclerView mRecyclerView;
@@ -30,27 +29,25 @@ public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelp
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(
-                R.layout.entertainment_roll, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.entertainment_roll);
 
         // use a constraint layout for the delete snackbar with UNDO
-        constraintLayout = rootView.findViewById(R.id.constraint_layout);
+        constraintLayout = findViewById(R.id.constraint_layout);
 
         // set visibility of the empty view to be GONE initially
-        mEmptyStateTextView = (TextView) rootView.findViewById(R.id.empty_view);
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
 
         // setup the recycler view adapter, layout, etc.
-        prepareRecyclerView(rootView);
+        prepareRecyclerView();
 
         // add Entertainment items into the Entertainments list
         prepareEntertainments();
 
         // prepare the buttons in the UI
-        prepareButtons(rootView);
-
-        return rootView;
+        prepareButtons();
     }
 
     /**
@@ -59,15 +56,15 @@ public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelp
      * - setting the layout of the recycler view
      * - adding an item touch listener, etc.
      */
-    public void prepareRecyclerView(View rootView){
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycle_view);
+    public void prepareRecyclerView(){
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycle_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager for the recycler view
-        mLayoutManager = new LinearLayoutManager(rootView.getContext());
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // This draws a line separator for each row, but card views are used so no need for this
@@ -106,20 +103,20 @@ public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelp
     /**
      * This method setups the buttons to be displayed in the Entertainment activity UI
      */
-    public void prepareButtons(final View rootView){
+    public void prepareButtons(){
 
         // ADD Button to go to add a new Entertainment activity
-        Button add = (Button) rootView.findViewById(R.id.add);
+        Button add = (Button) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(rootView.getContext(), MainActivity.class);
+                Intent intent = new Intent(TestActivity.this, MainActivity.class);
                 //startActivityForResult(intent, ADD_RESTO_REQUEST);
             }
         });
 
         // SURPRISE button to pick a random Entertainment
-        Button surprise = (Button) rootView.findViewById(R.id.surprise);
+        Button surprise = (Button) findViewById(R.id.surprise);
         surprise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,7 +135,7 @@ public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelp
         });
 
         // CLEAR Button to go to add a new Entertainment activity
-        Button clear = (Button) rootView.findViewById(R.id.clear);
+        Button clear = (Button) findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
