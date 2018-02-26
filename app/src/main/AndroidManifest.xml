@@ -24,6 +24,11 @@
             android:name=".TestActivity"
             android:label="Test Activity" />
 
+        <activity
+            android:name=".TestAddActivity"
+            android:label="Test Add Activity"
+            android:parentActivityName=".MainActivity"/>
+
     </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TestActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class TestActivity extends MainActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     /** The list containing Entertainment objects */               private List<Entertainment> entertainments = new ArrayList<>();
     /** The recycler view containing the Entertainment items */    private RecyclerView mRecyclerView;
@@ -32,6 +31,7 @@ public class TestActivity extends AppCompatActivity implements RecyclerItemTouch
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entertainment_roll);
+        //super.onCreateDrawer(savedInstanceState); BASE CLASS INHERITANCE
 
         // use a constraint layout for the delete snackbar with UNDO
         constraintLayout = findViewById(R.id.constraint_layout);
