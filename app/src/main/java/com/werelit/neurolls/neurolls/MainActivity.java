@@ -1,6 +1,7 @@
 package com.werelit.neurolls.neurolls;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -198,6 +199,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
         //For each icon
         navigationView.getMenu().findItem(R.id.nav_home).getIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.nav_archived).getIcon().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.nav_search).getIcon().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.nav_films).getIcon().setColorFilter(getResources().getColor(R.color.films), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.nav_books).getIcon().setColorFilter(getResources().getColor(R.color.books), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.nav_games).getIcon().setColorFilter(getResources().getColor(R.color.games), PorterDuff.Mode.SRC_IN);
