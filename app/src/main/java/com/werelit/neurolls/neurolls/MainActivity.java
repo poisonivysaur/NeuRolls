@@ -26,6 +26,8 @@ import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         setupNavigationDrawer();
 
         // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
@@ -104,24 +106,30 @@ public class MainActivity extends AppCompatActivity
         Intent i = new Intent();
         if (id == R.id.nav_home) {
             // Handle the home action
-            i.setClass(getBaseContext(),TestActivity.class);
+            //i.setClass(getBaseContext(),TestActivity.class);
+            viewPager.setCurrentItem(0);
         } else if (id == R.id.nav_films) {
-            i.setClass(getBaseContext(),TestActivity.class);
+            //i.setClass(getBaseContext(),TestActivity.class);
+            viewPager.setCurrentItem(1);
         } else if (id == R.id.nav_books) {
-            i.setClass(getBaseContext(),TestActivity.class);
+            //i.setClass(getBaseContext(),TestActivity.class);
+            viewPager.setCurrentItem(2);
         } else if (id == R.id.nav_games) {
-            i.setClass(getBaseContext(),TestActivity.class);
+            //i.setClass(getBaseContext(),TestActivity.class);
+            viewPager.setCurrentItem(3);
         } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }*/
+
+        /*
         if(item.getItemId() == R.id.nav_home)
             setTitle("NeuRolls");
         else
             setTitle(item.getTitle());
         startActivity(i);
-
+        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -143,8 +151,8 @@ public class MainActivity extends AppCompatActivity
                 // do something
                 if (id == R.id.action_films) {
                     // Handle the home action
-//                    Intent intent = new Intent(MainActivity.this, TestActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                    startActivity(intent);
                 } else if (id == R.id.action_books) {
                     Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
 
