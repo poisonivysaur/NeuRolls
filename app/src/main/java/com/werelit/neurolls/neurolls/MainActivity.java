@@ -26,7 +26,6 @@ import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FloatingActionButton menu1,menu2,menu3 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
