@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.werelit.neurolls.neurolls.NumbersFragment;
-import com.werelit.neurolls.neurolls.R;
-
 /**
  * {@link CategoryAdapter} is a {@link FragmentPagerAdapter} that can provide the layout for
  * each list item based on a data source which is a list of {@link Entertainment} objects.
@@ -35,13 +32,13 @@ public class CategoryAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new NumbersFragment();
+            return new EntertainmentRoll();
         } else if (position == 1) {
-            return new NumbersFragment();
+            return new EntertainmentRoll();
         } else if (position == 2) {
-            return new NumbersFragment();
+            return new EntertainmentRoll();
         } else {
-            return new NumbersFragment();
+            return new EntertainmentRoll();
         }
     }
 
