@@ -44,6 +44,7 @@
                     android:layout_marginRight="@dimen/padd_10"
                     android:layout_toLeftOf="@id/delete_icon"
                     android:text="@string/delete"
+                    android:textAllCaps="true"
                     android:textColor="#fff"
                     android:textSize="13dp" />
 
