@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_films"
+        android:icon="@drawable/ic_movie_black_24dp"
+        android:orderInCategory="0"
+        android:title="@string/menu_item_films" />
+    <item
+        android:id="@+id/action_books"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:orderInCategory="1"
+        android:title="@string/menu_item_books" />
+    <item
+        android:id="@+id/action_games"
+        android:icon="@drawable/ic_videogame_asset_black_24dp"
+        android:orderInCategory="2"
+        android:title="@string/menu_item_games" />
+</menu>

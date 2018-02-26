@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="fab_menu_item_colors">
+        <item>@color/films</item>
+        <item>@color/books</item>
+        <item>@color/games</item>
+    </integer-array>
+
+    <integer-array name="nav_menu_item_colors">
+        <item>@color/colorAccent</item>
+        <item>@color/films</item>
+        <item>@color/books</item>
+        <item>@color/games</item>
+    </integer-array>
+</resources>
