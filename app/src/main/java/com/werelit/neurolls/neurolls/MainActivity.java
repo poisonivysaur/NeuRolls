@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity
                 // do something
                 if (id == R.id.action_films) {
                     // Handle the home action
-                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(MainActivity.this, EntertainmentRoll.class);
+//                    startActivity(intent);
                 } else if (id == R.id.action_books) {
                     Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
 
