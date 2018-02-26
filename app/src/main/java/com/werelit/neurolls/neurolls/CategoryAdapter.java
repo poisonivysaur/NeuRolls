@@ -32,13 +32,13 @@ public class CategoryAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new EntertainmentRoll();
+            return new TestFragment();
         } else if (position == 1) {
-            return new EntertainmentRoll();
+            return new TestFragment();
         } else if (position == 2) {
-            return new EntertainmentRoll();
+            return new TestFragment();
         } else {
-            return new EntertainmentRoll();
+            return new TestFragment();
         }
     }
 
