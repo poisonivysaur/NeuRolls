@@ -1,26 +1,22 @@
 package com.werelit.neurolls.neurolls;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-public class EntertainmentRoll extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class EntertainmentRoll extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     /** The list containing Entertainment objects */               private List<Entertainment> entertainments = new ArrayList<>();
     /** The recycler view containing the Entertainment items */    private RecyclerView mRecyclerView;
@@ -30,25 +26,27 @@ public class EntertainmentRoll extends AppCompatActivity implements RecyclerItem
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.entertainment_roll);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView =  inflater.inflate(
+                R.layout.entertainment_roll, container, false);
 
         // use a constraint layout for the delete snackbar with UNDO
-        constraintLayout = findViewById(R.id.constraint_layout);
+        constraintLayout = rootView.findViewById(R.id.constraint_layout);
 
         // set visibility of the empty view to be GONE initially
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        mEmptyStateTextView = (TextView) rootView.findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
 
         // setup the recycler view adapter, layout, etc.
-        prepareRecyclerView();
+        prepareRecyclerView(rootView);
 
         // add Entertainment items into the Entertainments list
         prepareEntertainments();
 
         // prepare the buttons in the UI
         //prepareButtons();
+
+        return rootView;
     }
 
     /**
@@ -57,15 +55,15 @@ public class EntertainmentRoll extends AppCompatActivity implements RecyclerItem
      * - setting the layout of the recycler view
      * - adding an item touch listener, etc.
      */
-    public void prepareRecyclerView(){
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+    public void prepareRecyclerView(View rootView){
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycle_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager for the recycler view
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(rootView.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // This draws a line separator for each row, but card views are used so no need for this
