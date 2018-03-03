@@ -13,10 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-/**
- * Created by inoue on 03/03/2018.
- */
-
 public class ConnectMovieDB {
 
     private static final String TAG = ConnectMovieDB.class.getSimpleName();

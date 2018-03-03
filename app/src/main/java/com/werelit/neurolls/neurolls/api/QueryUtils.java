@@ -11,10 +11,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by inoue on 03/03/2018.
- */
-
 public class QueryUtils {
 
     private static final String TAG = QueryUtils.class.getSimpleName();
