@@ -33,7 +33,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Media entertainment = mediaList.get(position);
         holder.name.setText(entertainment.getmMediaName());
-        holder.desc.setText(entertainment.getmMediaAuthor());
+        holder.desc.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
         holder.modelIndex = position;
 

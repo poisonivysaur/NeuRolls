@@ -1,18 +1,18 @@
 package com.werelit.neurolls.neurolls;
 
 public class Media {
-    /** name for the media */
+    /** name of the media */
     private String mMediaName;
 
-    /** description for the media */
-    private String mMediaAuthor;
+    /** the genre of the media */
+    private String mMediaGenre;
 
-    /** weight for the media */
+    /** year released or published of the media */
     private double mMediaYear = 1800;
 
     public Media(String mediaName, String mediaAuthor, double entertainmenmentYear) {
         mMediaName = mediaName;
-        mMediaAuthor = mediaAuthor;
+        mMediaGenre = mediaAuthor;
         mMediaYear = entertainmenmentYear;
     }
 
@@ -24,12 +24,12 @@ public class Media {
         this.mMediaName = mMediaName;
     }
 
-    public String getmMediaAuthor() {
-        return mMediaAuthor;
+    public String getmMediaGenre() {
+        return mMediaGenre;
     }
 
-    public void setmMediaAuthor(String mMediaAuthor) {
-        this.mMediaAuthor = mMediaAuthor;
+    public void setmMediaGenre(String mMediaGenre) {
+        this.mMediaGenre = mMediaGenre;
     }
 
     public double getmMediaYear() {
