@@ -41,7 +41,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
-                    android:maxLines="1"
                     android:textColor="@color/name"
                     android:textSize="@dimen/subheading_label"
                     android:textStyle="bold"
@@ -213,9 +212,13 @@
                     android:id="@+id/duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="test"
                     android:textColor="@color/year"
-                    tools:text="1h 53min" />
+                    tools:text="1h 53" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/year"
+                    android:text=" mins" />
 
             </LinearLayout>
 
@@ -235,7 +238,6 @@
                     android:id="@+id/director"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Guy Ritchi"
                     android:textColor="@color/year"
                     tools:text="Guy Ritchie" />
 
@@ -257,7 +259,6 @@
                     android:id="@+id/production"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Joel Schumacher Productions, Really Useful Films, Scion Films"
                     android:textColor="@color/year"
                     tools:text="Joel Schumacher Productions, Really Useful Films, Scion Films" />
 
@@ -277,7 +278,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill"
-                android:text="@string/synopsis_test"
                 android:textColor="@color/year"
                 android:textSize="@dimen/subheading_label"
                 tools:text="@string/synopsis_test" />
