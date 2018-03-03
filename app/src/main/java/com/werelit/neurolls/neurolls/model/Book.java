@@ -11,6 +11,10 @@ public class Book extends Media{
     /** description of the book */
     private String description;
 
+    public Book(){
+
+    }
+    
     public Book(String mediaName, String mediaGenre, int releaseYear,
                 String author, String publisher, String description) {
 
