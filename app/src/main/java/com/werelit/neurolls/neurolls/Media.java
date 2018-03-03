@@ -10,10 +10,10 @@ public class Media {
     /** year released or published of the media */
     private double mMediaYear = 1800;
 
-    public Media(String mediaName, String mediaAuthor, double entertainmenmentYear) {
+    public Media(String mediaName, String mediaGenre, double releaseYear) {
         mMediaName = mediaName;
-        mMediaGenre = mediaAuthor;
-        mMediaYear = entertainmenmentYear;
+        mMediaGenre = mediaGenre;
+        mMediaYear = releaseYear;
     }
 
     public String getmMediaName() {
