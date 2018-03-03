@@ -51,7 +51,25 @@
         </EditText>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_item_name"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other details like genre and year go here"
+            android:textAllCaps="true"
+            android:layout_marginLeft="@dimen/navigation_icon_size"
+            android:textSize="@dimen/caption_label" />
+
+    </LinearLayout>
+<!--
     <LinearLayout
         android:id="@+id/layout_user_name"
         android:layout_width="match_parent"
@@ -81,7 +99,7 @@
         </AutoCompleteTextView>
 
     </LinearLayout>
-
+-->
     <LinearLayout
         android:id="@+id/item_date_details"
         android:layout_width="match_parent"
