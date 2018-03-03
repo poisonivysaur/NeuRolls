@@ -52,9 +52,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // add Media items into the Medias list
         prepareMedias();
 
-        // prepare the buttons in the UI
-        prepareButtons(rootView);
-
         return rootView;
     }
 
@@ -162,54 +159,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         entertainments.add(new Film("A Beautiful Mind", " Drama/Romance", 2001,
                 101, "Ron Howard", "Imagine Entertainment",
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
-    }
-
-    /**
-     * This method setups the buttons to be displayed in the Media activity UI
-     */
-    public void prepareButtons(final View rootView){
-
-        // ADD Button to go to add a new Media activity
-        Button add = (Button) rootView.findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(rootView.getContext(), MainActivity.class);
-                //startActivityForResult(intent, ADD_RESTO_REQUEST);
-            }
-        });
-
-        // SURPRISE button to pick a random Media
-        Button surprise = (Button) rootView.findViewById(R.id.surprise);
-        surprise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // EQUAL RANDOMNESS
-                Collections.shuffle(entertainments);
-                mAdapter.notifyDataSetChanged(); //enable this to view the shuffling animation
-
-                if(entertainments.size() != 0){
-                    Snackbar snackbar = Snackbar.make(view, "Go for... " + entertainments.get(entertainments.size()/2).getmMediaName() + "!!!", Snackbar.LENGTH_LONG);
-                    snackbar.setAction("Action", null).show();
-                    TextView snackbarActionTextView =  snackbar.getView().findViewById( android.support.design.R.id.snackbar_text );
-                    snackbarActionTextView.setTextSize( 30 );
-                    snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
-                }
-            }
-        });
-
-        // CLEAR Button to go to add a new Media activity
-        Button clear = (Button) rootView.findViewById(R.id.clear);
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                entertainments.clear();
-                //mAdapter.notifyDataSetChanged();
-                mRecyclerView.setVisibility(View.GONE);
-                mEmptyStateTextView.setText("No Medias. :(");
-                mEmptyStateTextView.setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     @Override
