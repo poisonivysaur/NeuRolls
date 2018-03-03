@@ -34,6 +34,16 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
+    private int mediaCategory;
+
+    public ViewAllMediaFragment(){
+
+    }
+
+    public ViewAllMediaFragment(int mediaCategory){
+
+        this.mediaCategory = mediaCategory;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(
@@ -76,7 +86,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // specify an adapter (see also next example)
-        mAdapter = new MediaAdapter(entertainments);
+        mAdapter = new MediaAdapter(entertainments, mediaCategory);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper

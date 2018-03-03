@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,8 +17,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
 
     private List<Media> mediaList;
 
+    /** Resource ID for the background tint for image of the media */
+    private int category = -1;
+
     public MediaAdapter(List<Media> restaurantList) {
         this.mediaList = restaurantList;
+    }
+
+    public MediaAdapter(List<Media> restaurantList, int category) {
+        this.mediaList = restaurantList;
+        this.category = category;
     }
 
     @Override
@@ -34,6 +43,21 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
+        switch (category){
+            case 0:
+                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
+                break;
+            case 1:
+                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
+                break;
+            case 2:
+                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
+                break;
+            case 3:
+                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
+                break;
+            default:
+        }
         holder.modelIndex = position;
 
     }
@@ -61,15 +85,19 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, genre, year;
         public Button editItem;
+        public ImageView image;
+        public View rootView;
         //public final ImageButton moreButt;
         private int modelIndex = -1;
         public RelativeLayout viewBackground, viewForeground;
 
         public MyViewHolder(View view) {
             super(view);
+            rootView = view;
             name = (TextView) view.findViewById(R.id.name);
             genre = (TextView) view.findViewById(R.id.genre);
             year = (TextView) view.findViewById(R.id.year);
+            image = (ImageView) view.findViewById(R.id.media_image);
             //editItem = (Button) view.findViewById(R.id.edit_item);
             //moreButt = (ImageButton) view.findViewById(R.id.moreButton);
 
