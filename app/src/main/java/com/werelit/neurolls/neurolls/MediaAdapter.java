@@ -56,7 +56,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
             case 3:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
                 break;
-            default:
         }
         holder.modelIndex = position;
 
