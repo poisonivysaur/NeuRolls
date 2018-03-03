@@ -18,4 +18,6 @@ public class MediaKeys {
     public final static String GAME_PUBLISHER_KEY = "GAME_PUBLISHER_KEY";
     public final static String GAME_SERIES_KEY = "GAME_SERIES_KEY";
     public final static String GAME_STORYLINE_KEY = "GAME_STORYLINE_KEY";
+
+    public final static String MEDIA_CATEGORY_KEY = "MEDIA_CATEGORY_KEY";
 }
