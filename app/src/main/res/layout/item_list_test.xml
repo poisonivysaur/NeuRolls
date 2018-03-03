@@ -81,6 +81,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
                         android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/name"
                         android:textSize="@dimen/subheading_label"
                         android:textStyle="bold"
@@ -92,6 +93,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:maxLines="1"
+                        android:ellipsize="end"
                         tools:text="Genre goes here" />
 
                     <TextView
