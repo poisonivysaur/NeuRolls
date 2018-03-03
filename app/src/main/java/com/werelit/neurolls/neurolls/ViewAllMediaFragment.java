@@ -101,13 +101,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
 
                 // Make a bundle containing the current restaurant details
                 Bundle bundle = new Bundle();
-                bundle.putString(ViewFilmDetailsActivity.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
-                bundle.putString(ViewFilmDetailsActivity.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
-                bundle.putInt(ViewFilmDetailsActivity.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
+                bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
+                bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
+                bundle.putInt(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
 
                 // View the details depending what category the media is
                 Media media = entertainments.get(position);
@@ -115,16 +115,26 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
 
                 if(media instanceof Film){
-                    //bundle.putString(ViewFilmDetailsActivity.MEDIA_NAME_KEY, name.getText().toString());
-                    Toast.makeText(rootView.getContext(), "instanceof Film", Toast.LENGTH_SHORT).show();
+                    bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)entertainments.get(position)).getDuration());
+                    bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)entertainments.get(position)).getDirector());
+                    bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)entertainments.get(position)).getProduction());
+                    bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)entertainments.get(position)).getSynopsis());
+
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Book){
-                    Toast.makeText(rootView.getContext(), "instanceof Book", Toast.LENGTH_SHORT).show();
+                    bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
+                    bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
+                    bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
+
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Game){
-                    Toast.makeText(rootView.getContext(), "instanceof Game", Toast.LENGTH_SHORT).show();
+                    bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)entertainments.get(position)).getPlatform());
+                    bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)entertainments.get(position)).getPublisher());
+                    bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)entertainments.get(position)).getSeries());
+                    bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)entertainments.get(position)).getStoryline());
+
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
 

@@ -10,11 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ViewFilmDetailsActivity extends AppCompatActivity{
-    public final static String MEDIA_NAME_KEY = "MEDIA_NAME_KEY";
-    public final static String MEDIA_GENRE_KEY = "MEDIA_GENRE_KEY";
-    public final static String MEDIA_YEAR_KEY = "MEDIA_YEAR_KEY";
 
-    public TextView name, genre, year;
+    public TextView name, genre, year, duration, director, production, synopsis;
     public ImageView image;
     public View rootView;
     @Override
@@ -25,17 +22,30 @@ public class ViewFilmDetailsActivity extends AppCompatActivity{
         name = (TextView) findViewById(R.id.name);
         genre = (TextView) findViewById(R.id.genre);
         year = (TextView) findViewById(R.id.year);
+        duration = (TextView) findViewById(R.id.duration);
+        director = (TextView) findViewById(R.id.director);
+        production = (TextView) findViewById(R.id.production);
+        synopsis = (TextView) findViewById(R.id.synopsis);
+
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null){ // there is a bundle
-            String mediaName = bundle.getString(MEDIA_NAME_KEY);
-            String mediaGenre = bundle.getString(MEDIA_GENRE_KEY);
-            int mediaYear = bundle.getInt(MEDIA_YEAR_KEY, 0);
+            String filmName = bundle.getString(MediaKeys.MEDIA_NAME_KEY);
+            String filmGenre = bundle.getString(MediaKeys.MEDIA_GENRE_KEY);
+            int filmYear = bundle.getInt(MediaKeys.MEDIA_YEAR_KEY, 0);
+            int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
+            String filmDirector = bundle.getString(MediaKeys.FILM_DIRECTOR_KEY);
+            String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
+            String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
 
-            name.setText("" + mediaName);
-            genre.setText("" + mediaGenre);
-            year.setText("" + mediaYear);
+            name.setText("" + filmName);
+            genre.setText("" + filmGenre);
+            year.setText("" + filmYear);
+            duration.setText("" + filmDuration);
+            director.setText("" + filmDirector);
+            production.setText("" + filmProduction);
+            synopsis.setText("" + filmSynopsis);
         }
     }
 }
