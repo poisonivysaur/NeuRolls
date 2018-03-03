@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TestFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /** The list containing Media objects */               private List<Media> entertainments = new ArrayList<>();
     /** The recycler view containing the Media items */    private RecyclerView mRecyclerView;
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
@@ -37,7 +37,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(
-                R.layout.entertainment_roll, container, false);
+                R.layout.view_all_media, container, false);
 
         // use a constraint layout for the delete snackbar with UNDO
         constraintLayout = rootView.findViewById(R.id.constraint_layout);
