@@ -33,7 +33,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Media entertainment = mediaList.get(position);
         holder.name.setText(entertainment.getmMediaName());
-        holder.desc.setText(entertainment.getmMediaGenre());
+        holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
         holder.modelIndex = position;
 
@@ -60,7 +60,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, desc, year;
+        public TextView name, genre, year;
         public Button editItem;
         //public final ImageButton moreButt;
         private int modelIndex = -1;
@@ -69,9 +69,9 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
-            desc = (TextView) view.findViewById(R.id.author);
+            genre = (TextView) view.findViewById(R.id.genre);
             year = (TextView) view.findViewById(R.id.year);
-            editItem = (Button) view.findViewById(R.id.edit_item);
+            //editItem = (Button) view.findViewById(R.id.edit_item);
             //moreButt = (ImageButton) view.findViewById(R.id.moreButton);
 
             viewBackground = view.findViewById(R.id.view_background);
@@ -88,7 +88,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
                     Bundle bundle = new Bundle();
                     bundle.putInt(AddRestaurant.EDIT_MODEL_INDEX_KEY, modelIndex);
                     bundle.putString(AddRestaurant.RESTAURANT_NAME_KEY, name.getText().toString());
-                    bundle.putString(AddRestaurant.RESTAURANT_DESC_KEY, desc.getText().toString());
+                    bundle.putString(AddRestaurant.RESTAURANT_DESC_KEY, genre.getText().toString());
                     bundle.putDouble(AddRestaurant.WEIGHT_KEY, Double.parseDouble(weight.getText().toString()));
                     // Edit the restaurant item
                     intent.putExtras(bundle);
