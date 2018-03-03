@@ -8,9 +8,9 @@ public class Media {
     private String mMediaGenre;
 
     /** year released or published of the media */
-    private double mMediaYear = 1800;
+    private int mMediaYear = 1800;
 
-    public Media(String mediaName, String mediaGenre, double releaseYear) {
+    public Media(String mediaName, String mediaGenre, int releaseYear) {
         mMediaName = mediaName;
         mMediaGenre = mediaGenre;
         mMediaYear = releaseYear;
@@ -36,7 +36,7 @@ public class Media {
         return mMediaYear;
     }
 
-    public void setmMediaYear(double mMediaYear) {
+    public void setmMediaYear(int mMediaYear) {
         this.mMediaYear = mMediaYear;
     }
 }

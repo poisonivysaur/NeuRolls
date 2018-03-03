@@ -14,7 +14,7 @@ public class Film extends Media{
     /** synopsis of the film */
     private String synopsis;
 
-    public Film(String mediaName, String mediaGenre, double releaseYear,
+    public Film(String mediaName, String mediaGenre, int releaseYear,
                 int duration, String director, String production, String synopsis) {
 
         super(mediaName, mediaGenre, releaseYear);

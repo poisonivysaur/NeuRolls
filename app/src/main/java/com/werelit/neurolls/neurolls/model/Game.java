@@ -14,7 +14,7 @@ public class Game extends Media{
     /** the series that the game is part of */
     private String series;
 
-    public Game(String mediaName, String mediaGenre, double releaseYear,
+    public Game(String mediaName, String mediaGenre, int releaseYear,
                 String platform, String publisher, String storyline, String series) {
 
         super(mediaName, mediaGenre, releaseYear);
