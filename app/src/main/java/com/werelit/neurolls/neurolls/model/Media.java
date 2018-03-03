@@ -36,7 +36,7 @@ public class Media {
         this.mMediaGenre = mMediaGenre;
     }
 
-    public double getmMediaYear() {
+    public int getmMediaYear() {
         return mMediaYear;
     }
 
