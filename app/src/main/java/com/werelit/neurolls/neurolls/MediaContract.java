@@ -15,6 +15,7 @@ public class MediaContract {
         public static final String COLUMN_PRODUCTION = "production";
         public static final String COLUMN_SYNOPSIS = "synopsis";
         public static final String COLUMN_IMG_DIR = "image_directory";
+        public static final String COLUMN_ARCHIVED = "isArchived";
     }
 
     public static final class BookEntry implements BaseColumns{
@@ -27,6 +28,7 @@ public class MediaContract {
         public static final String COLUMN_GENRE = "genre";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_IMG_DIR = "image_directory";
+        public static final String COLUMN_ARCHIVED = "isArchived";
     }
 
     public static final class GameEntry implements BaseColumns{
@@ -43,5 +45,6 @@ public class MediaContract {
         public static final String COLUMN_SERIES = "series";
         public static final String COLUMN_STORYLINE = "storyline";
         public static final String COLUMN_IMG_DIR = "image_directory";
+        public static final String COLUMN_ARCHIVED = "isArchived";
     }
 }
