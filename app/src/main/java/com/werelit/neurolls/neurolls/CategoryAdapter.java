@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * {@link CategoryAdapter} is a {@link FragmentPagerAdapter} that can provide the layout for
- * each list item based on a data source which is a list of {@link Entertainment} objects.
+ * each list item based on a data source which is a list of {@link com.werelit.neurolls.neurolls.model.Media} objects.
  */
 public class CategoryAdapter extends FragmentPagerAdapter {
 
