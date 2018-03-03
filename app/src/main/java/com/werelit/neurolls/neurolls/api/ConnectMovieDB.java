@@ -76,6 +76,9 @@ public class ConnectMovieDB {
         }catch(IOException e){
             Log.e(TAG, "Error @ConnectMovieDB:httpGetRequestTotmdb\n" + e.toString());
         }finally {
+            if(http != null){
+                http.disconnect();
+            }
             if(inputStream != null){
                 try{
                     inputStream.close();
