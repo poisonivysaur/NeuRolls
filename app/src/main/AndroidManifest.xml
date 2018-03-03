@@ -29,6 +29,10 @@
             android:label="Test Add Activity"
             android:parentActivityName=".MainActivity"/>
 
+        <activity
+            android:name=".ViewFilmDetailsActivity"
+            android:label="View Details"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

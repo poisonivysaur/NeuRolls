@@ -11,21 +11,21 @@ import java.util.List;
  * Loads a list of medias by using an AsyncTask to perform the
  * network request to the given URL.
  */
-public class MediaLoader extends AsyncTaskLoader<List<Media>> {
+public class MediaTaskLoader extends AsyncTaskLoader<List<Media>> {
 
     /** Tag for log messages */
-    private static final String LOG_TAG = MediaLoader.class.getName();
+    private static final String LOG_TAG = MediaTaskLoader.class.getName();
 
     /** Query URL */
     private String mUrl;
 
     /**
-     * Constructs a new {@link MediaLoader}.
+     * Constructs a new {@link MediaTaskLoader}.
      *
      * @param context of the activity
      * @param url to load data from
      */
-    public MediaLoader(Context context, String url) {
+    public MediaTaskLoader(Context context, String url) {
         super(context);
         mUrl = url;
     }
