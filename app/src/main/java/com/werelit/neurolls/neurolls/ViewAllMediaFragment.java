@@ -105,10 +105,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 // Make a bundle containing the current restaurant details
                 Bundle bundle = new Bundle();
-                bundle.putInt("position", position);
-                bundle.putString("name", entertainments.get(position).getmMediaName());
-                bundle.putString("genre", entertainments.get(position).getmMediaGenre());
-                bundle.putDouble("year", entertainments.get(position).getmMediaYear());
+                bundle.putString(ViewFilmDetailsActivity.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
+                bundle.putString(ViewFilmDetailsActivity.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
+                bundle.putInt(ViewFilmDetailsActivity.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
 
                 // View the details depending what category the media is
                 Media media = entertainments.get(position);
@@ -116,7 +115,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
 
                 if(media instanceof Film){
-                    //bundle.putInt();
+                    //bundle.putString(ViewFilmDetailsActivity.MEDIA_NAME_KEY, name.getText().toString());
                     Toast.makeText(rootView.getContext(), "instanceof Film", Toast.LENGTH_SHORT).show();
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
