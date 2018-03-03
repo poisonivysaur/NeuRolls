@@ -1,4 +1,4 @@
-package com.werelit.neurolls.neurolls;
+package com.werelit.neurolls.neurolls.model;
 
 public class Media {
     /** name of the media */
