@@ -14,6 +14,11 @@ import java.util.List;
  */
 public class CategoryAdapter extends FragmentPagerAdapter {
 
+    public static final int CATEGORY_ALL = 0;
+    public static final int CATEGORY_FILMS = 1;
+    public static final int CATEGORY_BOOKS = 2;
+    public static final int CATEGORY_GAMES = 3;
+
     /** Context of the app */
     private Context mContext;
     private final List<Fragment> mFragments = new ArrayList<>();

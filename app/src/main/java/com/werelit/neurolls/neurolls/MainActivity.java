@@ -91,16 +91,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
-            viewPager.setCurrentItem(0);
+            viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
         } else if (id == R.id.nav_films) {
             //i.setClass(getBaseContext(),TestActivity.class);
-            viewPager.setCurrentItem(1);
+            viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
         } else if (id == R.id.nav_books) {
             //i.setClass(getBaseContext(),TestActivity.class);
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(CategoryAdapter.CATEGORY_BOOKS);
         } else if (id == R.id.nav_games) {
             //i.setClass(getBaseContext(),TestActivity.class);
-            viewPager.setCurrentItem(3);
+            viewPager.setCurrentItem(CategoryAdapter.CATEGORY_GAMES);
         } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -171,10 +171,10 @@ public class MainActivity extends AppCompatActivity
 
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
-        adapter.addFragment(new ViewAllMediaFragment(0), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(1), getResources().getString(R.string.menu_item_films).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(2), getResources().getString(R.string.menu_item_books).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(3), getResources().getString(R.string.menu_item_games).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS), getResources().getString(R.string.menu_item_films).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS), getResources().getString(R.string.menu_item_books).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES), getResources().getString(R.string.menu_item_games).toUpperCase());
 
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
