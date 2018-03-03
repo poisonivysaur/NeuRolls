@@ -115,6 +115,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
 
                 if(media instanceof Film){
+                    bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
                     bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)entertainments.get(position)).getDuration());
                     bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)entertainments.get(position)).getDirector());
                     bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)entertainments.get(position)).getProduction());
@@ -123,6 +124,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Book){
+                    bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
                     bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
                     bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
                     bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
@@ -130,6 +132,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                     intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Game){
+                    bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
                     bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)entertainments.get(position)).getPlatform());
                     bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)entertainments.get(position)).getPublisher());
                     bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)entertainments.get(position)).getSeries());
