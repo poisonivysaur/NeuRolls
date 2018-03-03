@@ -272,7 +272,7 @@
                 android:textSize="@dimen/subheading_label" />
 
             <TextView
-                android:id="@+id/synopsis"
+                android:id="@+id/storyline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill"
