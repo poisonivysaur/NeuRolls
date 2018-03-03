@@ -111,15 +111,15 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 if(media instanceof Film){
                     //bundle.putInt();
                     Toast.makeText(rootView.getContext(), "instanceof Film", Toast.LENGTH_SHORT).show();
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
+                    intent.setClass(rootView.getContext(), ViewMediaDetailsActivity.class);
                 }
                 else if(media instanceof Book){
                     Toast.makeText(rootView.getContext(), "instanceof Book", Toast.LENGTH_SHORT).show();
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
+                    intent.setClass(rootView.getContext(), ViewMediaDetailsActivity.class);
                 }
                 else if(media instanceof Game){
                     Toast.makeText(rootView.getContext(), "instanceof Game", Toast.LENGTH_SHORT).show();
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
+                    intent.setClass(rootView.getContext(), ViewMediaDetailsActivity.class);
                 }
 
                 intent.putExtras(bundle);

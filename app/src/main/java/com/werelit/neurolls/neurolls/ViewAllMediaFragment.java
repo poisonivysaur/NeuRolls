@@ -111,8 +111,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 // View the details depending what category the media is
                 Media media = entertainments.get(position);
-                Intent intent = new Intent();
-
+                Intent intent = new Intent(rootView.getContext(), ViewMediaDetailsActivity.class);
 
                 if(media instanceof Film){
                     bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
@@ -120,16 +119,12 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                     bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)entertainments.get(position)).getDirector());
                     bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)entertainments.get(position)).getProduction());
                     bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)entertainments.get(position)).getSynopsis());
-
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Book){
                     bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
                     bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
                     bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
                     bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
-
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
                 else if(media instanceof Game){
                     bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
@@ -137,8 +132,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                     bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)entertainments.get(position)).getPublisher());
                     bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)entertainments.get(position)).getSeries());
                     bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)entertainments.get(position)).getStoryline());
-
-                    intent.setClass(rootView.getContext(), ViewFilmDetailsActivity.class);
                 }
 
                 intent.putExtras(bundle);

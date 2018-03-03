@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ViewFilmDetailsActivity extends AppCompatActivity {
+public class ViewMediaDetailsActivity extends AppCompatActivity {
 
     public TextView name, genre, year;
     public ImageView image;
@@ -85,5 +88,21 @@ public class ViewFilmDetailsActivity extends AppCompatActivity {
             genre.setText("" + mediaGenre);
             year.setText("" + mediaYear);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_archive) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: Archived!", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
