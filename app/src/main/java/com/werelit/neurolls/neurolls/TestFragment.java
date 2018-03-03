@@ -15,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
+import com.werelit.neurolls.neurolls.model.Game;
 import com.werelit.neurolls.neurolls.model.Media;
 
 import java.util.ArrayList;
@@ -60,7 +64,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
      * - setting the layout of the recycler view
      * - adding an item touch listener, etc.
      */
-    public void prepareRecyclerView(View rootView){
+    public void prepareRecyclerView(final View rootView){
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycle_view);
 
         // use this setting to improve performance if you know that changes
@@ -84,6 +88,47 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+
+
+        // add a click listener to go to the restaurant details for editing an existing item
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+
+                // Make a bundle containing the current restaurant details
+                Bundle bundle = new Bundle();
+                bundle.putInt("position", position);
+                bundle.putString("name", entertainments.get(position).getmMediaName());
+                bundle.putString("genre", entertainments.get(position).getmMediaGenre());
+                bundle.putDouble("year", entertainments.get(position).getmMediaYear());
+
+                // View the details depending what category the media is
+                Media media = entertainments.get(position);
+                Intent intent = new Intent();
+
+
+                if(media instanceof Film){
+                    //bundle.putInt();
+                    intent.setClass(rootView.getContext(), ViewFilmDetails.class);
+                }
+                else if(media instanceof Book){
+                    intent.setClass(rootView.getContext(), ViewBookDetails.class);
+                }
+                else if(media instanceof Game){
+                    intent.setClass(rootView.getContext(), ViewGameDetails.class);
+                }
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //Toast.makeText(getApplicationContext(), "You Long pressed me!", Toast.LENGTH_SHORT).show();
+            }
+        }));
+
     }
 
     /**
