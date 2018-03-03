@@ -32,11 +32,12 @@ public class MediaContract {
         public static final String COLUMN_YEAR_RELEASED = "year_released";
         public static final String COLUMN_PLATFORM = "platform";
         public static final String COLUMN_GENRE = "genre";
-        public static final String COLUMN_COMPOSER = "composer";
-        public static final String COLUMN_WRITER = "writer";
-        public static final String COLUMN_DESIGNER = "designer";
+        //public static final String COLUMN_COMPOSER = "composer";
+        //public static final String COLUMN_WRITER = "writer";
+        //public static final String COLUMN_DESIGNER = "designer";
+        public static final String COLUMN_PUBLISHER = "publisher";
         public static final String COLUMN_SERIES = "series";
-        public static final String COLUMN_SUMMARY = "summary";
+        public static final String COLUMN_STORYLINE = "storyline";
         public static final String COLUMN_IMG_DIR = "image_directory";
     }
 }
