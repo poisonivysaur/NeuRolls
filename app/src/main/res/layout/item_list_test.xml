@@ -60,9 +60,9 @@
                     android:id="@+id/media_image"
                     android:layout_width="@dimen/list_item_height"
                     android:layout_height="@dimen/list_item_height"
-                    android:tint="@android:color/white"
                     android:background="@color/colorAccent"
                     android:src="@drawable/ic_movie_black_24dp"
+                    android:tint="@android:color/white"
                     tools:src="@drawable/ic_movie_black_24dp" />
 
                 <LinearLayout
@@ -80,9 +80,9 @@
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:gravity="bottom"
                         android:maxLines="1"
-                        android:ellipsize="end"
                         android:textColor="@color/name"
                         android:textSize="@dimen/subheading_label"
                         android:textStyle="bold"
@@ -92,9 +92,9 @@
                         android:id="@+id/genre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:gravity="top"
                         android:maxLines="1"
-                        android:ellipsize="end"
                         tools:text="Genre goes here" />
 
                     <TextView

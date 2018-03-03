@@ -16,6 +16,7 @@
             android:layout_height="@dimen/list_item_height"
             android:background="@color/colorAccent"
             android:src="@drawable/ic_movie_black_24dp"
+            android:tint="@android:color/white"
             tools:src="@drawable/ic_movie_black_24dp" />
 
         <LinearLayout
