@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/view_foreground"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="@dimen/list_item_height"
-            android:layout_height="@dimen/list_item_height"
-            android:background="@color/colorAccent"
-            android:src="@drawable/ic_movie_black_24dp"
-            android:tint="@android:color/white"
-            tools:src="@drawable/ic_movie_black_24dp" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/text_container"
+            android:id="@+id/view_foreground"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_padding_horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/name"
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/list_item_height"
+                android:background="@color/colorAccent"
+                android:src="@drawable/ic_movie_black_24dp"
+                android:tint="@android:color/white"
+                tools:src="@drawable/ic_movie_black_24dp" />
+
+            <LinearLayout
+                android:id="@+id/text_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:maxLines="1"
-                android:textColor="@color/name"
-                android:textSize="@dimen/subheading_label"
-                android:textStyle="bold"
-                tools:text="Media Name" />
+                android:layout_height="@dimen/list_item_height"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_padding_horizontal">
 
-            <TextView
-                android:id="@+id/genre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:maxLines="1"
-                tools:text="Genre goes here" />
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:maxLines="1"
+                    android:textColor="@color/name"
+                    android:textSize="@dimen/subheading_label"
+                    android:textStyle="bold"
+                    tools:text="Media Name" />
 
-            <TextView
-                android:id="@+id/year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/year"
-                tools:text="1990" />
+                <TextView
+                    android:id="@+id/genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:maxLines="1"
+                    tools:text="Genre goes here" />
+
+                <TextView
+                    android:id="@+id/year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/year"
+                    tools:text="1990" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</ScrollView>
