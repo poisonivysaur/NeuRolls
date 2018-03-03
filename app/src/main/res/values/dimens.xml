@@ -32,4 +32,9 @@
     <dimen name ="subheading_label">16sp</dimen>
     <dimen name ="caption_label">12sp</dimen>
 
+    <!-- Height of each list item -->
+    <dimen name="list_item_height">96dp</dimen>
+    <!-- Height of each larger list item -->
+    <dimen name="larger_list_item_height">120dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
 </resources>
