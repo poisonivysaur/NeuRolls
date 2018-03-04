@@ -27,8 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    /** The list containing Media objects */               private List<Media> entertainments;
-    /** The recycler view containing the Media items */    private RecyclerView mRecyclerView;
+    /** The list containing Media objects */                    private List<Media> entertainments;
+    /** The recycler view containing the Media items */         private RecyclerView mRecyclerView;
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
@@ -40,7 +40,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     public ViewAllMediaFragment(){
 
     }
-/*
+
     public ViewAllMediaFragment(int mediaCategory){
 
         this(mediaCategory, false);
@@ -51,7 +51,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         this.mediaCategory = mediaCategory;
         this.isArchived = isArchived;
     }
-*/
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(
