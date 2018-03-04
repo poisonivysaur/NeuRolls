@@ -163,7 +163,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             //this.finish();
             Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
         }
-        else if(item.getItemId() == R.id.delete_icon) {
+        else if(item.getItemId() == R.id.action_delete) {
             //this.finish();
             Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
         }
