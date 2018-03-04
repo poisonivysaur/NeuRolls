@@ -35,6 +35,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
     private int mediaCategory;
+    private boolean isArchived;
 
     public ViewAllMediaFragment(){
 
@@ -42,8 +43,15 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     public ViewAllMediaFragment(int mediaCategory){
 
-        this.mediaCategory = mediaCategory;
+        this(mediaCategory, false);
     }
+
+    public ViewAllMediaFragment(int mediaCategory, boolean isArchived){
+
+        this.mediaCategory = mediaCategory;
+        this.isArchived = isArchived;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(
@@ -61,6 +69,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // add Media items into the Medias list
         prepareMedias();
+        if(entertainments.isEmpty()){
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyStateTextView.setText("You have no media to enjoy later :(");
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
+        }
 
         return rootView;
     }
@@ -85,7 +98,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // This draws a line separator for each row, but card views are used so no need for this
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-        // specify an adapter (see also next example)
+        // specify an adapter
         mAdapter = new MediaAdapter(entertainments, mediaCategory);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -103,7 +116,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             public void onClick(View view, int position) {
                 //Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
 
-                // Make a bundle containing the current restaurant details
+                // Make a bundle containing the current media details
                 Bundle bundle = new Bundle();
                 bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
@@ -150,6 +163,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
      * This method adds the dummy Media data into the Medias list.
      */
     private void prepareMedias() {
+
         entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", 2004,
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",
                 "From his hideout beneath a 19th century Paris opera house, the brooding Phantom (Gerard Butler) schemes to get closer to vocalist Christine Daae (Emmy Rossum). The Phantom, wearing a mask to hide a congenital disfigurement, strong-arms management into giving the budding starlet key roles, but Christine instead falls for arts benefactor Raoul (Patrick Wilson). Terrified at the notion of her absence, the Phantom enacts a plan to keep Christine by his side, while Raoul tries to foil the scheme."));
@@ -176,7 +190,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
     }
 
-
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof MediaAdapter.MyViewHolder) {
@@ -191,13 +204,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             mAdapter.removeItem(viewHolder.getAdapterPosition());
             if(entertainments.size() == 0 ){
                 mRecyclerView.setVisibility(View.GONE);
-                mEmptyStateTextView.setText("No Media. :(");
+                mEmptyStateTextView.setText("You have no media yet :(");
                 mEmptyStateTextView.setVisibility(View.VISIBLE);
             }
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(constraintLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+                    .make(constraintLayout, name + " removed from media roll!", Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
