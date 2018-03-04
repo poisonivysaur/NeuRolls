@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
+        } else if (id == R.id.nav_archived) {
+            setTitle("Archived Media");
+        } else if (id == R.id.nav_search) {
+
         } else if (id == R.id.nav_films) {
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
@@ -101,12 +105,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_games) {
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_GAMES);
-        } /*else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
-
+        }
         /*
         if(item.getItemId() == R.id.nav_home)
             setTitle("NeuRolls");
