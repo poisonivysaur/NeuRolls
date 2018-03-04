@@ -35,7 +35,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
     private int mediaCategory = -1;
-    private boolean isArchived;
+    private boolean isArchived = false;
 
     public ViewAllMediaFragment(){
 
@@ -43,13 +43,19 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     public ViewAllMediaFragment(int mediaCategory){
 
-        this(mediaCategory, false);
+        this.mediaCategory = mediaCategory;
     }
 
-    public ViewAllMediaFragment(int mediaCategory, boolean isArchived){
-
-        this.mediaCategory = mediaCategory;
-        this.isArchived = isArchived;
+    public void setArchived(boolean archived) {
+        isArchived = archived;
+        if(isArchived){
+            mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
+        }
+        else {
+            mAdapter = new MediaAdapter(entertainments, mediaCategory);
+        }
+        if(mRecyclerView != null)
+            mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -76,8 +82,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // setup the recycler view adapter, layout, etc.
         prepareRecyclerView(rootView);
 
-
-
         return rootView;
     }
 
@@ -102,7 +106,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // specify an adapter
-        mAdapter = new MediaAdapter(entertainments, mediaCategory);
+        if(isArchived){
+            mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
+        }
+        else {
+            mAdapter = new MediaAdapter(entertainments, mediaCategory);
+        }
+
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -212,8 +222,12 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             }
 
             // showing snack bar with Undo option
+            String action = " archived!";
+            if(isArchived){
+               action = " deleted from media roll!";
+            }
             Snackbar snackbar = Snackbar
-                    .make(constraintLayout, name + " removed from media roll!", Snackbar.LENGTH_LONG);
+                    .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -100,28 +100,27 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        String title = "Neurolls";
+        //Intent intent = new Intent();
 
-        Intent i = new Intent();
+        boolean pressedArchive = false;
+
         if (id == R.id.nav_home) {
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
-            setTitle("NeuRolls");
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
         } else if (id == R.id.nav_archived) {
-            setTitle("Archived Media");
+            title = "Archived Media";
+            pressedArchive = true;
         } else if (id == R.id.nav_search) {
 
-            setTitle("NeuRolls");
         } else if (id == R.id.nav_films) {
             //i.setClass(getBaseContext(),TestActivity.class);
-            setTitle("NeuRolls");
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
         } else if (id == R.id.nav_books) {
-            setTitle("NeuRolls");
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_BOOKS);
         } else if (id == R.id.nav_games) {
-            setTitle("NeuRolls");
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_GAMES);
         }
@@ -132,6 +131,11 @@ public class MainActivity extends AppCompatActivity
             setTitle(item.getTitle());
         startActivity(i);
         */
+
+        getFilteredMedia(pressedArchive);
+        viewPager.getAdapter().notifyDataSetChanged();
+
+        setTitle(title);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -194,5 +198,12 @@ public class MainActivity extends AppCompatActivity
 
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
+    }
+
+    public void getFilteredMedia(boolean isArchived){
+        for(int i = 0; i < viewPager.getAdapter().getCount(); i++){
+            ViewAllMediaFragment f = (ViewAllMediaFragment)((CategoryAdapter)viewPager.getAdapter()).getItem(i);
+            f.setArchived(isArchived);
+        }
     }
 }
