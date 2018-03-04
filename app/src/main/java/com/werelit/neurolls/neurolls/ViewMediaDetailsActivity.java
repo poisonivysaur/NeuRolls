@@ -30,10 +30,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
         if (bundle != null) { // check first if the bundle is not empty
 
             // get all the common attributes of the 3 categories of media
-            isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             String mediaName = bundle.getString(MediaKeys.MEDIA_NAME_KEY);
             String mediaGenre = bundle.getString(MediaKeys.MEDIA_GENRE_KEY);
             int mediaYear = bundle.getInt(MediaKeys.MEDIA_YEAR_KEY, 0);
+
+            isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
+            isForAdding = bundle.getBoolean(MediaKeys.ADDING_NEW_MEDIA);
 
             // get the the media category (depending which type of recycler view item was pressed)
             // this only applies for the view ALL media fragment but neverthe less this activity
@@ -119,9 +121,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+
+        }
+
         // Inflate the menu; this adds items to the action bar if it is present.
         if(isArchived){ // if item is archived, menu shows delete or unarchive options
-            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+            getMenuInflater().inflate(R.menu.archived_media_menu, menu);
         }
         else if(isForAdding){   // if this is a new media for adding, then menu shows submit or cancel options
             getMenuInflater().inflate(R.menu.add_media_menu, menu);
@@ -137,11 +145,27 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_archive) {
             //this.finish();
-            Toast.makeText(this, "TO DO: Archived!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_share) {
             //this.finish();
             Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_submit) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_cancel) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: finish()!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_unarchive) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.delete_icon) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

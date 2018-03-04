@@ -132,7 +132,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 // Make a bundle containing the current media details
                 Bundle bundle = new Bundle();
 
-                bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived);
+                bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to entertainments.get(i).isArchived()
                 bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
                 bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
@@ -214,10 +214,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             // backup of removed item for undo purpose
             final Media deletedItem = entertainments.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
-            final boolean isArchived = deletedItem.isArchived();
 
-            if(!isArchived){
-                deletedItem.setArchived(true);
+            String action = " archived!";
+            if(!deletedItem.isArchived()){  // if item is not yet archived
+                deletedItem.setArchived(true);  // archive it!
+            }
+            if(isArchived){
+                action = " deleted from media roll!";
             }
 
             // remove the item from recycler view
@@ -229,10 +232,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             }
 
             // showing snack bar with Undo option
-            String action = " archived!";
-            if(isArchived){ // if the media item was already archived, then it will be deleted
-               action = " deleted from media roll!";
-            }
+
             Snackbar snackbar = Snackbar
                     .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
@@ -240,7 +240,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 public void onClick(View view) {
 
                     // undo is selected, restore the deleted item
-                    if(isArchived){
+                    if(deletedItem.isArchived()){
                         deletedItem.setArchived(false);
                     }
 
