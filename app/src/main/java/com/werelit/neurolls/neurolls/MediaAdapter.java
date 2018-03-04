@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.model.Media;
 
@@ -41,6 +42,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         if(!isArchived){
+            //Toast.makeText(parent.getContext(), "isArchived in media adapter: "+isArchived, Toast.LENGTH_SHORT).show();
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.media_unarchived_item, parent, false);
         }else {

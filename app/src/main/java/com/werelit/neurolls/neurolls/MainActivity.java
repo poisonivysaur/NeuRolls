@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
+    private CategoryAdapter adapter;
+    private boolean archivePressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         setupNavigationDrawer();
-        setupFragments();
+        setupFragments(archivePressed);
     }
 
     @Override
@@ -92,6 +94,14 @@ public class MainActivity extends AppCompatActivity
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
+        } else if (id == R.id.nav_archived) {
+            //i.setClass(getBaseContext(),TestActivity.class);
+            archivePressed = true;
+            setupFragments(true);
+            //viewPager.notifyAll();
+        } else if (id == R.id.nav_search) {
+            //i.setClass(getBaseContext(),TestActivity.class);
+            Toast.makeText(this, "TO DO!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_films) {
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
@@ -165,16 +175,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setupFragments(){
+    public void setupFragments(boolean isArchived){
+
         // Find the view pager that will allow the user to swipe between fragments
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         // Create an adapter that knows which fragment should be shown on each page
-        CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
-        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS), getResources().getString(R.string.menu_item_films).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS), getResources().getString(R.string.menu_item_books).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES), getResources().getString(R.string.menu_item_games).toUpperCase());
+        adapter = new CategoryAdapter(this, getSupportFragmentManager());
+
+        if(isArchived){
+            Toast.makeText(this, "setup Fragments called! isArchived: " + isArchived, Toast.LENGTH_SHORT).show();
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL, isArchived), getResources().getString(R.string.menu_item_all).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS, isArchived), getResources().getString(R.string.menu_item_films).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS, isArchived), getResources().getString(R.string.menu_item_books).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES, isArchived), getResources().getString(R.string.menu_item_games).toUpperCase());
+        }
+        else{
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL,isArchived), getResources().getString(R.string.menu_item_all).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS,isArchived), getResources().getString(R.string.menu_item_films).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS,isArchived), getResources().getString(R.string.menu_item_books).toUpperCase());
+            adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES,isArchived), getResources().getString(R.string.menu_item_games).toUpperCase());
+        }
 
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
