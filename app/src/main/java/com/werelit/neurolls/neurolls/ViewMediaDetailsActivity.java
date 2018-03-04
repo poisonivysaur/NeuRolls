@@ -17,6 +17,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     public TextView name, genre, year;
     public ImageView image;
     public View rootView;
+    private boolean isArchived = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,6 +116,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.media_detail_menu, menu);
         return true;

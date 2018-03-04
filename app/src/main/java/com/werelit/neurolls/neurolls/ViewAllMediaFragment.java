@@ -42,7 +42,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     public ViewAllMediaFragment(int mediaCategory){
-
         this.mediaCategory = mediaCategory;
     }
 

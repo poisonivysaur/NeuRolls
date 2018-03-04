@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity
 
         boolean pressedArchive = false;
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        int archiveColor = getResources().getColor(R.color.colorPrimary);
+
         if (id == R.id.nav_home) {
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_archived) {
             title = "Archived Media";
             pressedArchive = true;
+            archiveColor = getResources().getColor(R.color.item_name);
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_films) {
@@ -134,6 +139,8 @@ public class MainActivity extends AppCompatActivity
 
         getFilteredMedia(pressedArchive);
         viewPager.getAdapter().notifyDataSetChanged();
+
+        toolbar.setBackgroundColor(archiveColor);
 
         setTitle(title);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
