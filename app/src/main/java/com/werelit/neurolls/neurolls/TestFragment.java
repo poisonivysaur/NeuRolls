@@ -39,6 +39,8 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         View rootView =  inflater.inflate(
                 R.layout.entertainment_roll, container, false);
 
+        Toast.makeText(rootView.getContext(), "on create view !!!", Toast.LENGTH_SHORT).show();
+
         // use a constraint layout for the delete snackbar with UNDO
         constraintLayout = rootView.findViewById(R.id.constraint_layout);
 
@@ -50,7 +52,8 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         prepareRecyclerView(rootView);
 
         // add Media items into the Medias list
-        prepareMedias();
+        if(entertainments.isEmpty())
+            prepareMedias();
 
         // prepare the buttons in the UI
         prepareButtons(rootView);

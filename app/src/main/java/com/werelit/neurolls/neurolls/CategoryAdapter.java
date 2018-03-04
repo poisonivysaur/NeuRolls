@@ -34,7 +34,6 @@ public class CategoryAdapter extends FragmentPagerAdapter {
     public CategoryAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-
     }
 
     public void addFragment(Fragment fragment, String title) {

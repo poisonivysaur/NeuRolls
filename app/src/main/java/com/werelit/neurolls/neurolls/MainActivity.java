@@ -46,7 +46,21 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         setupNavigationDrawer();
-        setupFragments();
+        // Find the view pager that will allow the user to swipe between fragments
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager();
+        }
+
+        // Find the tab layout that shows the tabs
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        // Connect the tab layout with the view pager. This will
+        //   1. Update the tab layout when the view pager is swiped
+        //   2. Update the view pager when a tab is selected
+        //   3. Set the tab layout's tab names with the view pager's adapter's titles
+        //      by calling onPageTitle()
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -91,18 +105,23 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the home action
             //i.setClass(getBaseContext(),TestActivity.class);
+            setTitle("NeuRolls");
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
         } else if (id == R.id.nav_archived) {
             setTitle("Archived Media");
         } else if (id == R.id.nav_search) {
 
+            setTitle("NeuRolls");
         } else if (id == R.id.nav_films) {
             //i.setClass(getBaseContext(),TestActivity.class);
+            setTitle("NeuRolls");
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
         } else if (id == R.id.nav_books) {
+            setTitle("NeuRolls");
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_BOOKS);
         } else if (id == R.id.nav_games) {
+            setTitle("NeuRolls");
             //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_GAMES);
         }
@@ -164,28 +183,21 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setupFragments(){
-        // Find the view pager that will allow the user to swipe between fragments
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
+    public void setupViewPager(){
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
+
+        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_films).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_books).toUpperCase());
+        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_games).toUpperCase());
+        /*
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL), getResources().getString(R.string.menu_item_all).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS), getResources().getString(R.string.menu_item_films).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS), getResources().getString(R.string.menu_item_books).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES), getResources().getString(R.string.menu_item_games).toUpperCase());
-
+*/
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
-
-        // Find the tab layout that shows the tabs
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        // Connect the tab layout with the view pager. This will
-        //   1. Update the tab layout when the view pager is swiped
-        //   2. Update the view pager when a tab is selected
-        //   3. Set the tab layout's tab names with the view pager's adapter's titles
-        //      by calling onPageTitle()
-        tabLayout.setupWithViewPager(viewPager);
     }
 }

@@ -27,20 +27,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    /** The list containing Media objects */               private List<Media> entertainments = new ArrayList<>();
+    /** The list containing Media objects */               private List<Media> entertainments;
     /** The recycler view containing the Media items */    private RecyclerView mRecyclerView;
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
 
-    private int mediaCategory;
+    private int mediaCategory = -1;
     private boolean isArchived;
 
     public ViewAllMediaFragment(){
 
     }
-
+/*
     public ViewAllMediaFragment(int mediaCategory){
 
         this(mediaCategory, false);
@@ -51,7 +51,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         this.mediaCategory = mediaCategory;
         this.isArchived = isArchived;
     }
-
+*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(
@@ -64,16 +64,19 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mEmptyStateTextView = (TextView) rootView.findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
 
-        // setup the recycler view adapter, layout, etc.
-        prepareRecyclerView(rootView);
-
         // add Media items into the Medias list
+        entertainments = new ArrayList<>();
         prepareMedias();
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
             mEmptyStateTextView.setText("You have no media to enjoy later :(");
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
+
+        // setup the recycler view adapter, layout, etc.
+        prepareRecyclerView(rootView);
+
+
 
         return rootView;
     }
