@@ -20,19 +20,33 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     /** Resource ID for the background tint for image of the media */
     private int category = -1;
 
+    /** Resource ID for the background layout of the media */
+    private boolean isArchived = false;
+
     public MediaAdapter(List<Media> restaurantList) {
-        this.mediaList = restaurantList;
+        this(restaurantList, -1, false);
     }
 
     public MediaAdapter(List<Media> restaurantList, int category) {
+        this(restaurantList, category, false);
+    }
+
+    public MediaAdapter(List<Media> restaurantList, int category, boolean isArchived) {
         this.mediaList = restaurantList;
         this.category = category;
+        this.isArchived = isArchived;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_test, parent, false);
+        View itemView;
+        if(!isArchived){
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_list_test, parent, false);
+        }else {
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_list_test, parent, false);
+        }
 
         return new MyViewHolder(itemView);
     }
