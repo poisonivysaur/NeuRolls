@@ -42,10 +42,10 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         View itemView;
         if(!isArchived){
             itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_test, parent, false);
+                    .inflate(R.layout.media_unarchived_item, parent, false);
         }else {
             itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_test, parent, false);
+                    .inflate(R.layout.media_archived_item, parent, false);
         }
 
         return new MyViewHolder(itemView);
