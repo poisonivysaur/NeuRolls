@@ -23,16 +23,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
     /** Resource ID for the background layout of the media */
     private boolean isArchived = false;
 
-    public MediaAdapter(List<Media> restaurantList) {
-        this(restaurantList, -1, false);
+    public MediaAdapter(List<Media> mediaList) {
+        this(mediaList, -1, false);
     }
 
-    public MediaAdapter(List<Media> restaurantList, int category) {
-        this(restaurantList, category, false);
+    public MediaAdapter(List<Media> mediaList, int category) {
+        this(mediaList, category, false);
     }
 
-    public MediaAdapter(List<Media> restaurantList, int category, boolean isArchived) {
-        this.mediaList = restaurantList;
+    public MediaAdapter(List<Media> mediaList, int category, boolean isArchived) {
+        this.mediaList = mediaList;
         this.category = category;
         this.isArchived = isArchived;
     }
