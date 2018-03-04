@@ -103,6 +103,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             //this.finish();
             Toast.makeText(this, "TO DO: Archived!", Toast.LENGTH_SHORT).show();
         }
+        else if(item.getItemId() == R.id.action_share) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 }
