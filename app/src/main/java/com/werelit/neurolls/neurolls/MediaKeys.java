@@ -20,4 +20,7 @@ public class MediaKeys {
     public final static String GAME_STORYLINE_KEY = "GAME_STORYLINE_KEY";
 
     public final static String MEDIA_CATEGORY_KEY = "MEDIA_CATEGORY_KEY";
+
+    public final static String MEDIA_ARCHIVED = "MEDIA_ARCHIVED";
+    public final static String ADDING_NEW_MEDIA = "ADDING_NEW_MEDIA";
 }

@@ -10,6 +10,9 @@ public class Media {
     /** year released or published of the media */
     private int mMediaYear = 1800;
 
+    /** if the media was archived or not */
+    private boolean isArchived = false;
+
     public Media(){
 
     }
@@ -42,5 +45,13 @@ public class Media {
 
     public void setmMediaYear(int mMediaYear) {
         this.mMediaYear = mMediaYear;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 }

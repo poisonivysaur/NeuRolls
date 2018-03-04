@@ -14,10 +14,11 @@ import android.widget.Toast;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity {
 
-    public TextView name, genre, year;
-    public ImageView image;
-    public View rootView;
+    private TextView name, genre, year;
+    private ImageView image;
+    private View rootView;
     private boolean isArchived = false;
+    private boolean isForAdding = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
         if (bundle != null) { // check first if the bundle is not empty
 
             // get all the common attributes of the 3 categories of media
+            isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             String mediaName = bundle.getString(MediaKeys.MEDIA_NAME_KEY);
             String mediaGenre = bundle.getString(MediaKeys.MEDIA_GENRE_KEY);
             int mediaYear = bundle.getInt(MediaKeys.MEDIA_YEAR_KEY, 0);
@@ -116,11 +118,18 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+        if(isArchived){ // if item is archived, menu shows delete or unarchive options
+            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+        }
+        else if(isForAdding){   // if this is a new media for adding, then menu shows submit or cancel options
+            getMenuInflater().inflate(R.menu.add_media_menu, menu);
+        }
+        else{   // else menu shows archive or share options
+            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+        }
+
         return true;
     }
 

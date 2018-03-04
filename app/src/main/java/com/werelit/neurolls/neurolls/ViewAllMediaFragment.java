@@ -48,6 +48,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     public void setArchived(boolean archived) {
         isArchived = archived;
         if(isArchived){
+            // query here later on for isArchived attribute from the db for the entertainments array list
             mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
         }
         else {
@@ -130,6 +131,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 // Make a bundle containing the current media details
                 Bundle bundle = new Bundle();
+
+                bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived);
+                bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
                 bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
                 bundle.putInt(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
@@ -168,7 +172,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 //Toast.makeText(getApplicationContext(), "You Long pressed me!", Toast.LENGTH_SHORT).show();
             }
         }));
-
     }
 
     /**
@@ -211,6 +214,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             // backup of removed item for undo purpose
             final Media deletedItem = entertainments.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
+            final boolean isArchived = deletedItem.isArchived();
+
+            if(!isArchived){
+                deletedItem.setArchived(true);
+            }
 
             // remove the item from recycler view
             mAdapter.removeItem(viewHolder.getAdapterPosition());
@@ -222,7 +230,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             // showing snack bar with Undo option
             String action = " archived!";
-            if(isArchived){
+            if(isArchived){ // if the media item was already archived, then it will be deleted
                action = " deleted from media roll!";
             }
             Snackbar snackbar = Snackbar
@@ -232,14 +240,22 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 public void onClick(View view) {
 
                     // undo is selected, restore the deleted item
+                    if(isArchived){
+                        deletedItem.setArchived(false);
+                    }
+
                     mAdapter.restoreItem(deletedItem, deletedIndex);
                     mEmptyStateTextView.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.VISIBLE);
+
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
 
             snackbar.show();
+
+            // perform DELETE on the db if an item was removed completely & if that media is already archived
+            // if it just archived, then UPDATE the db only and not DELETE
         }
     }
 }
