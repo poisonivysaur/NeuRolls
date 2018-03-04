@@ -187,16 +187,11 @@ public class MainActivity extends AppCompatActivity
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
 
-        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_all).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_films).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_books).toUpperCase());
-        adapter.addFragment(new ViewAllMediaFragment(), getResources().getString(R.string.menu_item_games).toUpperCase());
-        /*
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_ALL), getResources().getString(R.string.menu_item_all).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_FILMS), getResources().getString(R.string.menu_item_films).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_BOOKS), getResources().getString(R.string.menu_item_books).toUpperCase());
         adapter.addFragment(new ViewAllMediaFragment(CategoryAdapter.CATEGORY_GAMES), getResources().getString(R.string.menu_item_games).toUpperCase());
-*/
+
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
     }
