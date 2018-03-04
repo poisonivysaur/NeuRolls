@@ -8,7 +8,7 @@ public class Media {
     private String mMediaGenre;
 
     /** year released or published of the media */
-    private int mMediaYear = 1800;
+    private int mMediaYear = 9999;
 
     /** if the media was archived or not */
     private boolean isArchived = false;
