@@ -41,7 +41,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     }
 
+    public ViewAllMediaFragment(int mediaCategory){
+
+        this(mediaCategory, false);
+    }
+
     public ViewAllMediaFragment(int mediaCategory, boolean isArchived){
+
         this.mediaCategory = mediaCategory;
         this.isArchived = isArchived;
     }
@@ -93,14 +99,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // specify an adapter
-        Toast.makeText(rootView.getContext(), "isArchived in VIEW ALL FRAG: "+isArchived, Toast.LENGTH_SHORT).show();
-        if(isArchived){
-            mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
-        }
-        else{
-            mAdapter = new MediaAdapter(entertainments, mediaCategory);
-        }
-
+        mAdapter = new MediaAdapter(entertainments, mediaCategory);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -164,8 +163,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
      * This method adds the dummy Media data into the Medias list.
      */
     private void prepareMedias() {
-
-        // TO DO check if isArchived == true to query all archived items
 
         entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", 2004,
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",
