@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -54,14 +56,6 @@ public class MediaSearchActivity extends AppCompatActivity{
 
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
-        searchView.post(new Runnable() {
-            @Override
-            public void run() {
-                //Do your animation work here.
-                searchView.openSearch();
-            }
-        });
-
         Toast.makeText(this, "" + searchView.isOpen(), Toast.LENGTH_SHORT).show();
 
         // If you want to submit the query from the selected suggestion
@@ -86,5 +80,30 @@ public class MediaSearchActivity extends AppCompatActivity{
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle toolbar item clicks here. It'll
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_search:
+                // Open the search view on the menu item click.
+
+                searchView.openSearch();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
