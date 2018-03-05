@@ -56,7 +56,7 @@ public class MediaSearchActivity extends AppCompatActivity{
 
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
-        Toast.makeText(this, "" + searchView.isOpen(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "" + searchView.isOpen(), Toast.LENGTH_SHORT).show();
 
         // If you want to submit the query from the selected suggestion
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,6 +86,7 @@ public class MediaSearchActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.search_menu, menu);
+        searchView.openSearch();
         return true;
     }
 
