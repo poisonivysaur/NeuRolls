@@ -13,7 +13,7 @@ public class SearchableActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_test);
+        setContentView(R.layout.activity_main);
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
