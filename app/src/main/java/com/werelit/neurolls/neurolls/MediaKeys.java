@@ -24,7 +24,5 @@ public class MediaKeys {
     public final static String MEDIA_ARCHIVED = "MEDIA_ARCHIVED";
     public final static String ADDING_NEW_MEDIA = "ADDING_NEW_MEDIA";
 
-    public final static String FILM_FAB_PRESSED = "FILM_FAB_PRESSED";
-    public final static String BOOK_FAB_PRESSED = "BOOK_FAB_PRESSED";
-    public final static String GAME_FAB_PRESSED = "GAME_FAB_PRESSED";
+    public final static String FAB_PRESSED = "FAB_PRESSED";
 }

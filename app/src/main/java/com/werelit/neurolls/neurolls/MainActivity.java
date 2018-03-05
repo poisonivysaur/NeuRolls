@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
+    public static final int FILM_FAB = 1;
+    public static final int BOOK_FAB = 2;
+    public static final int GAME_FAB = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,22 +164,23 @@ public class MainActivity extends AppCompatActivity
         fab.addOnMenuItemClickListener(new FabSpeedDial.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(FloatingActionButton fab, TextView textView, int id) {
-                // do something
+
+                Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
+
                 if (id == R.id.action_films) {
                     // Handle the home action
-                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     // TODO put in intent extras/ bundles here to see if it was from film, books, or games
-                    intent.putExtra(AddRestaurantActivity.REQUEST_CODE_KEY, AddRestaurantActivity.EDIT_ACTIVITY_CODE);
+                    intent.putExtra(MediaKeys.FAB_PRESSED, FILM_FAB);
                     startActivity(intent);
                 } else if (id == R.id.action_books) {
                     //Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     // TODO put in intent extras/ bundles here to see if it was from film, books, or games
+                    intent.putExtra(MediaKeys.FAB_PRESSED, BOOK_FAB);
                     startActivity(intent);
                 } else if (id == R.id.action_games) {
                     //Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     // TODO put in intent extras/ bundles here to see if it was from film, books, or games
+                    intent.putExtra(MediaKeys.FAB_PRESSED, GAME_FAB);
                     startActivity(intent);
                 }
             }
