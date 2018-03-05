@@ -1,6 +1,10 @@
 package com.werelit.neurolls.neurolls.model;
 
 public class Media {
+
+    /** the ID of the media */
+    private int mediaID;
+
     /** name of the media */
     private String mMediaName;
 
