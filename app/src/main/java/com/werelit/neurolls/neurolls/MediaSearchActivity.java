@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import br.com.mauker.materialsearchview.MaterialSearchView;
 /**
+ *
+ * TODO: DELETE THIS CLASS IF WILL NO LONGER BE USED
+ *
  * To open the search view, simply call the searchView.openSearch() method.
  * To close the search view, call the searchView.closeSearch() method.
  * You can check if the view is open by using the searchView.isOpen() method.
