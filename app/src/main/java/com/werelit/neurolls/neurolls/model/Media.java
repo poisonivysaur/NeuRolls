@@ -8,7 +8,7 @@ public class Media {
     private String mMediaGenre;
 
     /** year released or published of the media */
-    private int mMediaYear = 9999;
+    private String mMediaYear = "9999";
 
     /** if the media was archived or not */
     private boolean isArchived = false;
@@ -17,7 +17,7 @@ public class Media {
 
     }
 
-    public Media(String mediaName, String mediaGenre, int releaseYear) {
+    public Media(String mediaName, String mediaGenre, String releaseYear) {
         mMediaName = mediaName;
         mMediaGenre = mediaGenre;
         mMediaYear = releaseYear;
@@ -39,11 +39,11 @@ public class Media {
         this.mMediaGenre = mMediaGenre;
     }
 
-    public int getmMediaYear() {
+    public String getmMediaYear() {
         return mMediaYear;
     }
 
-    public void setmMediaYear(int mMediaYear) {
+    public void setmMediaYear(String mMediaYear) {
         this.mMediaYear = mMediaYear;
     }
 

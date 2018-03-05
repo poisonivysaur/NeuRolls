@@ -32,7 +32,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             // get all the common attributes of the 3 categories of media
             String mediaName = bundle.getString(MediaKeys.MEDIA_NAME_KEY);
             String mediaGenre = bundle.getString(MediaKeys.MEDIA_GENRE_KEY);
-            int mediaYear = bundle.getInt(MediaKeys.MEDIA_YEAR_KEY, 0);
+            String mediaYear = bundle.getString(MediaKeys.MEDIA_YEAR_KEY);
 
             isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             isForAdding = bundle.getBoolean(MediaKeys.ADDING_NEW_MEDIA);

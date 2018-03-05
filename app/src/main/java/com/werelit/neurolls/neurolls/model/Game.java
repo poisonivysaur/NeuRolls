@@ -18,7 +18,7 @@ public class Game extends Media{
 
     }
 
-    public Game(String mediaName, String mediaGenre, int releaseYear,
+    public Game(String mediaName, String mediaGenre, String releaseYear,
                 String platform, String publisher, String storyline, String series) {
 
         super(mediaName, mediaGenre, releaseYear);

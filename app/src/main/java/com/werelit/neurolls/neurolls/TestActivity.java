@@ -88,6 +88,7 @@ public class TestActivity extends MainActivity implements RecyclerItemTouchHelpe
      * This method adds the dummy Media data into the Medias list.
      */
     private void prepareMedias() {
+        /*
         entertainments.add(new Media("Pericos", "Canteen @ LS building DLSU", 5));
         entertainments.add(new Media("La Casita @ 6th Andrew", "Canteen @ Andrew building DLSU", 9));
         entertainments.add(new Media("La Casita @ 2nd Razon", "Canteen @ Razon building DLSU", 3));
@@ -100,6 +101,7 @@ public class TestActivity extends MainActivity implements RecyclerItemTouchHelpe
         entertainments.add(new Media("seventh resto", "Canteen @ LS building DLSU", 5));
         entertainments.add(new Media("eighth resto", "Canteen @ Andrew building DLSU", 9));
         entertainments.add(new Media("9th", "Canteen @ Razon building DLSU", 3));
+        */
     }
 
     /**

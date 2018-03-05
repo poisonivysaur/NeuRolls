@@ -18,7 +18,7 @@ public class Film extends Media{
 
     }
 
-    public Film(String mediaName, String mediaGenre, int releaseYear,
+    public Film(String mediaName, String mediaGenre, String releaseYear,
                 int duration, String director, String production, String synopsis) {
 
         super(mediaName, mediaGenre, releaseYear);

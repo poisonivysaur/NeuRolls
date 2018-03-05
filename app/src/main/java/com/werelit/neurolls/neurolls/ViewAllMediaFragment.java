@@ -136,7 +136,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
                 bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
-                bundle.putInt(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
+                bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
 
                 // View the details depending what category the media is
                 Media media = entertainments.get(position);
@@ -179,28 +179,28 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
      */
     private void prepareMedias() {
 
-        entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", 2004,
+        entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", "2004",
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",
                 "From his hideout beneath a 19th century Paris opera house, the brooding Phantom (Gerard Butler) schemes to get closer to vocalist Christine Daae (Emmy Rossum). The Phantom, wearing a mask to hide a congenital disfigurement, strong-arms management into giving the budding starlet key roles, but Christine instead falls for arts benefactor Raoul (Patrick Wilson). Terrified at the notion of her absence, the Phantom enacts a plan to keep Christine by his side, while Raoul tries to foil the scheme."));
-        entertainments.add(new Film("不能說的·秘密", "Drama/Fantasy", 2007,
+        entertainments.add(new Film("不能說的·秘密", "Drama/Fantasy", "2007",
                 101, "Jay Chou", "Sony Pictures Taiwan, Edko Film",
                 "A piano prodigy (Jay Chou) encounters two mysterious students at a college of arts."));
-        entertainments.add(new Book("Charlotte's Web", "Children's literature", 1952, "E. B. White","Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers."));
-        entertainments.add(new Game("Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", 2005,
+        entertainments.add(new Book("Charlotte's Web", "Children's literature", "1952", "E. B. White","Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers."));
+        entertainments.add(new Game("Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
                 "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.", "Sonic the Hedgehog"));
-        entertainments.add(new Film("Sherlock Holmes", "Thriller/Action", 2009,
+        entertainments.add(new Film("Sherlock Holmes", "Thriller/Action", "2009",
                 130, "Guy Ritchie", "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
                 "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies."));
-        entertainments.add(new Film("Sherlock Holmes: A Game of Shadows", "Crime film/Thriller", 2011,
+        entertainments.add(new Film("Sherlock Holmes: A Game of Shadows", "Crime film/Thriller", "2011",
                 129, "Guy Ritchie", "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
                 "When Austria's crown prince is found dead, evidence seems to point to suicide. However, detective Sherlock Holmes (Robert Downey Jr.) deduces that the prince was murdered and that the crime is but a piece of a puzzle designed by an evil genius named Moriarty (Jared Harris). Holmes and his friend Dr. Watson (Jude Law), who are accompanied by a Gypsy (Noomi Rapace) whose life Holmes saved, chase Moriarty across Europe in the hope that they can thwart his plot before it can come to fruition."));
-        entertainments.add(new Film("The Theory of Everything", "Drama/Romance", 2014,
+        entertainments.add(new Film("The Theory of Everything", "Drama/Romance", "2014",
                 123, "James Marsh", "Working Title Films",
                 "In the 1960s, Cambridge University student and future physicist Stephen Hawking (Eddie Redmayne) falls in love with fellow collegian Jane Wilde (Felicity Jones). At 21, Hawking learns that he has motor neuron disease. Despite this -- and with Jane at his side -- he begins an ambitious study of time, of which he has very little left, according to his doctor. He and Jane defy terrible odds and break new ground in the fields of medicine and science, achieving more than either could hope to imagine."));
-        entertainments.add(new Film("Astro Boy", "Action/Adventure", 2009,
+        entertainments.add(new Film("Astro Boy", "Action/Adventure", "2009",
                 94, "David Bowers", "Imagi Animation Studios",
                 "In futuristic Metro City, a brilliant scientist named Tenma builds Astro Boy (Freddie Highmore), a robotic child with superstrength, X-ray vision and the ability to fly. Astro Boy sets out to explore the world and find acceptance, learning what being human is all about in the process. Finding that his friends and family in Metro City are in danger, he uses his incredible powers to save all that he loves."));
-        entertainments.add(new Film("A Beautiful Mind", " Drama/Romance", 2001,
+        entertainments.add(new Film("A Beautiful Mind", " Drama/Romance", "2001",
                 101, "Ron Howard", "Imagine Entertainment",
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
     }

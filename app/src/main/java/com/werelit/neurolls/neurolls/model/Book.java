@@ -15,7 +15,7 @@ public class Book extends Media{
 
     }
 
-    public Book(String mediaName, String mediaGenre, int releaseYear,
+    public Book(String mediaName, String mediaGenre, String releaseYear,
                 String author, String publisher, String description) {
 
         super(mediaName, mediaGenre, releaseYear);

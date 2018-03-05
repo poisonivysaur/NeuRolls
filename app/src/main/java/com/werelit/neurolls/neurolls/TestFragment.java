@@ -104,7 +104,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 bundle.putInt("position", position);
                 bundle.putString("name", entertainments.get(position).getmMediaName());
                 bundle.putString("genre", entertainments.get(position).getmMediaGenre());
-                bundle.putDouble("year", entertainments.get(position).getmMediaYear());
+                //bundle.putDouble("year", entertainments.get(position).getmMediaYear());
 
                 // View the details depending what category the media is
                 Media media = entertainments.get(position);
@@ -141,6 +141,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
      * This method adds the dummy Media data into the Medias list.
      */
     private void prepareMedias() {
+        /*
         entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", 2004,
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",
                 "From his hideout beneath a 19th century Paris opera house, the brooding Phantom (Gerard Butler) schemes to get closer to vocalist Christine Daae (Emmy Rossum). The Phantom, wearing a mask to hide a congenital disfigurement, strong-arms management into giving the budding starlet key roles, but Christine instead falls for arts benefactor Raoul (Patrick Wilson). Terrified at the notion of her absence, the Phantom enacts a plan to keep Christine by his side, while Raoul tries to foil the scheme."));
@@ -165,6 +166,7 @@ public class TestFragment extends Fragment implements RecyclerItemTouchHelper.Re
         entertainments.add(new Film("A Beautiful Mind", " Drama/Romance", 2001,
                 101, "Ron Howard", "Imagine Entertainment",
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
+                */
     }
 
     /**
