@@ -37,15 +37,17 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the pets table
+       // TODO: Query
+        /*
         String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + FilmEntry.TABLE_NAME + " ("
                 + FilmEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + FilmEntry.COLUMN + " TEXT NOT NULL, "
                 + FilmEntry.COLUMN_PET_BREED + " TEXT, "
                 + FilmEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
                 + FilmEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
-
+        */
         // Execute the SQL statement
-        db.execSQL(SQL_CREATE_PETS_TABLE);
+        //db.execSQL(SQL_CREATE_PETS_TABLE);
     }
 
     /**
