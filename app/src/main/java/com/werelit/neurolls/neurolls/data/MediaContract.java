@@ -16,7 +16,8 @@ public class MediaContract {
         public static final String COLUMN_FILM_SYNOPSIS = "synopsis";
         public static final String COLUMN_FILM_IMG_DIR = "image_directory";
         public static final String COLUMN_FILM_ARCHIVED = "isArchived";
-        public static final String COLUMN_FILMDATE_TO_WATCH = "date_to_watch";
+        public static final String COLUMN_FILM_DATE_TO_WATCH = "date_to_watch";
+        public static final String COLUMN_FILM_WATCHED = "isWatched";
         public static final String COLUMN_FILM_NOTIF_SETTINGS = "notif_settings";
     }
 
@@ -31,8 +32,9 @@ public class MediaContract {
         public static final String COLUMN_BOOK_DESCRIPTION = "description";
         public static final String COLUMN_BOOK_IMG_DIR = "image_directory";
         public static final String COLUMN_BOOK_ARCHIVED = "isArchived";
-        public static final String COLUMN_BOOKDATE_TO_READ = "date_to_read";
-        public static final String COLUMN_BOOKNOTIF_SETTINGS = "notif_settings";
+        public static final String COLUMN_BOOK_DATE_TO_READ = "date_to_read";
+        public static final String COLUMN_FILM_READ = "isRead";
+        public static final String COLUMN_BOOK_NOTIF_SETTINGS = "notif_settings";
     }
 
     public static final class GameEntry implements BaseColumns{
@@ -50,7 +52,8 @@ public class MediaContract {
         public static final String COLUMN_GAME_STORYLINE = "storyline";
         public static final String COLUMN_GAME_IMG_DIR = "image_directory";
         public static final String COLUMN_GAME_ARCHIVED = "isArchived";
-        public static final String COLUMN_GAMEDATE_TO_PLAY = "date_to_play";
-        public static final String COLUMN_GAMENOTIF_SETTINGS = "notif_settings";
+        public static final String COLUMN_GAME_DATE_TO_PLAY = "date_to_play";
+        public static final String COLUMN_FILM_PLAYED = "isPlayed";
+        public static final String COLUMN_GAME_NOTIF_SETTINGS = "notif_settings";
     }
 }
