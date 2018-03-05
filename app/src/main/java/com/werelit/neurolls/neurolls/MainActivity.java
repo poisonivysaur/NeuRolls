@@ -164,15 +164,15 @@ public class MainActivity extends AppCompatActivity
                 // do something
                 if (id == R.id.action_films) {
                     // Handle the home action
-                    Intent intent = new Intent(MainActivity.this, MediaSearchActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     startActivity(intent);
                 } else if (id == R.id.action_books) {
                     //Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, MediaSearchActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     startActivity(intent);
                 } else if (id == R.id.action_games) {
                     //Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, MediaSearchActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
                     startActivity(intent);
                 }
             }
