@@ -10,9 +10,6 @@ import br.com.mauker.materialsearchview.MaterialSearchView;
 
 public class SearchableActivity extends AppCompatActivity{
 
-
-
-    private MaterialSearchView searchView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
