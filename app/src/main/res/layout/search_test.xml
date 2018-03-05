@@ -10,12 +10,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/argh"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:queryHint="@string/search"
-        android:iconifiedByDefault="false" />
-
-
 </android.support.constraint.ConstraintLayout>

@@ -55,8 +55,7 @@
 
         <activity
             android:name=".MediaSearchActivity"
-            android:label="Search Media"
-            android:parentActivityName=".MainActivity"/>
+            android:label="Search Media"/>
 
     </application>
 
