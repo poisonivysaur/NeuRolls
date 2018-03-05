@@ -38,6 +38,8 @@ public class SearchMediaActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO put in intent extras/ bundles here to see if it was from film, books, or games
+                Intent intent = getIntent();
+                intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
                 return false;
             }
 

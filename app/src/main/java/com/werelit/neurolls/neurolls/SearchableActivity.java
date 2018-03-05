@@ -20,6 +20,22 @@ public class SearchableActivity extends AppCompatActivity{
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //doMySearch(query);
+
+            // TODO do search depending on which fab button was pressed
+            int searchFilm = intent.getIntExtra(MediaKeys.FAB_PRESSED, 1);
+
+            switch (searchFilm){
+                case MainActivity.FILM_FAB:
+                    // TODO do film search
+                    break;
+                case MainActivity.BOOK_FAB:
+                    // TODO do book search
+                    break;
+                case MainActivity.GAME_FAB:
+                    // TODO do game search
+                    break;
+            }
+
             Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
         }
     }
