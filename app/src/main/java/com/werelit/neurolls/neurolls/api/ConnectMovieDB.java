@@ -3,6 +3,10 @@ package com.werelit.neurolls.neurolls.api;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 public class ConnectMovieDB {
 
@@ -35,75 +40,11 @@ public class ConnectMovieDB {
      */
     private static final String API_MOVIE = "/movie";
 
+    private static final String API_GENRE = "/genre/movie/list";
+    private static final String API_PEOPLE = "/person";
+    private static final String API_CREDIT = "/credits";
+
     private ConnectMovieDB(){}
-
-    private static URL createURL(String stringUrl){
-        URL url = null;
-        try{
-            url = new URL(stringUrl);
-        }catch(MalformedURLException e){
-            Log.e(TAG, "Error @ConnectMovieDB:createURL\n" + e.toString());
-        }
-        return url;
-    }
-
-    private static String httpGetRequestTotmdb(String stringUrl) {
-        URL url = createURL(stringUrl);
-        String jsonResponse = "";
-        if(url == null){
-            return "";
-        }
-
-        HttpURLConnection http = null;
-        InputStream inputStream = null;
-        try{
-            http = (HttpURLConnection) url.openConnection();
-            http.setRequestMethod("GET");
-
-            http.connect();
-
-            System.out.println("Response Code: " + http.getResponseCode());
-            if(http.getResponseCode() == 200){
-                inputStream = http.getInputStream();
-                jsonResponse = readFromStream(inputStream);
-            }else{
-                jsonResponse = "";
-            }
-        }catch(IOException e){
-            Log.e(TAG, "Error @ConnectMovieDB:httpGetRequestTotmdb\n" + e.toString());
-        }finally {
-            if(http != null){
-                http.disconnect();
-            }
-            if(inputStream != null){
-                try{
-                    inputStream.close();
-                }catch(IOException e){}
-            }
-        }
-
-        return jsonResponse;
-    }
-
-    private static String readFromStream(InputStream stream) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        InputStreamReader inputStreamReader = null;
-        BufferedReader reader = null;
-        if(stream != null){
-            inputStreamReader = new InputStreamReader(stream);
-            reader = new BufferedReader(inputStreamReader);
-            String line = reader.readLine();
-            while(line != null){
-                builder.append(line);
-                line = reader.readLine();
-            }
-        }
-
-        if(inputStreamReader != null) inputStreamReader.close();
-        if(reader != null) reader.close();
-
-        return builder.toString();
-    }
 
     public static String searchMovie(String query){
         String url = "";
@@ -111,17 +52,73 @@ public class ConnectMovieDB {
         try{
             url = API_URL + API_SEARCH + API_KEY + "&query=" + URLEncoder.encode(query, "UTF-8");
         }catch(UnsupportedEncodingException e){
-            Log.e(TAG, "Error @ConnectMovieDB:createURL\n" + e.toString());
+            e.printStackTrace();
         }
 
-        jsonResponse = httpGetRequestTotmdb(url);
+        jsonResponse = NetworkUtils.httpGetRequestToAny(url);
 
         return jsonResponse;
     }
 
     public static String getMovieDetails(int movieId){
         String url = API_URL + API_MOVIE + "/" + movieId + API_KEY;
-        return httpGetRequestTotmdb(url);
+        return NetworkUtils.httpGetRequestToAny(url);
+    }
+
+    public static String getGenre(JSONArray genreIds){
+        if(genreIds.length() == 0)
+            return "";
+        String genreList = NetworkUtils.httpGetRequestToAny(API_URL + API_GENRE + API_KEY);
+        String genre = "";
+        HashMap<Integer, String> allGenres = new HashMap<>();
+        try{
+            JSONObject baseObject = new JSONObject(genreList);
+            JSONArray jsonArray = baseObject.getJSONArray("genres");
+            for(int i = 0; i < jsonArray.length(); i++){
+                JSONObject genreObj = jsonArray.getJSONObject(i);
+                allGenres.put(genreObj.getInt("id"), genreObj.getString("name"));
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        try {
+            for (int i = 0; i < genreIds.length(); i++) {
+                if (allGenres.containsKey(genreIds.getInt(i))) {
+                    genre += allGenres.get(genreIds.getInt(i)) + "/";
+                }
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        return genre.substring(0, genre.length() - 1);
+    }
+
+    public static String getDirector(int filmId){
+        String director = "";
+        String response = NetworkUtils.httpGetRequestToAny(API_URL + API_MOVIE + "/" + filmId + API_CREDIT + API_KEY);
+        if(response == null)
+            return "";
+        try{
+            JSONObject baseObject = new JSONObject(response);
+            JSONArray crewArray = baseObject.getJSONArray("crew");
+
+            for(int i = 0; i < crewArray.length(); i++){
+                JSONObject curObj = crewArray.getJSONObject(i);
+                if(curObj.getString("job").equals("Director")){
+                    director = curObj.getString("name");
+                    break;
+                }
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return "";
+        }
+
+        return director;
     }
 
 }
