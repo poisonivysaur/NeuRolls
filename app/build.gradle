@@ -27,6 +27,8 @@ dependencies {
     // compile 'io.github.yavski:fab-speed-dial:1.0.6'
     compile 'com.github.kobakei:MaterialFabSpeedDial:master-SNAPSHOT'
 
+    // SearchView
+    compile 'br.com.mauker.materialsearchview:materialsearchview:1.2.2'
     // CardView
     compile 'com.android.support:cardview-v7:27.0.2'
     testImplementation 'junit:junit:4.12'

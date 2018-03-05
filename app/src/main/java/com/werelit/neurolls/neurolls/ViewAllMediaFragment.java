@@ -254,8 +254,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             snackbar.show();
 
-            // perform DELETE on the db if an item was removed completely & if that media is already archived
-            // if it just archived, then UPDATE the db only and not DELETE
+            // TODO perform DELETE on the db if an item was removed completely & if that media is already archived
+            // TODO if it just archived, then UPDATE the db only and not DELETE
         }
     }
 }
