@@ -1,4 +1,4 @@
-package com.werelit.neurolls.neurolls;
+package com.werelit.neurolls.neurolls.data;
 
 import android.provider.BaseColumns;
 
