@@ -49,6 +49,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         isArchived = archived;
         if(isArchived){
             // query here later on for isArchived attribute from the db for the entertainments array list
+            // TODO enetertainments = dbHelper.query ...
             mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
         }
         else {
@@ -178,6 +179,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
      * This method adds the dummy Media data into the Medias list.
      */
     private void prepareMedias() {
+
+        // TODO query db and return the result as an ArrayList entertainments
 
         entertainments.add(new Film("Phantom of the Opera", "Drama/Thriller", "2004",
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",

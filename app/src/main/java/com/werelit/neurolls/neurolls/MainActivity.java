@@ -165,14 +165,18 @@ public class MainActivity extends AppCompatActivity
                 if (id == R.id.action_films) {
                     // Handle the home action
                     Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
+                    // TODO put in intent extras/ bundles here to see if it was from film, books, or games
+                    intent.putExtra(AddRestaurantActivity.REQUEST_CODE_KEY, AddRestaurantActivity.EDIT_ACTIVITY_CODE);
                     startActivity(intent);
                 } else if (id == R.id.action_books) {
                     //Toast.makeText(MainActivity.this , " Books clicked ", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
+                    // TODO put in intent extras/ bundles here to see if it was from film, books, or games
                     startActivity(intent);
                 } else if (id == R.id.action_games) {
                     //Toast.makeText(MainActivity.this , " Games clicked ", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
+                    // TODO put in intent extras/ bundles here to see if it was from film, books, or games
                     startActivity(intent);
                 }
             }
@@ -207,6 +211,7 @@ public class MainActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
     }
 
+    // this method will get the archived media
     public void getFilteredMedia(boolean isArchived){
         for(int i = 0; i < viewPager.getAdapter().getCount(); i++){
             ViewAllMediaFragment f = (ViewAllMediaFragment)((CategoryAdapter)viewPager.getAdapter()).getItem(i);

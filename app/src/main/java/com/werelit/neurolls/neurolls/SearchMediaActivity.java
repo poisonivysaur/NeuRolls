@@ -37,11 +37,13 @@ public class SearchMediaActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                // TODO put in intent extras/ bundles here to see if it was from film, books, or games
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // TODO do search suggestions
                 return false;
             }
         });
