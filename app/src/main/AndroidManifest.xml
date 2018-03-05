@@ -50,6 +50,11 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
+        <activity
+            android:name=".MediaSearchActivity"
+            android:label="Search Media"
+            android:parentActivityName=".MainActivity"/>
+
     </application>
 
 
