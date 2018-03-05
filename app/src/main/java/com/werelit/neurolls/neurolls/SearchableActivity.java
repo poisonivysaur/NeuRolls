@@ -56,6 +56,9 @@ public class SearchableActivity extends AppCompatActivity{
 
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
+        //searchView.openSearch();
+        Toast.makeText(this, "" + searchView.isOpen(), Toast.LENGTH_SHORT).show();
+
         // If you want to submit the query from the selected suggestion
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
