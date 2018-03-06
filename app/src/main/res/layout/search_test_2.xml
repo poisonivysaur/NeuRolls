@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -16,10 +16,16 @@
 
     <br.com.mauker.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
+        style="@style/MaterialSearchViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/MaterialSearchViewStyle"/>
-
-
+        android:layout_below="@+id/toolbar"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/media_archived_item" />
 
 </RelativeLayout>

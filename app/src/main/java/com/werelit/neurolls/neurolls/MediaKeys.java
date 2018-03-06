@@ -25,4 +25,6 @@ public class MediaKeys {
     public final static String ADDING_NEW_MEDIA = "ADDING_NEW_MEDIA";
 
     public final static String FAB_PRESSED = "FAB_PRESSED";
+
+    public final static String SEARCH_QUERY = "SEARCH_QUERY";
 }
