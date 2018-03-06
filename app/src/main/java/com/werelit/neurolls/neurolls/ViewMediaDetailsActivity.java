@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -179,5 +180,24 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     public void setupClickListeners(){
 
         // TODO set up date picker, notification modal
+        LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
+        scheduledDate.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                // TODO
+                Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        LinearLayout notifSettings = (LinearLayout) findViewById(R.id.notif_settings);
+        notifSettings.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                // TODO
+                Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
