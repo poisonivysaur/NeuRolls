@@ -64,12 +64,13 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 JSONObject currentObj = resultsArray.getJSONObject(i);
 
                 String title = currentObj.getString("title");
+
+                // TODO extract year from date
                 String releaseDate = currentObj.getString("release_date");
-                int releaseYear = 0;
-                if(!releaseDate.equals(""))
-                    releaseYear = Integer.parseInt(releaseDate.substring(0, 4));
+
+                // TODO get the genre instead of the language
                 String language = currentObj.getString("original_language");
-                movieList.add(new Media(title, language, releaseYear));
+                movieList.add(new Media(title, language, releaseDate));
                     /*
                     System.out.println("Movie Index: " + i);
                     System.out.println("\tTitle: " + title);
