@@ -186,6 +186,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO
+
                 Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
             }
         });
