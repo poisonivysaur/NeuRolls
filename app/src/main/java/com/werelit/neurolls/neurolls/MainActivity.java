@@ -16,13 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
-import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
-//
-//import io.github.yavski.fabspeeddial.FabSpeedDial;
-//import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
