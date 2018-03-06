@@ -24,6 +24,64 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setupUI();
+        setupClickListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+
+        }
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if(isArchived){ // if item is archived, menu shows delete or unarchive options
+            getMenuInflater().inflate(R.menu.archived_media_menu, menu);
+        }
+        else if(isForAdding){   // if this is a new media for adding, then menu shows submit or cancel options
+            getMenuInflater().inflate(R.menu.add_media_menu, menu);
+        }
+        else{   // else menu shows archive or share options
+            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_archive) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_share) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_submit) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_cancel) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: finish()!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_unarchive) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
+        }
+        else if(item.getItemId() == R.id.action_delete) {
+            //this.finish();
+            Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setupUI(){
+
         // get intent that was passed when the recycler view item was pressed
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -118,55 +176,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void setupClickListeners(){
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-
-        }
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        if(isArchived){ // if item is archived, menu shows delete or unarchive options
-            getMenuInflater().inflate(R.menu.archived_media_menu, menu);
-        }
-        else if(isForAdding){   // if this is a new media for adding, then menu shows submit or cancel options
-            getMenuInflater().inflate(R.menu.add_media_menu, menu);
-        }
-        else{   // else menu shows archive or share options
-            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_archive) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
-        }
-        else if(item.getItemId() == R.id.action_share) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
-        }
-        else if(item.getItemId() == R.id.action_submit) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
-        }
-        else if(item.getItemId() == R.id.action_cancel) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: finish()!", Toast.LENGTH_SHORT).show();
-        }
-        else if(item.getItemId() == R.id.action_unarchive) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
-        }
-        else if(item.getItemId() == R.id.action_delete) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
+        // TODO set up date picker, notification modal
     }
 }
