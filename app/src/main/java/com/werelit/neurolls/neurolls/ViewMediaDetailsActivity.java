@@ -1,6 +1,7 @@
 package com.werelit.neurolls.neurolls;
 
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity {
 
@@ -181,11 +185,30 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
 
         // TODO set up date picker, notification modal
         LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
+        final TextView dateTextView = (TextView) findViewById(R.id.date_text_view);
         scheduledDate.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 // TODO
+                // calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ViewMediaDetailsActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                dateTextView.setText(dayOfMonth + "/"
+                                        + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
                 Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
             }
         });
