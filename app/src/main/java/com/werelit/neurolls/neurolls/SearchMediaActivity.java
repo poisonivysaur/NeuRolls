@@ -194,11 +194,13 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onSearchViewOpened() {
                 // Do something once the view is open.
+                recyclerView.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onSearchViewClosed() {
                 // Do something once the view is closed.
+                recyclerView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -207,7 +209,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Do something when the suggestion list is clicked.
                 String suggestion = searchView.getSuggestionAtPosition(position);
-
+                //Toast.makeText(SearchMediaActivity.this, "ehem ehem", Toast.LENGTH_SHORT).show();
                 searchView.setQuery(suggestion, false);
             }
         });
