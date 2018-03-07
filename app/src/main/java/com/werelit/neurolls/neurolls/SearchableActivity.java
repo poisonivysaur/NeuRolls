@@ -10,6 +10,9 @@ import br.com.mauker.materialsearchview.MaterialSearchView;
 
 public class SearchableActivity extends AppCompatActivity{
 
+    // TODO implement task loader methods here instead, passing the searchFilm as a parameter
+    // and set searchFilm in FilmSearchLoader class as an attribute that determines
+    // which moviedbuitls method to call
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
