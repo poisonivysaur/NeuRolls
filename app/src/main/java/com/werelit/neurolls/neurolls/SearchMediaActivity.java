@@ -18,6 +18,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
+import com.werelit.neurolls.neurolls.model.Game;
 import com.werelit.neurolls.neurolls.model.Media;
 
 import org.json.JSONArray;
@@ -245,10 +248,61 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mediaAdapter);
-        //prepareMovieData();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(SearchMediaActivity.this, movieList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                //Toast.makeText(getApplicationContext(), "You Long pressed me!", Toast.LENGTH_SHORT).show();
+            }
+        }));
 
         if(getSupportLoaderManager().getLoader(0) != null){
             getSupportLoaderManager().initLoader(0, null, this);
         }
+    }
+
+    private void prepareData(int position){
+
+        // Make a bundle containing the current media details
+        Bundle bundle = new Bundle();
+
+        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to movieList.get(i).isArchived()
+        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, movieList.get(position).getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, movieList.get(position).getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, movieList.get(position).getmMediaYear());
+
+        // View the details depending what category the media is
+        Media media = movieList.get(position);
+        Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
+
+        if(media instanceof Film){
+            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
+            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)movieList.get(position)).getDuration());
+            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)movieList.get(position)).getDirector());
+            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)movieList.get(position)).getProduction());
+            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)movieList.get(position)).getSynopsis());
+        }
+        else if(media instanceof Book){
+            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
+            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)movieList.get(position)).getAuthor());
+            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)movieList.get(position)).getPublisher());
+            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)movieList.get(position)).getDescription());
+        }
+        else if(media instanceof Game){
+            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
+            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)movieList.get(position)).getPlatform());
+            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)movieList.get(position)).getPublisher());
+            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)movieList.get(position)).getSeries());
+            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)movieList.get(position)).getStoryline());
+        }
+
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
