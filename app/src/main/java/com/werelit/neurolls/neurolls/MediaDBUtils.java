@@ -126,6 +126,7 @@ public class MediaDBUtils {
         return httpGetRequestTotmdb(url);
     }
 
+    // TODO
     public static String searchBook(String query){
         String url = "";
         String jsonResponse = "";
@@ -140,6 +141,7 @@ public class MediaDBUtils {
         return jsonResponse;
     }
 
+    // TODO
     public static String searchGame(String query){
         String url = "";
         String jsonResponse = "";
