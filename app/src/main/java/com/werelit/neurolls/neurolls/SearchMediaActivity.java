@@ -40,7 +40,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_test_2);
+        setContentView(R.layout.search_media);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
