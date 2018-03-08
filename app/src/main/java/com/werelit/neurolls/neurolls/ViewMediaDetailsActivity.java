@@ -69,6 +69,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
         else if(item.getItemId() == R.id.action_submit) {
             //this.finish();
             Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
+            // TODO db insertion happens here
         }
         else if(item.getItemId() == R.id.action_cancel) {
             //this.finish();

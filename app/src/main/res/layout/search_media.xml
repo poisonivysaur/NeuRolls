@@ -22,6 +22,16 @@
         android:scrollbars="vertical"
         tools:listitem="@layout/media_archived_item" />
 
+    <!-- Empty view is only visible when the list has no items. -->
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_gravity="center"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:textAppearanceMedium" />
+
     <br.com.mauker.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
         style="@style/MaterialSearchViewStyle"

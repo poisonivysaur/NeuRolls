@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.model.Book;
@@ -39,6 +40,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private ArrayList<Media> movieList;
     private RecyclerView recyclerView;
     private MediaAdapter mediaAdapter;
+    /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
     private int searchType = 1;
 
     @Override
@@ -51,6 +53,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         setupSearchView();
         setupRecyclerView();
+
+        // set visibility of the empty view to be GONE initially
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        mEmptyStateTextView.setVisibility(View.GONE);
 
         searchType = getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1);
     }
@@ -90,6 +96,11 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             e.printStackTrace();
         }
         mediaAdapter.notifyDataSetChanged();
+        if(movieList.size() == 0 ){
+            recyclerView.setVisibility(View.GONE);
+            mEmptyStateTextView.setText("No matching results :(");
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
