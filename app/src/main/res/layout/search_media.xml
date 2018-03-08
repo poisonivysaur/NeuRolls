@@ -28,8 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_gravity="center"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:gravity="center"
         android:textAppearance="?android:textAppearanceMedium" />
 
     <br.com.mauker.materialsearchview.MaterialSearchView
