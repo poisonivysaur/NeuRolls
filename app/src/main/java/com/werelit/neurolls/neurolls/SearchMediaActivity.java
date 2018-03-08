@@ -39,6 +39,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private ArrayList<Media> movieList;
     private RecyclerView recyclerView;
     private MediaAdapter mediaAdapter;
+    private int searchType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +51,14 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         setupSearchView();
         setupRecyclerView();
+
+        searchType = getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1);
     }
 
     @Override
     public android.support.v4.content.Loader<String> onCreateLoader(int id, Bundle args) {
         MediaTaskLoader mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
-        mediaTaskLoader.setMediaCategory(getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1));
+        mediaTaskLoader.setMediaCategory(searchType);
         return mediaTaskLoader;
     }
 
@@ -282,6 +285,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Media media = movieList.get(position);
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
 
+        // TODO instead of checking the instanceof, use searchType to determine which view to get
         if(media instanceof Film){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
             bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)movieList.get(position)).getDuration());
