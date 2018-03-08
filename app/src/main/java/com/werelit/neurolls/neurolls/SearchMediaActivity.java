@@ -51,7 +51,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public android.support.v4.content.Loader<String> onCreateLoader(int id, Bundle args) {
-        return new FilmSearchLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
+        MediaTaskLoader mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
+        mediaTaskLoader.setMediaCategory(getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1));
+        return mediaTaskLoader;
     }
 
     @Override
