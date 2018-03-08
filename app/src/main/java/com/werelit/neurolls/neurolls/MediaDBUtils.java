@@ -37,8 +37,16 @@ public class MediaDBUtils {
      */
     private static final String API_MOVIE = "/movie";
 
+    /**
+     * Create a private constructor because no one should ever create a {@link MediaDBUtils} object.
+     * This class is only meant to hold static variables and methods, which can be accessed
+     * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
+     */
     private MediaDBUtils(){}
 
+    /**
+     * Returns new URL object from the given string URL.
+     */
     public static URL createURL(String stringUrl){
         URL url = null;
         try{
@@ -49,6 +57,9 @@ public class MediaDBUtils {
         return url;
     }
 
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
     public static String httpGetRequestTotmdb(String stringUrl) {
         URL url = createURL(stringUrl);
         String jsonResponse = "";
@@ -87,6 +98,10 @@ public class MediaDBUtils {
         return jsonResponse;
     }
 
+    /**
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
     private static String readFromStream(InputStream stream) throws IOException {
         StringBuilder builder = new StringBuilder();
         InputStreamReader inputStreamReader = null;
