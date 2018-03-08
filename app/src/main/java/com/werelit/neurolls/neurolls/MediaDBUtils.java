@@ -12,29 +12,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class MovieDBUtils {
+/**
+ * Helper methods related to requesting and receiving media data from APIs.
+ */
+public class MediaDBUtils {
 
-    private static final String TAG = MovieDBUtils.class.getSimpleName();
+    private static final String TAG = MediaDBUtils.class.getSimpleName();
 
     /**
      * API key for The Movie DB.
      */
-    private static final String API_KEY = "?api_key=07d9adcc57400a9e0037f806286a7c3c";
+    private static final String FILM_API_KEY = "?api_key=07d9adcc57400a9e0037f806286a7c3c";
     /**
      * The general URI for calling the API.
      */
-    private static final String API_URL = "https://api.themoviedb.org/3";
+    private static final String FILM_API_URL = "https://api.themoviedb.org/3";
 
     /**
-     * The URI for searching movies. (ex: https://api.themoviedb.org/3/search/movie?query=Black Panther)
+     * The URI for searching movies & tv series. (ex: https://api.themoviedb.org/3/search/movie?query=Black Panther)
      */
-    private static final String API_SEARCH = "/search/movie";
+    private static final String FILM_API_SEARCH = "/search/movie";
     /**
      * The URI for getting a specific movie. (ex: https://api.themoviedb.org/3/movie/284054)
      */
     private static final String API_MOVIE = "/movie";
 
-    private MovieDBUtils(){}
+    private MediaDBUtils(){}
 
     public static URL createURL(String stringUrl){
         URL url = null;
@@ -108,7 +111,7 @@ public class MovieDBUtils {
         String url = "";
         String jsonResponse = "";
         try{
-            url = API_URL + API_SEARCH + API_KEY + "&query=" + URLEncoder.encode(query, "UTF-8");
+            url = FILM_API_URL + FILM_API_SEARCH + FILM_API_KEY + "&query=" + URLEncoder.encode(query, "UTF-8");
         }catch(UnsupportedEncodingException e){
             Log.e(TAG, "Error @ConnectMovieDB:createURL\n" + e.toString());
         }
@@ -119,9 +122,36 @@ public class MovieDBUtils {
     }
 
     public static String getMovieDetails(int movieId){
-        String url = API_URL + API_MOVIE + "/" + movieId + API_KEY;
+        String url = FILM_API_URL + API_MOVIE + "/" + movieId + FILM_API_KEY;
         return httpGetRequestTotmdb(url);
     }
 
+    public static String searchBook(String query){
+        String url = "";
+        String jsonResponse = "";
+        try{
+            url = FILM_API_URL + FILM_API_SEARCH + FILM_API_KEY + "&query=" + URLEncoder.encode(query, "UTF-8");
+        }catch(UnsupportedEncodingException e){
+            Log.e(TAG, "Error @ConnectMovieDB:createURL\n" + e.toString());
+        }
+
+        jsonResponse = httpGetRequestTotmdb(url);
+
+        return jsonResponse;
+    }
+
+    public static String searchGame(String query){
+        String url = "";
+        String jsonResponse = "";
+        try{
+            url = FILM_API_URL + FILM_API_SEARCH + FILM_API_KEY + "&query=" + URLEncoder.encode(query, "UTF-8");
+        }catch(UnsupportedEncodingException e){
+            Log.e(TAG, "Error @ConnectMovieDB:createURL\n" + e.toString());
+        }
+
+        jsonResponse = httpGetRequestTotmdb(url);
+
+        return jsonResponse;
+    }
 
 }

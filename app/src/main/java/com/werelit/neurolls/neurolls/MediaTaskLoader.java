@@ -47,13 +47,13 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
         // depending on what is the value of media category set in searchable activity
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
-                return MovieDBUtils.searchMovie(this.query);
+                return MediaDBUtils.searchMovie(this.query);
 
             case Media.CATEGORY_BOOKS:
-                return MovieDBUtils.searchMovie(this.query);
+                return MediaDBUtils.searchBook(this.query);
 
             case Media.CATEGORY_GAMES:
-                return MovieDBUtils.searchMovie(this.query);
+                return MediaDBUtils.searchGame(this.query);
         }
         return "No matching results :(";
     }
