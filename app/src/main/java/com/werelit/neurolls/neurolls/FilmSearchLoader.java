@@ -3,9 +3,10 @@ package com.werelit.neurolls.neurolls;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-public class FilmSearchLoader extends AsyncTaskLoader<String> {
+public class FilmSearchLoader extends AsyncTaskLoader<String> { // TODO change class name to MediaTaskLoader
 
     private String query;
+    public static final int MEDIA_CATEGORY = 0;
 
     // TODO make a new attribute searchType to which method to call in movie db utils
 

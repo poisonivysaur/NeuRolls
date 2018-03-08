@@ -17,6 +17,11 @@ public class Media {
     /** if the media was archived or not */
     private boolean isArchived = false;
 
+
+    public static final int CATEGORY_FILMS = 1;
+    public static final int CATEGORY_BOOKS = 2;
+    public static final int CATEGORY_GAMES = 3;
+
     public Media(){
 
     }
