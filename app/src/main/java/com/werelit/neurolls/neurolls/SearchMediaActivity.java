@@ -214,6 +214,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public void onSearchViewOpened() {
                 // Do something once the view is open.
                 recyclerView.setVisibility(View.INVISIBLE);
+                mEmptyStateTextView.setVisibility(View.GONE);
             }
 
             @Override
