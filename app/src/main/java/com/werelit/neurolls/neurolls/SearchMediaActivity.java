@@ -5,20 +5,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.igdb.api_android_java.callback.onSuccessCallback;
+import com.igdb.api_android_java.model.APIWrapper;
+import com.igdb.api_android_java.model.Parameters;
+import com.werelit.neurolls.neurolls.api.ConnectGameDB;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
@@ -37,9 +43,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MaterialSearchView searchView;
-    private ArrayList<Media> movieList;
+    private ArrayList<Media> mediaList;
     private RecyclerView recyclerView;
     private MediaAdapter mediaAdapter;
+    private MediaTaskLoader mediaTaskLoader;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
     private int searchType = 1;
 
@@ -63,40 +70,30 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public android.support.v4.content.Loader<String> onCreateLoader(int id, Bundle args) {
-        MediaTaskLoader mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
+        mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
         mediaTaskLoader.setMediaCategory(searchType);
         return mediaTaskLoader;
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<String> loader, String data) {
-        movieList.clear();
-        try{
-            JSONObject baseJsonResponse = new JSONObject(data);
-            JSONArray resultsArray = baseJsonResponse.getJSONArray("results");
-            for(int i = 0; i < resultsArray.length(); i++){
-                JSONObject currentObj = resultsArray.getJSONObject(i);
-
-                String title = currentObj.getString("title");
-
-                // TODO extract year from date
-                String releaseDate = currentObj.getString("release_date");
-
-                // TODO get the genre instead of the language
-                String language = currentObj.getString("original_language");
-                movieList.add(new Media(title, language, releaseDate));
-                    /*
-                    System.out.println("Movie Index: " + i);
-                    System.out.println("\tTitle: " + title);
-                    System.out.println("\tRelease Date: " + releaseDate);
-                    System.out.println("\tOverview: " + overview);
-                    */
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public void onLoadFinished(Loader<String> loader, String data) {
+        mediaList.clear();
+        ArrayList<Media> m = new ArrayList<>();
+        switch (searchType){
+            case Media.CATEGORY_FILMS:
+                m = JsonConverter.revisedSearchFilms(data);
+                break;
+            case Media.CATEGORY_BOOKS:
+                m = JsonConverter.revisedBookSearchResult(data);
+                break;
         }
+
+        for(Media a : m) {
+            mediaList.add(a);
+        }
+
         mediaAdapter.notifyDataSetChanged();
-        if(movieList.size() == 0 ){
+        if(mediaList.size() == 0 ){
             recyclerView.setVisibility(View.GONE);
             mEmptyStateTextView.setText("No matching results :(");
             mEmptyStateTextView.setVisibility(View.VISIBLE);
@@ -192,13 +189,13 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO put in intent extras/ bundles here to see if it was from film, books, or games
-                Intent intent = getIntent();
-                Bundle queryBundle = new Bundle();
-                // to know where the search was from based on FAB pressed
-                queryBundle.putInt(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
-                queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
-                getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-                //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
+
+                if(searchType == Media.CATEGORY_GAMES){
+                    setupGameSearch(query);
+                }
+                else {
+                    searchMedia(query);
+                }
                 return false;
             }
 
@@ -255,8 +252,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void setupRecyclerView(){
-        this.movieList = new ArrayList<>();
-        this.mediaAdapter = new MediaAdapter(movieList);
+        this.mediaList = new ArrayList<>();
+        this.mediaAdapter = new MediaAdapter(mediaList);
 
         this.recyclerView = findViewById(R.id.search_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -267,8 +264,14 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(SearchMediaActivity.this, movieList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
-                //prepareData(position);
+                Toast.makeText(SearchMediaActivity.this, mediaList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+
+                // TODO call api again, put it in bundle (prepareData method)
+/*
+                Bundle queryBundle = new Bundle();
+                queryBundle.putString(MediaKeys.SEARCH_QUERY, mediaList.get(position).getmMediaName()); // get name or ID better
+                getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
+                //prepareData(position);*/
             }
 
             @Override
@@ -287,39 +290,90 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         // Make a bundle containing the current media details
         Bundle bundle = new Bundle();
 
-        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to movieList.get(i).isArchived()
-        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
-        bundle.putString(MediaKeys.MEDIA_NAME_KEY, movieList.get(position).getmMediaName());
-        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, movieList.get(position).getmMediaGenre());
-        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, movieList.get(position).getmMediaYear());
+        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
+        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, true);
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, mediaList.get(position).getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, mediaList.get(position).getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, mediaList.get(position).getmMediaYear());
 
         // View the details depending what category the media is
-        Media media = movieList.get(position);
+        Media media = mediaList.get(position);
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
 
         // TODO instead of checking the instanceof, use searchType to determine which view to get
-        if(media instanceof Film){
-            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)movieList.get(position)).getDuration());
-            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)movieList.get(position)).getDirector());
-            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)movieList.get(position)).getProduction());
-            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)movieList.get(position)).getSynopsis());
-        }
-        else if(media instanceof Book){
-            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
-            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)movieList.get(position)).getAuthor());
-            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)movieList.get(position)).getPublisher());
-            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)movieList.get(position)).getDescription());
-        }
-        else if(media instanceof Game){
-            bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
-            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)movieList.get(position)).getPlatform());
-            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)movieList.get(position)).getPublisher());
-            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)movieList.get(position)).getSeries());
-            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)movieList.get(position)).getStoryline());
+        switch (searchType){
+            case Media.CATEGORY_FILMS:
+                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
+                bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)mediaList.get(position)).getDuration());
+                bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)mediaList.get(position)).getDirector());
+                bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)mediaList.get(position)).getProduction());
+                bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)mediaList.get(position)).getSynopsis());
+                break;
+
+            case Media.CATEGORY_BOOKS:
+                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
+                bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)mediaList.get(position)).getAuthor());
+                bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)mediaList.get(position)).getPublisher());
+                bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)mediaList.get(position)).getDescription());
+                break;
+
+            case Media.CATEGORY_GAMES:
+                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
+                bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)mediaList.get(position)).getPlatform());
+                bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)mediaList.get(position)).getPublisher());
+                bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)mediaList.get(position)).getSeries());
+                bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)mediaList.get(position)).getStoryline());
+                break;
         }
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    private void searchMedia(String query){
+        // for films and books
+        switch (searchType){
+            case Media.CATEGORY_FILMS:
+                //query = query + "@film";
+                break;
+            case Media.CATEGORY_BOOKS:
+                query = query + "@book";
+                break;
+        }
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
+        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
+        //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
+    }
+
+    public void setupGameSearch(String query){
+        APIWrapper wrapper = new APIWrapper(SearchMediaActivity.this, ConnectGameDB.USER_KEY);
+        Parameters params = new Parameters()
+                .addSearch(query)
+                .addFields("name,summary,collection,cover,release_dates,publishers,developers,platforms,genres")
+                .addExpand("game,collection,developers,publishers,platforms,genres")
+                .addFilter("[developers][exists]=true")
+                .addFilter("[publishers][exists]=true")
+                .addFilter("[category][eq]=0")
+                .addFilter("[platforms][any]=6,48,9,38,11,12,37,20,130,5,41");
+
+        wrapper.search(APIWrapper.Endpoint.GAMES, params, new onSuccessCallback() {
+            @Override
+            public void onSuccess(JSONArray jsonArray) {
+                mediaList.clear();
+                for(Media m : JsonConverter.revisedGetGameSearchResult(jsonArray.toString())){
+                    mediaList.add(m);
+                }
+                mediaAdapter.notifyDataSetChanged();
+                if(mediaList.size() == 0 ){
+                    recyclerView.setVisibility(View.GONE);
+                    mEmptyStateTextView.setText("No matching results :(");
+                    mEmptyStateTextView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {}
+        });
     }
 }

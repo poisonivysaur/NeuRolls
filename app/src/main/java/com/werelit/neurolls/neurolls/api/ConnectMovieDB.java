@@ -1,19 +1,14 @@
 package com.werelit.neurolls.neurolls.api;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.werelit.neurolls.neurolls.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -56,7 +51,6 @@ public class ConnectMovieDB {
         }
 
         jsonResponse = NetworkUtils.httpGetRequestToAny(url);
-
         return jsonResponse;
     }
 
@@ -68,7 +62,7 @@ public class ConnectMovieDB {
     public static String getGenre(JSONArray genreIds){
         if(genreIds.length() == 0)
             return "";
-        String genreList = NetworkUtils.httpGetRequestToAny(API_URL + API_GENRE + API_KEY);
+        String genreList = GENRE_JSON;
         String genre = "";
         HashMap<Integer, String> allGenres = new HashMap<>();
         try{
@@ -88,9 +82,9 @@ public class ConnectMovieDB {
                     genre += allGenres.get(genreIds.getInt(i)) + "/";
                 }
             }
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
-            return "";
+            Log.e(TAG, e.toString());
         }
 
         return genre.substring(0, genre.length() - 1);
@@ -115,10 +109,14 @@ public class ConnectMovieDB {
 
         }catch(Exception e){
             e.printStackTrace();
+            Log.e(TAG, e.toString());
             return "";
         }
 
         return director;
     }
+
+
+    private static final String GENRE_JSON = "{\"genres\":[{\"id\":28,\"name\":\"Action\"},{\"id\":12,\"name\":\"Adventure\"},{\"id\":16,\"name\":\"Animation\"},{\"id\":35,\"name\":\"Comedy\"},{\"id\":80,\"name\":\"Crime\"},{\"id\":99,\"name\":\"Documentary\"},{\"id\":18,\"name\":\"Drama\"},{\"id\":10751,\"name\":\"Family\"},{\"id\":14,\"name\":\"Fantasy\"},{\"id\":36,\"name\":\"History\"},{\"id\":27,\"name\":\"Horror\"},{\"id\":10402,\"name\":\"Music\"},{\"id\":9648,\"name\":\"Mystery\"},{\"id\":10749,\"name\":\"Romance\"},{\"id\":878,\"name\":\"Science Fiction\"},{\"id\":10770,\"name\":\"TV Movie\"},{\"id\":53,\"name\":\"Thriller\"},{\"id\":10752,\"name\":\"War\"},{\"id\":37,\"name\":\"Western\"}]}";
 
 }

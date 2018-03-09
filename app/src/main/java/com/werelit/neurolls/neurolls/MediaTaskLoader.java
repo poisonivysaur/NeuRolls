@@ -3,6 +3,8 @@ package com.werelit.neurolls.neurolls;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.werelit.neurolls.neurolls.api.ConnectBookDB;
+import com.werelit.neurolls.neurolls.api.ConnectMovieDB;
 import com.werelit.neurolls.neurolls.model.Media;
 
 /**
@@ -47,14 +49,14 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
         // depending on what is the value of media category set in searchable activity
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
-                return MediaDBUtils.searchMovie(this.query);
+                return ConnectMovieDB.searchMovie(this.query);
 
             case Media.CATEGORY_BOOKS:
-                return MediaDBUtils.searchBook(this.query);
+                return ConnectBookDB.searchBook(this.query);
 
             case Media.CATEGORY_GAMES:
-                return MediaDBUtils.searchGame(this.query);
+                return "";
         }
-        return "No matching results :(";
+        return "outside switch"; // todo no net, etc.
     }
 }

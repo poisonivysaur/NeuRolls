@@ -132,7 +132,7 @@ public class MediaDBUtils {
         }
 
         jsonResponse = httpGetRequestTotmdb(url);
-
+        Log.wtf(TAG, jsonResponse);
         return jsonResponse;
     }
 
