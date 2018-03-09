@@ -32,6 +32,14 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:textAppearance="?android:textAppearanceMedium" />
 
+    <!-- Loading indicator is only shown before the first load -->
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
     <br.com.mauker.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
         style="@style/MaterialSearchViewStyle"
