@@ -66,10 +66,24 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         mEmptyStateTextView.setVisibility(View.GONE);
 
         searchType = getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1);
+        switch (searchType){
+            case Media.CATEGORY_FILMS:
+                setTitle(R.string.search_films);
+                searchView.setHint("Search Films");
+                break;
+            case Media.CATEGORY_BOOKS:
+                setTitle(R.string.search_books);
+                searchView.setHint("Search Books");
+                break;
+            case Media.CATEGORY_GAMES:
+                setTitle(R.string.search_games);
+                searchView.setHint("Search Games");
+                break;
+        }
     }
 
     @Override
-    public android.support.v4.content.Loader<String> onCreateLoader(int id, Bundle args) {
+    public Loader<String> onCreateLoader(int id, Bundle args) {
         mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
         mediaTaskLoader.setMediaCategory(searchType);
         return mediaTaskLoader;
@@ -249,7 +263,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Do something when the suggestion list is clicked.
                 String suggestion = searchView.getSuggestionAtPosition(position);
-                //Toast.makeText(SearchMediaActivity.this, "ehem ehem", Toast.LENGTH_SHORT).show();
                 searchView.setQuery(suggestion, false);
             }
         });

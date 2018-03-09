@@ -28,6 +28,9 @@
     <string name="menu_night_mode_auto">Auto</string>
 
     <string name="search_hint">Search Media</string>
+    <string name="search_films">Search Films</string>
+    <string name="search_books">Search Books</string>
+    <string name="search_games">Search Games</string>
 
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">No internet connection.</string>
