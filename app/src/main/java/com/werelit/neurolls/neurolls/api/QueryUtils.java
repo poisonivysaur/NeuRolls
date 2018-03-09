@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Media;
+import com.werelit.neurolls.neurolls.network.ConnectMovieDB;
 
 import org.json.JSONArray;
 import org.json.JSONException;

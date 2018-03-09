@@ -3,8 +3,8 @@ package com.werelit.neurolls.neurolls;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.werelit.neurolls.neurolls.api.ConnectBookDB;
-import com.werelit.neurolls.neurolls.api.ConnectMovieDB;
+import com.werelit.neurolls.neurolls.network.ConnectBookDB;
+import com.werelit.neurolls.neurolls.network.ConnectMovieDB;
 import com.werelit.neurolls.neurolls.model.Media;
 
 /**
