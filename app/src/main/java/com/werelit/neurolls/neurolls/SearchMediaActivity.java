@@ -2,6 +2,8 @@ package com.werelit.neurolls.neurolls;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.LoaderManager;
@@ -75,7 +77,13 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
+        // Hide loading indicator because the data has been loaded
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
+
+        // Clear the adapter of previous earthquake data
         mediaList.clear();
+
         ArrayList<Media> m = new ArrayList<>();
         switch (searchType){
             case Media.CATEGORY_FILMS:
@@ -93,6 +101,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         mediaAdapter.notifyDataSetChanged();
         if(mediaList.size() == 0 ){
             recyclerView.setVisibility(View.GONE);
+            // Set empty state text to display "No matching results :("
             mEmptyStateTextView.setText(R.string.no_matching_results);
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
@@ -186,13 +195,37 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // TODO put in intent extras/ bundles here to see if it was from film, books, or games
+                // Get a reference to the ConnectivityManager to check state of network connectivity
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                if(searchType == Media.CATEGORY_GAMES){
-                    setupGameSearch(query);
-                }
-                else {
-                    searchMedia(query);
+                // Get details on the currently active default data network
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+                // If there is a network connection, fetch data
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    // Get a reference to the LoaderManager, in order to interact with loaders.
+                    android.app.LoaderManager loaderManager = getLoaderManager();
+
+                    // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+                    // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+                    // because this activity implements the LoaderCallbacks interface).
+                    //loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+
+                    if(searchType == Media.CATEGORY_GAMES){
+                        setupGameSearch(query);
+                    }
+                    else {
+                        searchMedia(query);
+                    }
+                } else {
+                    // Otherwise, display error
+                    // First, hide loading indicator so error message will be visible
+                    View loadingIndicator = findViewById(R.id.loading_indicator);
+                    loadingIndicator.setVisibility(View.GONE);
+
+                    // Update empty state with no connection error message
+                    mEmptyStateTextView.setText(R.string.no_internet_connection);
                 }
                 return false;
             }
