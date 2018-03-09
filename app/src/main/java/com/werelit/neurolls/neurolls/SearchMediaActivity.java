@@ -93,7 +93,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         mediaAdapter.notifyDataSetChanged();
         if(mediaList.size() == 0 ){
             recyclerView.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("No matching results :(");
+            mEmptyStateTextView.setText(R.string.no_matching_results);
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
     }
