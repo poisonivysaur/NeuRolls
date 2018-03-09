@@ -31,6 +31,7 @@ import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
 import com.werelit.neurolls.neurolls.model.Media;
 import com.werelit.neurolls.neurolls.network.JsonConverter;
+import com.werelit.neurolls.neurolls.network.MediaTaskLoader;
 
 import org.json.JSONArray;
 
