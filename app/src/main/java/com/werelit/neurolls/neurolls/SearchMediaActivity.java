@@ -204,14 +204,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
                 // If there is a network connection, fetch data
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    // Get a reference to the LoaderManager, in order to interact with loaders.
-                    android.app.LoaderManager loaderManager = getLoaderManager();
-
-                    // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-                    // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-                    // because this activity implements the LoaderCallbacks interface).
-                    //loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
-
                     if(searchType == Media.CATEGORY_GAMES){
                         setupGameSearch(query);
                     }
@@ -223,9 +215,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     // First, hide loading indicator so error message will be visible
                     View loadingIndicator = findViewById(R.id.loading_indicator);
                     loadingIndicator.setVisibility(View.GONE);
-
                     // Update empty state with no connection error message
                     mEmptyStateTextView.setText(R.string.no_internet_connection);
+                    mEmptyStateTextView.setVisibility(View.VISIBLE);
                 }
                 return false;
             }
@@ -295,14 +287,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(SearchMediaActivity.this, mediaList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
-
-                // TODO call api again, put it in bundle (prepareData method)
-/*
-                Bundle queryBundle = new Bundle();
-                queryBundle.putString(MediaKeys.SEARCH_QUERY, mediaList.get(position).getmMediaName()); // get name or ID better
-                getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-                //prepareData(position);*/
+                // Toast.makeText(SearchMediaActivity.this, mediaList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+                // TODO call MOVIE api again, put it in bundle (prepareData method)
+                prepareData(position);
             }
 
             @Override
@@ -391,6 +378,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         wrapper.search(APIWrapper.Endpoint.GAMES, params, new onSuccessCallback() {
             @Override
             public void onSuccess(JSONArray jsonArray) {
+                // Hide loading indicator because the data has been loaded
+                View loadingIndicator = findViewById(R.id.loading_indicator);
+                loadingIndicator.setVisibility(View.GONE);
+
                 mediaList.clear();
                 for(Media m : JsonConverter.revisedGetGameSearchResult(jsonArray.toString())){
                     mediaList.add(m);

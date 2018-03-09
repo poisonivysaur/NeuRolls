@@ -72,8 +72,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             // TODO db insertion happens here
         }
         else if(item.getItemId() == R.id.action_cancel) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: finish()!", Toast.LENGTH_SHORT).show();
+            this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
             //this.finish();
