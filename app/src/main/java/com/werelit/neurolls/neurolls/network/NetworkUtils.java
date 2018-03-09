@@ -1,14 +1,11 @@
-package com.werelit.neurolls.neurolls;
+package com.werelit.neurolls.neurolls.network;
 
 import android.util.Log;
-
-import com.werelit.neurolls.neurolls.api.ConnectGameDB;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;

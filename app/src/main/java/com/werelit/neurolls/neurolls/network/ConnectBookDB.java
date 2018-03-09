@@ -1,8 +1,6 @@
-package com.werelit.neurolls.neurolls.api;
+package com.werelit.neurolls.neurolls.network;
 
 import android.util.Log;
-
-import com.werelit.neurolls.neurolls.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,12 +1,8 @@
-package com.werelit.neurolls.neurolls;
+package com.werelit.neurolls.neurolls.network;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.werelit.neurolls.neurolls.api.ConnectBookDB;
-import com.werelit.neurolls.neurolls.api.ConnectGameDB;
-import com.werelit.neurolls.neurolls.api.ConnectMovieDB;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
