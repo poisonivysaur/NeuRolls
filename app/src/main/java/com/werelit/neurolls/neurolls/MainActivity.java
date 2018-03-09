@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the home action
-            //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_ALL);
         } else if (id == R.id.nav_archived) {
             title = "Archived Media";
@@ -118,13 +117,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_search) {
 
         } else if (id == R.id.nav_films) {
-            //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
         } else if (id == R.id.nav_books) {
-            //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_BOOKS);
         } else if (id == R.id.nav_games) {
-            //i.setClass(getBaseContext(),TestActivity.class);
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_GAMES);
         }
         /*
