@@ -47,9 +47,6 @@ public class MediaContract {
         public static final String COLUMN_GAME_YEAR_RELEASED = "year_released";
         public static final String COLUMN_GAME_PLATFORM = "platform";
         public static final String COLUMN_GAME_GENRE = "genre";
-        //public static final String COLUMN_GAME_COMPOSER = "composer";
-        //public static final String COLUMN_GAME_WRITER = "writer";
-        //public static final String COLUM_GAMEN_DESIGNER = "designer";
         public static final String COLUMN_GAME_PUBLISHER = "publisher";
         public static final String COLUMN_GAME_SERIES = "series";
         public static final String COLUMN_GAME_STORYLINE = "storyline";
