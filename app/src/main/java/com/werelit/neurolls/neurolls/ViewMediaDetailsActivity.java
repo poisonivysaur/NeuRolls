@@ -87,7 +87,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_submit) {
             //this.finish();
-            Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
             // TODO db insertion happens here
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
@@ -291,6 +291,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         long newRowID = db.insert(FilmEntry.TABLE_NAME, null, values);
 
+        if(newRowID != -1){
+            Toast.makeText(this, "Successfully inserted into films table", Toast.LENGTH_SHORT).show();
+        }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 
@@ -314,6 +317,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         long newRowID = db.insert(BookEntry.TABLE_NAME, null, values);
 
+        if(newRowID != -1){
+            Toast.makeText(this, "Successfully inserted into books table", Toast.LENGTH_SHORT).show();
+        }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 
@@ -337,6 +343,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         long newRowID = db.insert(GameEntry.TABLE_NAME, null, values);
 
+        if(newRowID != -1){
+            Toast.makeText(this, "Successfully inserted into games table", Toast.LENGTH_SHORT).show();
+        }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 }
