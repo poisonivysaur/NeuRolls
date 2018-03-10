@@ -17,6 +17,8 @@ public class Game extends Media{
     /** the series that the game is part of */
     private String series;
 
+    private boolean isPlayed = false;
+
     public Game(){
 
     }

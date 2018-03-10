@@ -14,6 +14,8 @@ public class Book extends Media{
     /** description of the book */
     private String description;
 
+    private boolean isRead = false;
+
     public Book(){
 
     }

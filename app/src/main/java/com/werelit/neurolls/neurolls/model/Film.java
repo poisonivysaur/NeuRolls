@@ -17,6 +17,8 @@ public class Film extends Media{
     /** synopsis of the film */
     private String synopsis;
 
+    private boolean isWatched = false;
+
     public Film(){
 
     }
