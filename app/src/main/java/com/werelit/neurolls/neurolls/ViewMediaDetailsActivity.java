@@ -2,12 +2,15 @@ package com.werelit.neurolls.neurolls;
 
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.werelit.neurolls.neurolls.data.MediaContract;
+import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
 import com.werelit.neurolls.neurolls.model.Media;
+
+import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -33,13 +42,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
+    private NeurollsDbHelper mDbHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setupUI();
         setupClickListeners();
+        mDbHelper = new NeurollsDbHelper(this, mediaCategory);
     }
 
     @Override
@@ -81,11 +91,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             // TODO db insertion happens here
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
-
+                    insertFilm();
                     break;
                 case Media.CATEGORY_BOOKS:
+                    insertBook();
                     break;
                 case Media.CATEGORY_GAMES:
+                    insertGame();
                     break;
             }
         }
@@ -260,6 +272,71 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     }
 
     private void insertFilm(){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Create a ContentValues object where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(FilmEntry.COLUMN_FILM_ID, "Test Film ID");
+        values.put(FilmEntry.COLUMN_FILM_NAME, "Astro Boy");
+        values.put(FilmEntry.COLUMN_FILM_GENRE, "Action/Adventure");
+        values.put(FilmEntry.COLUMN_FILM_YEAR_RELEASED, "2009-03-10");
 
+        values.put(FilmEntry.COLUMN_FILM_DIRECTOR, "David Bowers");
+        values.put(FilmEntry.COLUMN_FILM_DURATION, 94);
+        values.put(FilmEntry.COLUMN_FILM_PRODUCTION, "Imagi Animation Studios");
+        values.put(FilmEntry.COLUMN_FILM_SYNOPSIS, "In futuristic Metro City, a brilliant scientist named Tenma builds Astro Boy (Freddie Highmore), a robotic child with superstrength, X-ray vision and the ability to fly. Astro Boy sets out to explore the world and find acceptance, learning what being human is all about in the process. Finding that his friends and family in Metro City are in danger, he uses his incredible powers to save all that he loves.");
+
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
+        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
+
+        long newRowID = db.insert(FilmEntry.TABLE_NAME, null, values);
+
+        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
+    }
+
+    private void insertBook(){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Create a ContentValues object where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN_BOOK_ID, "Test Book ID");
+        values.put(BookEntry.COLUMN_BOOK_NAME, "Charlotte's Web");
+        values.put(BookEntry.COLUMN_BOOK_GENRE, "Children's literature");
+        values.put(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED, "1952-03-10");
+
+        values.put(BookEntry.COLUMN_BOOK_AUTHOR, "E. B. White");
+        values.put(BookEntry.COLUMN_BOOK_PAGES, 192);
+        values.put(BookEntry.COLUMN_BOOK_PUBLISHER, "Harper & Brothers");
+        values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
+
+        values.put(BookEntry.COLUMN_BOOK_IMG_DIR, "test/img/dir.png");
+        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
+
+        long newRowID = db.insert(BookEntry.TABLE_NAME, null, values);
+
+        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
+    }
+
+    private void insertGame(){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // Create a ContentValues object where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(GameEntry.COLUMN_GAME_ID, "Test Game ID");
+        values.put(GameEntry.COLUMN_GAME_NAME, "Shadow the Hedgehog");
+        values.put(GameEntry.COLUMN_GAME_GENRE, "Platformer, action-adventure, third-person shooter");
+        values.put(GameEntry.COLUMN_GAME_YEAR_RELEASED, "2005-03-10");
+
+        values.put(GameEntry.COLUMN_GAME_PLATFORM, "Nintendo GameCube, PlayStation 2, Xbox");
+        values.put(GameEntry.COLUMN_GAME_PUBLISHER, "Sega");
+        values.put(GameEntry.COLUMN_GAME_SERIES, "Sonic the Hedgehog");
+        values.put(GameEntry.COLUMN_GAME_STORYLINE, "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
+
+        values.put(GameEntry.COLUMN_GAME_IMG_DIR, "test/img/dir.png");
+        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
+        values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
+
+        long newRowID = db.insert(GameEntry.TABLE_NAME, null, values);
+
+        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 }
