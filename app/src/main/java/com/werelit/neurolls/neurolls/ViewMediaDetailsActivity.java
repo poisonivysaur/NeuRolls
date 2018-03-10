@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -85,19 +84,28 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
             // TODO Twitter api
         }
-        else if(item.getItemId() == R.id.action_submit) {
+        else if(item.getItemId() == R.id.action_save) {
             //this.finish();
             //Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
             // TODO db insertion happens here
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
+                    // Save film to db
                     insertFilm();
+                    // Exit activity
+                    finish();
                     break;
                 case Media.CATEGORY_BOOKS:
+                    // Save book to db
                     insertBook();
+                    // Exit activity
+                    finish();
                     break;
                 case Media.CATEGORY_GAMES:
+                    // Save game to db
                     insertGame();
+                    // Exit activity
+                    finish();
                     break;
             }
         }
@@ -294,7 +302,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         long newRowID = db.insert(FilmEntry.TABLE_NAME, null, values);
 
         if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted into films table", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Successfully inserted " + newRowID + " into films table", Toast.LENGTH_SHORT).show();
         }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
@@ -320,7 +328,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         long newRowID = db.insert(BookEntry.TABLE_NAME, null, values);
 
         if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted into books table", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Successfully inserted " + newRowID + " into books table", Toast.LENGTH_SHORT).show();
         }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
@@ -346,7 +354,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         long newRowID = db.insert(GameEntry.TABLE_NAME, null, values);
 
         if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted into games table", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Successfully inserted " + newRowID + " into games table", Toast.LENGTH_SHORT).show();
         }
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }

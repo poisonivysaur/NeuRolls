@@ -29,6 +29,10 @@ import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
 import com.werelit.neurolls.neurolls.model.Media;
 
+import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,6 +85,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // add Media items into the Medias list
         entertainments = new ArrayList<>();
+
+        // setup the recycler view adapter, layout, etc.
+        prepareRecyclerView(rootView);
+
+        mDbHelper = new NeurollsDbHelper(rootView.getContext());
+        displayDatabaseInfo();
+
         prepareMedias();
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
@@ -88,23 +99,29 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
 
-        // setup the recycler view adapter, layout, etc.
-        prepareRecyclerView(rootView);
-
-        mDbHelper = new NeurollsDbHelper(rootView.getContext());
-        displayDatabaseInfo(rootView);
-
         Button add = rootView.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 insertMedia();
-                displayDatabaseInfo(rootView);
+                displayDatabaseInfo();
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayDatabaseInfo();
     }
 
     /**
@@ -206,6 +223,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // TODO query db and return the result as an ArrayList entertainments
 
+        /*
         entertainments.add(new Film("ID#1", "Phantom of the Opera", "Drama/Thriller", "2004",
                 203, "Joel Schumacher", "Joel Schumacher Productions, Really Useful Films, Scion Films",
                 "From his hideout beneath a 19th century Paris opera house, the brooding Phantom (Gerard Butler) schemes to get closer to vocalist Christine Daae (Emmy Rossum). The Phantom, wearing a mask to hide a congenital disfigurement, strong-arms management into giving the budding starlet key roles, but Christine instead falls for arts benefactor Raoul (Patrick Wilson). Terrified at the notion of her absence, the Phantom enacts a plan to keep Christine by his side, while Raoul tries to foil the scheme."));
@@ -230,6 +248,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         entertainments.add(new Film("ID#1", "A Beautiful Mind", " Drama/Romance", "2001",
                 101, "Ron Howard", "Imagine Entertainment",
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
+              */
     }
 
     @Override
@@ -290,22 +309,82 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the films database.
      */
-    private void displayDatabaseInfo(View rootView) {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        NeurollsDbHelper mDbHelper = new NeurollsDbHelper(rootView.getContext());
-
+    private void displayDatabaseInfo() {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        // Perform this raw SQL query "SELECT * FROM films"
-        // to get a Cursor that contains all rows from the pets table.
-        Cursor cursor = db.rawQuery("SELECT * FROM " + MediaContract.FilmEntry.TABLE_NAME, null);
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                FilmEntry._ID,
+                FilmEntry.COLUMN_FILM_ID,
+                FilmEntry.COLUMN_FILM_NAME,
+                FilmEntry.COLUMN_FILM_GENRE,
+                FilmEntry.COLUMN_FILM_YEAR_RELEASED,
+                FilmEntry.COLUMN_FILM_IMG_DIR,
+
+                FilmEntry.COLUMN_FILM_DIRECTOR,
+                FilmEntry.COLUMN_FILM_DURATION,
+                FilmEntry.COLUMN_FILM_PRODUCTION,
+                FilmEntry.COLUMN_FILM_SYNOPSIS,
+
+                FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
+                FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
+                FilmEntry.COLUMN_FILM_WATCHED,
+                FilmEntry.COLUMN_FILM_ARCHIVED };
+
+        // Perform a query on the pets table
+        Cursor cursor = db.query(
+                FilmEntry.TABLE_NAME,   // The table to query
+                projection,            // The columns to return
+                null,                  // The columns for the WHERE clause
+                null,                  // The values for the WHERE clause
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // The sort order
+
+        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+
         try {
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // pets table in the database).
-            TextView displayView = (TextView) rootView.findViewById(R.id.text_view_db);
-            displayView.setText("Number of rows in films database table: " + cursor.getCount());
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
+            int nameColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_YEAR_RELEASED);
+            int imageColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DIRECTOR);
+            int durationColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DURATION);
+            int prodColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_PRODUCTION);
+            int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
+
+            int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+            int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
+            int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                int currentDuration = cursor.getInt(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDuration, currentDirector, currentProd, currentSynopsis));
+            }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
