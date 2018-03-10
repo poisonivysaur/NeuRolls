@@ -50,7 +50,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.add_media_menu, menu);
         }
         else{   // else menu shows archive or share options
-            getMenuInflater().inflate(R.menu.media_detail_menu, menu);
+            getMenuInflater().inflate(R.menu.unarchived_media_menu, menu);
         }
 
         return true;
