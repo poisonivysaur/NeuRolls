@@ -263,7 +263,7 @@ public class JsonConverter {
                 JSONObject curObj = items.getJSONObject(i);
                 String id = curObj.getString("id");
                 String title = curObj.getJSONObject("volumeInfo").getString("title");
-                String genres = ConnectBookDB.getGenres(curObj.optJSONArray("categories"));
+                String genres = ConnectBookDB.getGenres(curObj.getJSONObject("volumeInfo").optJSONArray("categories"));
                 String pageCount = Integer.toString(curObj.getJSONObject("volumeInfo").getInt("pageCount")) + " pages";
                 String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
