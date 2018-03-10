@@ -333,7 +333,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Media media = mediaList.get(position);
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
 
-        // TODO instead of checking the instanceof, use searchType to determine which view to get
         switch (searchType){
             case Media.CATEGORY_FILMS:
                 bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
@@ -346,6 +345,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             case Media.CATEGORY_BOOKS:
                 bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
                 bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)mediaList.get(position)).getAuthor());
+                bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)mediaList.get(position)).getPages());
                 bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)mediaList.get(position)).getPublisher());
                 bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)mediaList.get(position)).getDescription());
                 break;
