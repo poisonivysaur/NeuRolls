@@ -3,7 +3,7 @@ package com.werelit.neurolls.neurolls.model;
 public class Book extends Media{
 
     /** the ID of the book */
-    private String bookID;
+    //private String bookID;
 
     /** author of the book */
     private String author;

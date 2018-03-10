@@ -3,7 +3,7 @@ package com.werelit.neurolls.neurolls.model;
 public class Media {
 
     /** the ID of the media */
-    private int mediaID;
+    private String mediaID;
 
     /** name of the media */
     private String mMediaName;
@@ -62,5 +62,13 @@ public class Media {
 
     public void setArchived(boolean archived) {
         isArchived = archived;
+    }
+
+    public int getMediaID() {
+        return mediaID;
+    }
+
+    public void setMediaID(int mediaID) {
+        this.mediaID = mediaID;
     }
 }

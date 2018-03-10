@@ -3,7 +3,7 @@ package com.werelit.neurolls.neurolls.model;
 public class Film extends Media{
 
     /** the ID of the film */
-    private int filmID;
+    //private int filmID;
 
     /** run time duration in minutes of the film */
     private int duration = 0;

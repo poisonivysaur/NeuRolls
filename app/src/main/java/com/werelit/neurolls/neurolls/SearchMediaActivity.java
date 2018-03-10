@@ -327,6 +327,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, mediaList.get(position).getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, mediaList.get(position).getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, mediaList.get(position).getmMediaYear());
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, mediaList.get(position).getMediaID());
 
         // View the details depending what category the media is
         Media media = mediaList.get(position);

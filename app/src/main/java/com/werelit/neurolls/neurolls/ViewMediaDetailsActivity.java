@@ -24,6 +24,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
     private View rootView;
     private boolean isArchived = false;
     private boolean isForAdding = false;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
 
         // get intent that was passed when the recycler view item was pressed
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+        bundle = intent.getExtras();
         if (bundle != null) { // check first if the bundle is not empty
 
             // get all the common attributes of the 3 categories of media
@@ -223,4 +224,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

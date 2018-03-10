@@ -3,7 +3,7 @@ package com.werelit.neurolls.neurolls.model;
 public class Game extends Media{
 
     /** the ID of the game */
-    private int gameID;
+    //private int gameID;
 
     /** platform of the game */
     private String platform;

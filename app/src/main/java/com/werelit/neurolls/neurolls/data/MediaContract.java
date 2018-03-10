@@ -9,6 +9,7 @@ public class MediaContract {
         public static final String TABLE_NAME = "films";
 
         public static final String COLUMN_FILM_ID = "film_id";
+        public static final String COLUMN_FILM_NAME = "film_name";
         public static final String COLUMN_FILM_YEAR_RELEASED = "year_released";
         public static final String COLUMN_FILM_DIRECTOR = "director";
         public static final String COLUMN_FILM_DURATION = "duration";
@@ -27,6 +28,7 @@ public class MediaContract {
         public static final String TABLE_NAME = "books";
 
         public static final String COLUMN_BOOK_ID = "book_id";
+        public static final String COLUMN_BOOK_NAME = "book_name";
         public static final String COLUMN_BOOK_YEAR_PUBLISHED = "year_published";
         public static final String COLUMN_BOOK_AUTHOR = "author";
         public static final String COLUMN_BOOK_PUBLISHER = "publisher";
@@ -44,6 +46,7 @@ public class MediaContract {
         public static final String TABLE_NAME = "games";
 
         public static final String COLUMN_GAME_ID = "game_id";
+        public static final String COLUMN_GAME_NAME = "game_name";
         public static final String COLUMN_GAME_YEAR_RELEASED = "year_released";
         public static final String COLUMN_GAME_PLATFORM = "platform";
         public static final String COLUMN_GAME_GENRE = "genre";
