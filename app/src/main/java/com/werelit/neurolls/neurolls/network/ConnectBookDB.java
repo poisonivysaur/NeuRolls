@@ -14,7 +14,7 @@ public class ConnectBookDB {
     public static final String API_BOOKS = "https://www.googleapis.com/books/v1/volumes";
     public static final String BOOK_API_KEY = "&key=AIzaSyAfXEQyyt8FMtFd-AuisRSVpmZLtwsVK7k";
     public static final String BOOK_SEARCH = "?q=";
-    public static final String BOOK_FIELDS = "&fields=kind,items(id,volumeInfo(title,authors,publisher,publishedDate,description,imageLinks,pageCount))";
+    public static final String BOOK_FIELDS = "&fields=kind,items(id,volumeInfo(title,authors,publisher,publishedDate,description,imageLinks,pageCount,categories))";
 
     private ConnectBookDB(){}
 
@@ -50,4 +50,21 @@ public class ConnectBookDB {
 
         return author.substring(0, author.length() - 1);
     }
+
+    public static String getGenres(JSONArray genres){
+        if(genres == null)
+            return "No Genre";
+        else if(genres.length() == 0)
+            return "No Genre";
+        String genre = "";
+        try {
+            for (int i = 0; i < genres.length(); i++)
+                genre += genres.getString(i) + "/";
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+        return genre.substring(0, genre.length() - 1);
+    }
+
 }
