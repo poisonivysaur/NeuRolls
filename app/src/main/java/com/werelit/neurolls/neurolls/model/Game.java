@@ -11,11 +11,13 @@ public class Game extends Media{
     /** development production team or publisher of the game */
     private String publisher;
 
+    /** the series that the game is part of */
+    private String series;
+
     /** storyline of the game */
     private String storyline;
 
-    /** the series that the game is part of */
-    private String series;
+    private String dateToPlay = "";
 
     private boolean isPlayed = false;
 
@@ -24,7 +26,7 @@ public class Game extends Media{
     }
 
     public Game(String id, String mediaName, String mediaGenre, String releaseYear,
-                String platform, String publisher, String storyline, String series) {
+                String platform, String publisher, String series, String storyline) {
 
         super(id, mediaName, mediaGenre, releaseYear);
 

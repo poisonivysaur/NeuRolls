@@ -35,13 +35,14 @@ public class MediaContract {
         public static final String COLUMN_BOOK_YEAR_PUBLISHED = "year_published";
 
         public static final String COLUMN_BOOK_AUTHOR = "author";
+        public static final String COLUMN_BOOK_PAGES = "pages";
         public static final String COLUMN_BOOK_PUBLISHER = "publisher";
         public static final String COLUMN_BOOK_DESCRIPTION = "description";
 
         public static final String COLUMN_BOOK_IMG_DIR = "image_directory";
         public static final String COLUMN_BOOK_DATE_TO_READ = "date_to_read";
         public static final String COLUMN_BOOK_NOTIF_SETTINGS = "notif_settings";
-        public static final String COLUMN_FILM_READ = "isRead";
+        public static final String COLUMN_BOOK_READ = "isRead";
         public static final String COLUMN_BOOK_ARCHIVED = "isArchived";
     }
 
@@ -62,7 +63,7 @@ public class MediaContract {
         public static final String COLUMN_GAME_IMG_DIR = "image_directory";
         public static final String COLUMN_GAME_DATE_TO_PLAY = "date_to_play";
         public static final String COLUMN_GAME_NOTIF_SETTINGS = "notif_settings";
-        public static final String COLUMN_FILM_PLAYED = "isPlayed";
+        public static final String COLUMN_GAME_PLAYED = "isPlayed";
         public static final String COLUMN_GAME_ARCHIVED = "isArchived";
     }
 }

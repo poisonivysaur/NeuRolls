@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void setupNavigationDrawer(){
+    private void setupNavigationDrawer(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setupViewPager(){
+    private void setupViewPager(){
         // Create an adapter that knows which fragment should be shown on each page
         CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
 
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // this method will get the archived media
-    public void getFilteredMedia(boolean isArchived){
+    private void getFilteredMedia(boolean isArchived){
         for(int i = 0; i < viewPager.getAdapter().getCount(); i++){
             ViewAllMediaFragment f = (ViewAllMediaFragment)((CategoryAdapter)viewPager.getAdapter()).getItem(i);
             f.setArchived(isArchived);

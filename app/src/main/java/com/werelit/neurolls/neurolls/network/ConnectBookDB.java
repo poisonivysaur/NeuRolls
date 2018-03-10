@@ -16,6 +16,7 @@ public class ConnectBookDB {
     public static final String BOOK_SEARCH = "?q=";
     public static final String BOOK_FIELDS = "&fields=kind,items(id,volumeInfo(title,authors,publisher,publishedDate,description,imageLinks,pageCount,categories))";
 
+
     private ConnectBookDB(){}
 
     public static String searchBook(String query){

@@ -5,17 +5,19 @@ public class Film extends Media{
     /** the ID of the film */
     //private int filmID;
 
-    /** run time duration in minutes of the film */
-    private int duration = 0;
-
     /** director of the film */
     private String director;
+
+    /** run time duration in minutes of the film */
+    private int duration = 0;
 
     /** production team of the film */
     private String production;
 
     /** synopsis of the film */
     private String synopsis;
+
+    private String dateToWatch = "";
 
     private boolean isWatched = false;
 
@@ -72,5 +74,13 @@ public class Film extends Media{
 
     public void setWatched(boolean watched) {
         isWatched = watched;
+    }
+
+    public String getDateToWatch() {
+        return dateToWatch;
+    }
+
+    public void setDateToWatch(String dateToWatch) {
+        this.dateToWatch = dateToWatch;
     }
 }

@@ -324,10 +324,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, true);
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, mediaList.get(position).getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, mediaList.get(position).getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, mediaList.get(position).getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, mediaList.get(position).getmMediaYear());
-        bundle.putString(MediaKeys.MEDIA_ID_KEY, mediaList.get(position).getMediaID());
 
         // View the details depending what category the media is
         Media media = mediaList.get(position);
@@ -337,8 +337,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         switch (searchType){
             case Media.CATEGORY_FILMS:
                 bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-                bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)mediaList.get(position)).getDuration());
                 bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)mediaList.get(position)).getDirector());
+                bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)mediaList.get(position)).getDuration());
                 bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)mediaList.get(position)).getProduction());
                 bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)mediaList.get(position)).getSynopsis());
                 break;
@@ -379,7 +379,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
     }
 
-    public void setupGameSearch(String query){
+    private void setupGameSearch(String query){
         APIWrapper wrapper = new APIWrapper(SearchMediaActivity.this, ConnectGameDB.USER_KEY);
         Parameters params = new Parameters()
                 .addSearch(query)
