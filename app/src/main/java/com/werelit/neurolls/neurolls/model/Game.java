@@ -65,4 +65,12 @@ public class Game extends Media{
     public void setSeries(String series) {
         this.series = series;
     }
+
+    public boolean isPlayed() {
+        return isPlayed;
+    }
+
+    public void setPlayed(boolean played) {
+        isPlayed = played;
+    }
 }

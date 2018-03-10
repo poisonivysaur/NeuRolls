@@ -65,4 +65,12 @@ public class Film extends Media{
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
     }
+
+    public boolean isWatched() {
+        return isWatched;
+    }
+
+    public void setWatched(boolean watched) {
+        isWatched = watched;
+    }
 }

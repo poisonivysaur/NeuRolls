@@ -53,4 +53,12 @@ public class Book extends Media{
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 }
