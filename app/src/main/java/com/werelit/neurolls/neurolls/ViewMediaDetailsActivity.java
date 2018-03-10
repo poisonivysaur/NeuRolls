@@ -222,7 +222,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
-                Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -231,9 +231,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
             @Override
             public void onClick(View v) {
-                // TODO
-                Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
-                //displayNotifSettings(v);
+                //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
+                displayNotifSettings(v);
             }
         });
     }

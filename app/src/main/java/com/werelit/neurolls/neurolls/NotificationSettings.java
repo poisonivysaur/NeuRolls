@@ -74,7 +74,7 @@ public class NotificationSettings extends DialogFragment {
                         int iSecs = c.get(Calendar.SECOND);
 
                         //gets the sched date
-                        TextView etDate = ((MainActivity) getContext()).findViewById(R.id.date_text_view);
+                        TextView etDate = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.date_text_view);
                         String date = etDate.getText().toString();
                         Calendar cal = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
@@ -116,8 +116,6 @@ public class NotificationSettings extends DialogFragment {
                         scheduleNotification(getNotification(total + ""), total);
                         Toast.makeText(getContext(), total + " ms delay", Toast.LENGTH_SHORT).show();
 
-                        listener.setDays(days);
-                        listener.setTime(time);
                     }
                 });
 
@@ -168,18 +166,18 @@ public class NotificationSettings extends DialogFragment {
         void setDays(String days);
     }
 
-    //initiates notificationsettingslistener interface
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            listener = (NotificationSettingsListener) context;
-        }
-        catch (final ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
-        }
-    }
+//    //initiates notificationsettingslistener interface
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//
+//        try {
+//            listener = (NotificationSettingsListener) context;
+//        }
+//        catch (final ClassCastException e) {
+//            throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
+//        }
+//    }
 
     private void scheduleNotification(Notification notification, long delay) {
 
