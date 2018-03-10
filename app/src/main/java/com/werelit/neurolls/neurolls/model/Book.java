@@ -36,6 +36,7 @@ public class Book extends Media{
         this.pages = pages;
     }
 
+    // scaffholding method to be deleted when no longer useful
     public Book(String id, String mediaName, String mediaGenre, String releaseYear,
                 String author, String publisher, String description) {
 
