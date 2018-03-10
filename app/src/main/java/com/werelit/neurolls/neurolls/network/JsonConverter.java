@@ -34,6 +34,7 @@ public class JsonConverter {
 
             for(int i = 0; i < jsonArr.length(); i++){
                 JSONObject curObj = jsonArr.getJSONObject(i);
+                String id = "" + curObj.getInt("id");
                 String title = curObj.getString("title");
                 String releaseDate = curObj.getString("release_date");
                 if(releaseDate.equals(""))
@@ -48,6 +49,7 @@ public class JsonConverter {
                 System.out.println(genre);
                 */
                 Media m = new Film();
+                m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
@@ -97,36 +99,36 @@ public class JsonConverter {
         return films;
     }
 
-    public static Film getFilmById(int filmId){
-        Film film = null;
-
-        String response = ConnectMovieDB.getMovieDetails(filmId);
-        if(response == null || response.equals(""))
-            return null;
-
-        try{
-            JSONObject baseObject = new JSONObject(response);
-
-            String title = baseObject.getString("title");
-            String releaseDate = baseObject.getString("release_date");
-            String genre = getGenre(baseObject.getJSONArray("genres"));
-            int duration = baseObject.getInt("runtime");
-            String director = ConnectMovieDB.getDirector(filmId);
-            String synopsis = baseObject.getString("overview");
-            String production = "";
-            if(baseObject.getJSONArray("production_companies").length() != 0)
-                production = baseObject.getJSONArray("production_companies").getJSONObject(0).getString("name");
-
-
-            film = new Film(title, genre, releaseDate, duration, director, production, synopsis);
-
-        }catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
-
-        return film;
-    }
+//    public static Film getFilmById(int filmId){
+//        Film film = null;
+//
+//        String response = ConnectMovieDB.getMovieDetails(filmId);
+//        if(response == null || response.equals(""))
+//            return null;
+//
+//        try{
+//            JSONObject baseObject = new JSONObject(response);
+//
+//            String title = baseObject.getString("title");
+//            String releaseDate = baseObject.getString("release_date");
+//            String genre = getGenre(baseObject.getJSONArray("genres"));
+//            int duration = baseObject.getInt("runtime");
+//            String director = ConnectMovieDB.getDirector(filmId);
+//            String synopsis = baseObject.getString("overview");
+//            String production = "";
+//            if(baseObject.getJSONArray("production_companies").length() != 0)
+//                production = baseObject.getJSONArray("production_companies").getJSONObject(0).getString("name");
+//
+//
+//            film = new Film(title, genre, releaseDate, duration, director, production, synopsis);
+//
+//        }catch(Exception e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        return film;
+//    }
 
     private static String getGenre(JSONArray genreArr){
         if(genreArr.length() == 0)
@@ -204,7 +206,7 @@ public class JsonConverter {
                 JSONObject curObj = searchResultJson.getJSONObject(i);
 
                 //System.out.println(curObj.getInt("id"));
-                int gameId = curObj.getInt("id");
+                String gameId = "" + curObj.getInt("id");
                 String gameName = curObj.getString("name");
                 String summary = curObj.getString("summary");
                 String genre = ConnectGameDB.getCompany(curObj.getJSONArray("genres"));
@@ -218,7 +220,7 @@ public class JsonConverter {
                 String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
                 String publishers = ConnectGameDB.getCompany(curObj.getJSONArray("publishers"));
 
-                Game g = new Game(gameName, genre, release, platforms, publishers, summary, series);
+                Game g = new Game(gameId, gameName, genre, release, platforms, publishers, summary, series);
                 games.add(g);
             }
         } catch (JSONException e) {
@@ -266,7 +268,7 @@ public class JsonConverter {
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
                 String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
-                Book b = new Book(title, pageCount, publishedDate, author, publisher, desc);
+                Book b = new Book(id, title, pageCount, publishedDate, author, publisher, desc);
                 books.add(b);
             }
         } catch (JSONException e) {

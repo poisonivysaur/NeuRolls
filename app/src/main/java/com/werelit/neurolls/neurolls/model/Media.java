@@ -26,7 +26,8 @@ public class Media {
 
     }
 
-    public Media(String mediaName, String mediaGenre, String releaseYear) {
+    public Media(String id, String mediaName, String mediaGenre, String releaseYear) {
+        mediaID = id;
         mMediaName = mediaName;
         mMediaGenre = mediaGenre;
         mMediaYear = releaseYear;
@@ -64,11 +65,11 @@ public class Media {
         isArchived = archived;
     }
 
-    public int getMediaID() {
+    public String getMediaID() {
         return mediaID;
     }
 
-    public void setMediaID(int mediaID) {
+    public void setMediaID(String mediaID) {
         this.mediaID = mediaID;
     }
 }
