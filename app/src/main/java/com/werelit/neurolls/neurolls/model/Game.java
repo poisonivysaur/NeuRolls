@@ -75,4 +75,12 @@ public class Game extends Media{
     public void setPlayed(boolean played) {
         isPlayed = played;
     }
+
+    public String getDateToPlay() {
+        return dateToPlay;
+    }
+
+    public void setDateToPlay(String dateToPlay) {
+        this.dateToPlay = dateToPlay;
+    }
 }
