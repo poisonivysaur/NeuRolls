@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.werelit.neurolls.neurolls.model.Media;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +32,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isArchived = false;
     private boolean isForAdding = false;
     private Bundle bundle;
+    private int mediaCategory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +79,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             //this.finish();
             Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
             // TODO db insertion happens here
+            switch (mediaCategory){
+                case Media.CATEGORY_FILMS:
+
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    break;
+                case Media.CATEGORY_GAMES:
+                    break;
+            }
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
@@ -91,7 +103,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void setupUI(){
+    private void setupUI(){
 
         // get intent that was passed when the recycler view item was pressed
         Intent intent = getIntent();
@@ -109,7 +121,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             // get the the media category (depending which type of recycler view item was pressed)
             // this only applies for the view ALL media fragment but neverthe less this activity
             // will be used for all the other fragments for each type of category
-            int mediaCategory = bundle.getInt(MediaKeys.MEDIA_CATEGORY_KEY);
+            mediaCategory = bundle.getInt(MediaKeys.MEDIA_CATEGORY_KEY);
 
             // if the recycler view item pressed is a film,
             if (mediaCategory == CategoryAdapter.CATEGORY_FILMS) {
@@ -187,7 +199,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    public void setupClickListeners(){
+    private void setupClickListeners(){
 
         // TODO set up date picker, notification modal
         LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
@@ -238,12 +250,16 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     }
 
     //Changes the fragment displayed
-    public void displayNotifSettings(View view) {
+    private void displayNotifSettings(View view) {
         //Calls and displays NotificationSettings dialog
         if (view == findViewById(R.id.notif_settings)) {
             FragmentManager fm = getSupportFragmentManager();
             NotificationSettings notifSettings = new NotificationSettings();
             notifSettings.show(fm, "Notification Settings");
         }
+    }
+
+    private void insertFilm(){
+
     }
 }

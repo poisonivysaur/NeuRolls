@@ -379,7 +379,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
     }
 
-    public void setupGameSearch(String query){
+    private void setupGameSearch(String query){
         APIWrapper wrapper = new APIWrapper(SearchMediaActivity.this, ConnectGameDB.USER_KEY);
         Parameters params = new Parameters()
                 .addSearch(query)
