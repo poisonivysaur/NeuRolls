@@ -17,7 +17,7 @@ public class Media {
     /** if the media was archived or not */
     private boolean isArchived = false;
 
-    private String imageDir = "";
+    private String mImageDir = "";
 
     private String notifSettings = "";
 
@@ -30,10 +30,15 @@ public class Media {
     }
 
     public Media(String id, String mediaName, String mediaGenre, String releaseYear) {
+        this(id, mediaName, mediaGenre, releaseYear, "test/sample/directory/image.jpg");
+    }
+
+    public Media(String id, String mediaName, String mediaGenre, String releaseYear, String imageDir) {
         mediaID = id;
         mMediaName = mediaName;
         mMediaGenre = mediaGenre;
         mMediaYear = releaseYear;
+        mImageDir = imageDir;
     }
 
     public String getmMediaName() {
@@ -77,11 +82,11 @@ public class Media {
     }
 
     public String getImageDir() {
-        return imageDir;
+        return mImageDir;
     }
 
     public void setImageDir(String imageDir) {
-        this.imageDir = imageDir;
+        mImageDir = imageDir;
     }
 
     public String getNotifSettings() {
