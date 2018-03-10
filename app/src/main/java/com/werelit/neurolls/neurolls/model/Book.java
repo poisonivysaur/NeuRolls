@@ -9,7 +9,7 @@ public class Book extends Media{
     private String author;
 
     /** number of pages of the book */
-    private int pages;
+    private int pages = 0;
 
     /** publication company of the book */
     private String publisher;

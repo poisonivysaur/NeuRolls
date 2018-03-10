@@ -78,12 +78,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_archive) {
-            //this.finish();
             Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
+            // TODO db update happens here
         }
         else if(item.getItemId() == R.id.action_share) {
-            //this.finish();
             Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
+            // TODO Twitter api
         }
         else if(item.getItemId() == R.id.action_submit) {
             //this.finish();
@@ -107,10 +107,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         else if(item.getItemId() == R.id.action_unarchive) {
             //this.finish();
             Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
+            // TODO db update happens here
         }
         else if(item.getItemId() == R.id.action_delete) {
             //this.finish();
             Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
+            // TODO db deletion happens here
         }
         return super.onOptionsItemSelected(item);
     }
