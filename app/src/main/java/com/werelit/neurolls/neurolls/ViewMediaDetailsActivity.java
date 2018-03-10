@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-public class ViewMediaDetailsActivity extends AppCompatActivity {
+public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     private TextView name, genre, year;
     private ImageView image;
@@ -188,7 +193,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
         LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
         final TextView dateTextView = (TextView) findViewById(R.id.date_text_view);
         scheduledDate.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
                 // TODO
@@ -205,8 +209,16 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                dateTextView.setText(dayOfMonth + "/"
-                                        + (monthOfYear + 1) + "/" + year);
+                                //String month = c.getDisplayName(monthOfYear, Calendar.SHORT, Locale.getDefault());
+                                c.set(year, monthOfYear, dayOfMonth);
+
+                                //get selected date from datepicker dialog
+                                Date SelectedDate = c.getTime();
+
+                                //date format in US: e.g. September 14, 1998
+                                DateFormat dateformat_US = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
+                                String StringDateformat_US = dateformat_US.format(SelectedDate);
+                                dateTextView.setText(StringDateformat_US);
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -221,9 +233,18 @@ public class ViewMediaDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO
                 Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
+                //displayNotifSettings(v);
             }
         });
     }
 
-
+    //Changes the fragment displayed
+    public void displayNotifSettings(View view) {
+        //Calls and displays NotificationSettings dialog
+        if (view == findViewById(R.id.notif_settings)) {
+            FragmentManager fm = getSupportFragmentManager();
+            NotificationSettings notifSettings = new NotificationSettings();
+            notifSettings.show(fm, "Notification Settings");
+        }
+    }
 }

@@ -17,6 +17,7 @@ public class Media {
     /** if the media was archived or not */
     private boolean isArchived = false;
 
+    private String imageDir = "";
 
     public static final int CATEGORY_FILMS = 1;
     public static final int CATEGORY_BOOKS = 2;
@@ -71,5 +72,13 @@ public class Media {
 
     public void setMediaID(String mediaID) {
         this.mediaID = mediaID;
+    }
+
+    public String getImageDir() {
+        return imageDir;
+    }
+
+    public void setImageDir(String imageDir) {
+        this.imageDir = imageDir;
     }
 }
