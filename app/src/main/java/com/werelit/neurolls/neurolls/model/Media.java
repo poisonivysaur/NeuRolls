@@ -83,4 +83,12 @@ public class Media {
     public void setImageDir(String imageDir) {
         this.imageDir = imageDir;
     }
+
+    public String getNotifSettings() {
+        return notifSettings;
+    }
+
+    public void setNotifSettings(String notifSettings) {
+        this.notifSettings = notifSettings;
+    }
 }
