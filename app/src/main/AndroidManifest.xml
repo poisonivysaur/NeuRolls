@@ -64,7 +64,7 @@
 
         <provider
             android:name=".data.MediaProvider"
-            android:authorities="com.example.android.pets"
+            android:authorities="com.werelit.neurolls.neurolls"
             android:exported="false" />
 
         <receiver android:name=".NotificationPublisher" />
