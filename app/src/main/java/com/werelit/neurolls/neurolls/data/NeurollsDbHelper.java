@@ -58,6 +58,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_FILMS_TABLE =  "CREATE TABLE " + FilmEntry.TABLE_NAME + " ("
                 //+ FilmEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + FilmEntry.COLUMN_LAST_UPDATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
                 + FilmEntry.COLUMN_FILM_ID + " TEXT PRIMARY KEY, "
                 + FilmEntry.COLUMN_FILM_NAME + " TEXT NOT NULL, "
                 + FilmEntry.COLUMN_FILM_GENRE + " TEXT, "
@@ -76,6 +77,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BookEntry.TABLE_NAME + " ("
                 //+ BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BookEntry.COLUMN_LAST_UPDATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
                 + BookEntry.COLUMN_BOOK_ID + " TEXT PRIMARY KEY, "
                 + BookEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL, "
                 + BookEntry.COLUMN_BOOK_GENRE + " TEXT, "
@@ -94,6 +96,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_GAMES_TABLE =  "CREATE TABLE " + GameEntry.TABLE_NAME + " ("
                 //+ GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + GameEntry.COLUMN_LAST_UPDATE + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
                 + GameEntry.COLUMN_GAME_ID + " TEXT PRIMARY KEY, "
                 + GameEntry.COLUMN_GAME_NAME + " TEXT NOT NULL, "
                 + GameEntry.COLUMN_GAME_GENRE + " TEXT, "

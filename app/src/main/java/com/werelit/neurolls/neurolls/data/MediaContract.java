@@ -23,6 +23,8 @@ public class MediaContract {
         public static final String COLUMN_FILM_NOTIF_SETTINGS = "notif_settings";
         public static final String COLUMN_FILM_WATCHED = "isWatched";
         public static final String COLUMN_FILM_ARCHIVED = "isArchived";
+
+        public static final String COLUMN_LAST_UPDATE = "last_update";
     }
 
     public static final class BookEntry implements BaseColumns{
@@ -44,6 +46,8 @@ public class MediaContract {
         public static final String COLUMN_BOOK_NOTIF_SETTINGS = "notif_settings";
         public static final String COLUMN_BOOK_READ = "isRead";
         public static final String COLUMN_BOOK_ARCHIVED = "isArchived";
+
+        public static final String COLUMN_LAST_UPDATE = "last_update";
     }
 
     public static final class GameEntry implements BaseColumns{
@@ -65,5 +69,7 @@ public class MediaContract {
         public static final String COLUMN_GAME_NOTIF_SETTINGS = "notif_settings";
         public static final String COLUMN_GAME_PLAYED = "isPlayed";
         public static final String COLUMN_GAME_ARCHIVED = "isArchived";
+
+        public static final String COLUMN_LAST_UPDATE = "last_update";
     }
 }

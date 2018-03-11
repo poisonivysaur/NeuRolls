@@ -77,6 +77,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     @Override
     public void onResume() {
         super.onResume();
+        prepareMedias();
+        mAdapter.notifyDataSetChanged();
         Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
     }
 
@@ -256,7 +258,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 null,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                null);                   // The sort order
+                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
@@ -298,7 +300,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                entertainments.add(0, new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -339,7 +341,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 null,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                null);                   // The sort order
+                BookEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
@@ -381,7 +383,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                entertainments.add(0, new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -422,7 +424,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 null,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                null);                   // The sort order
+                GameEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
@@ -464,7 +466,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                entertainments.add(0, new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
