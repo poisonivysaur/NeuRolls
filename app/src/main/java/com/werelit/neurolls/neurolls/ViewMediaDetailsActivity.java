@@ -4,6 +4,8 @@ package com.werelit.neurolls.neurolls;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteAbortException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -300,12 +302,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
 
-        long newRowID = db.insert(FilmEntry.TABLE_NAME, null, values);
-
-        if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted " + newRowID + " into films table", Toast.LENGTH_SHORT).show();
+        long newRowID = -1;
+        try{
+            newRowID = db.insertOrThrow(FilmEntry.TABLE_NAME, null, values);
+            //Toast.makeText(this, "Successfully inserted " + newRowID + " into films table", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
+            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
+        }catch (SQLiteConstraintException e){
+            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
         }
-        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 
     private void insertBook(){
@@ -327,12 +332,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
-        long newRowID = db.insert(BookEntry.TABLE_NAME, null, values);
-
-        if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted " + newRowID + " into books table", Toast.LENGTH_SHORT).show();
+        long newRowID = -1;
+        try{
+            newRowID = db.insertOrThrow(BookEntry.TABLE_NAME, null, values);
+            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
+            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
+        }catch (SQLiteConstraintException e){
+            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
         }
-        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 
     private void insertGame(){
@@ -354,11 +361,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
-        long newRowID = db.insert(GameEntry.TABLE_NAME, null, values);
-
-        if(newRowID != -1){
-            Toast.makeText(this, "Successfully inserted " + newRowID + " into games table", Toast.LENGTH_SHORT).show();
+        long newRowID = -1;
+        try{
+            newRowID = db.insertOrThrow(GameEntry.TABLE_NAME, null, values);
+            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
+            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
+        }catch (SQLiteConstraintException e){
+            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
         }
-        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
 }

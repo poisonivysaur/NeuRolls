@@ -57,8 +57,8 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
        // TODO: Query
 
         String SQL_CREATE_FILMS_TABLE =  "CREATE TABLE " + FilmEntry.TABLE_NAME + " ("
-                + FilmEntry._ID + " INTEGER AUTOINCREMENT, "
-                + FilmEntry.COLUMN_FILM_ID + " TEXT PRIMARY KEY NOT NULL, "
+                //+ FilmEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + FilmEntry.COLUMN_FILM_ID + " TEXT PRIMARY KEY, "
                 + FilmEntry.COLUMN_FILM_NAME + " TEXT NOT NULL, "
                 + FilmEntry.COLUMN_FILM_GENRE + " TEXT, "
                 + FilmEntry.COLUMN_FILM_YEAR_RELEASED + " DATE, "
@@ -75,8 +75,8 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
                 + FilmEntry.COLUMN_FILM_WATCHED + " INTEGER NOT NULL DEFAULT 0); ";
 
         String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BookEntry.TABLE_NAME + " ("
-                + BookEntry._ID + " INTEGER AUTOINCREMENT, "
-                + BookEntry.COLUMN_BOOK_ID + " TEXT PRIMARY KEY NOT NULL, "
+                //+ BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + BookEntry.COLUMN_BOOK_ID + " TEXT PRIMARY KEY, "
                 + BookEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL, "
                 + BookEntry.COLUMN_BOOK_GENRE + " TEXT, "
                 + BookEntry.COLUMN_BOOK_YEAR_PUBLISHED + " DATE, "
@@ -93,8 +93,8 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
                 + BookEntry.COLUMN_BOOK_READ + " INTEGER NOT NULL DEFAULT 0); ";
 
         String SQL_CREATE_GAMES_TABLE =  "CREATE TABLE " + GameEntry.TABLE_NAME + " ("
-                + GameEntry._ID + " INTEGER AUTOINCREMENT, "
-                + GameEntry.COLUMN_GAME_ID + " TEXT PRIMARY KEY NOT NULL, "
+                //+ GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + GameEntry.COLUMN_GAME_ID + " TEXT PRIMARY KEY, "
                 + GameEntry.COLUMN_GAME_NAME + " TEXT NOT NULL, "
                 + GameEntry.COLUMN_GAME_GENRE + " TEXT, "
                 + GameEntry.COLUMN_GAME_YEAR_RELEASED + " DATE, "
