@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -18,9 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.data.MediaContract;
 import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
@@ -34,10 +30,11 @@ import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+
+    public static final String LOG_TAG = ViewAllMediaFragment.class.getSimpleName();
     /** The list containing Media objects */                    private List<Media> entertainments;
     /** The recycler view containing the Media items */         private RecyclerView mRecyclerView;
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
@@ -72,6 +69,19 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON START CALLED");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        prepareMedias();
+        Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView =  inflater.inflate(
                 R.layout.view_all_media, container, false);
@@ -84,7 +94,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mEmptyStateTextView.setVisibility(View.GONE);
 
         // add Media items into the Medias list
-        entertainments = new ArrayList<>();
+        entertainments = new ArrayList<>(); // always put this before setting up recycler view
 
         // setup the recycler view adapter, layout, etc.
         prepareRecyclerView(rootView);
@@ -94,7 +104,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         prepareMedias();
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("You have no media to enjoy later :(");
+            mEmptyStateTextView.setText("You have no media :(");
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
 
@@ -196,7 +206,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     private void prepareMedias() {
 
-        // TODO query db and return the result as an ArrayList entertainments
+        entertainments.clear();
+
         switch (mediaCategory){
             case 0:
                 getFilms();
@@ -249,7 +260,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                FilmEntry._ID,
+                //FilmEntry._ID,
                 FilmEntry.COLUMN_FILM_ID,
                 FilmEntry.COLUMN_FILM_NAME,
                 FilmEntry.COLUMN_FILM_GENRE,
@@ -332,7 +343,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                BookEntry._ID,
+                //BookEntry._ID,
                 BookEntry.COLUMN_BOOK_ID,
                 BookEntry.COLUMN_BOOK_NAME,
                 BookEntry.COLUMN_BOOK_GENRE,
@@ -415,7 +426,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                GameEntry._ID,
+                //GameEntry._ID,
                 GameEntry.COLUMN_GAME_ID,
                 GameEntry.COLUMN_GAME_NAME,
                 GameEntry.COLUMN_GAME_GENRE,
