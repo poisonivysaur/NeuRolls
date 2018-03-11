@@ -285,16 +285,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(FilmEntry.COLUMN_FILM_ID, "Test Film ID");
-        values.put(FilmEntry.COLUMN_FILM_NAME, "Astro Boy");
-        values.put(FilmEntry.COLUMN_FILM_GENRE, "Action/Adventure");
-        values.put(FilmEntry.COLUMN_FILM_YEAR_RELEASED, "2009-03-10");
+        values.put(FilmEntry.COLUMN_FILM_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+        values.put(FilmEntry.COLUMN_FILM_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
+        values.put(FilmEntry.COLUMN_FILM_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
+        values.put(FilmEntry.COLUMN_FILM_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
 
-        values.put(FilmEntry.COLUMN_FILM_DIRECTOR, "David Bowers");
-        values.put(FilmEntry.COLUMN_FILM_DURATION, 94);
-        values.put(FilmEntry.COLUMN_FILM_PRODUCTION, "Imagi Animation Studios");
-        values.put(FilmEntry.COLUMN_FILM_SYNOPSIS, "In futuristic Metro City, a brilliant scientist named Tenma builds Astro Boy (Freddie Highmore), a robotic child with superstrength, X-ray vision and the ability to fly. Astro Boy sets out to explore the world and find acceptance, learning what being human is all about in the process. Finding that his friends and family in Metro City are in danger, he uses his incredible powers to save all that he loves.");
+        values.put(FilmEntry.COLUMN_FILM_DIRECTOR, bundle.getString(MediaKeys.FILM_DIRECTOR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_DURATION, bundle.getInt(MediaKeys.FILM_DURATION_KEY));
+        values.put(FilmEntry.COLUMN_FILM_PRODUCTION, bundle.getString(MediaKeys.FILM_PRODUCTION_KEY));
+        values.put(FilmEntry.COLUMN_FILM_SYNOPSIS, bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY));
 
+        // TODO get text from UI for notif settings and date picker
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
@@ -311,16 +312,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN_BOOK_ID, "Test Book ID");
-        values.put(BookEntry.COLUMN_BOOK_NAME, "Charlotte's Web");
-        values.put(BookEntry.COLUMN_BOOK_GENRE, "Children's literature");
-        values.put(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED, "1952-03-10");
+        values.put(BookEntry.COLUMN_BOOK_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+        values.put(BookEntry.COLUMN_BOOK_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
+        values.put(BookEntry.COLUMN_BOOK_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
+        values.put(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
 
-        values.put(BookEntry.COLUMN_BOOK_AUTHOR, "E. B. White");
-        values.put(BookEntry.COLUMN_BOOK_PAGES, 192);
-        values.put(BookEntry.COLUMN_BOOK_PUBLISHER, "Harper & Brothers");
-        values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
+        values.put(BookEntry.COLUMN_BOOK_AUTHOR, bundle.getString(MediaKeys.BOOK_AUTHOR_KEY));
+        values.put(BookEntry.COLUMN_BOOK_PAGES, bundle.getInt(MediaKeys.BOOK_PAGES_KEY));
+        values.put(BookEntry.COLUMN_BOOK_PUBLISHER, bundle.getString(MediaKeys.BOOK_PUBLISHER_KEY));
+        values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY));
 
+        // TODO
         values.put(BookEntry.COLUMN_BOOK_IMG_DIR, "test/img/dir.png");
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
@@ -337,16 +339,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(GameEntry.COLUMN_GAME_ID, "Test Game ID");
-        values.put(GameEntry.COLUMN_GAME_NAME, "Shadow the Hedgehog");
-        values.put(GameEntry.COLUMN_GAME_GENRE, "Platformer, action-adventure, third-person shooter");
-        values.put(GameEntry.COLUMN_GAME_YEAR_RELEASED, "2005-03-10");
+        values.put(GameEntry.COLUMN_GAME_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+        values.put(GameEntry.COLUMN_GAME_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
+        values.put(GameEntry.COLUMN_GAME_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
+        values.put(GameEntry.COLUMN_GAME_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
 
-        values.put(GameEntry.COLUMN_GAME_PLATFORM, "Nintendo GameCube, PlayStation 2, Xbox");
-        values.put(GameEntry.COLUMN_GAME_PUBLISHER, "Sega");
-        values.put(GameEntry.COLUMN_GAME_SERIES, "Sonic the Hedgehog");
-        values.put(GameEntry.COLUMN_GAME_STORYLINE, "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
+        values.put(GameEntry.COLUMN_GAME_PLATFORM, bundle.getString(MediaKeys.GAME_PLATFORM_KEY));
+        values.put(GameEntry.COLUMN_GAME_PUBLISHER, bundle.getString(MediaKeys.GAME_PUBLISHER_KEY));
+        values.put(GameEntry.COLUMN_GAME_SERIES, bundle.getString(MediaKeys.GAME_SERIES_KEY));
+        values.put(GameEntry.COLUMN_GAME_STORYLINE, bundle.getString(MediaKeys.GAME_STORYLINE_KEY));
 
+        // TODO
         values.put(GameEntry.COLUMN_GAME_IMG_DIR, "test/img/dir.png");
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
