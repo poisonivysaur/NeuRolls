@@ -99,29 +99,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             mEmptyStateTextView.setVisibility(View.VISIBLE);
         }
 
-        Button add = rootView.findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                insertMedia();
-                displayDatabaseInfo();
-            }
-        });
-
         return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        displayDatabaseInfo();
     }
 
     /**
