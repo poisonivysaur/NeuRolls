@@ -64,8 +64,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         else {
             mAdapter = new MediaAdapter(entertainments, mediaCategory);
         }
-        if(mRecyclerView != null)
+        if(mRecyclerView != null) {
             mRecyclerView.setAdapter(mAdapter);
+            prepareMedias();
+            shouldDisplayEmptyView();
+        }
     }
 
     @Override
@@ -103,11 +106,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mDbHelper = new NeurollsDbHelper(rootView.getContext());
 
         prepareMedias();
-        if(entertainments.isEmpty()){
-            mRecyclerView.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("You have no media :(");
-            mEmptyStateTextView.setVisibility(View.VISIBLE);
-        }
+        mAdapter.notifyDataSetChanged();
+        shouldDisplayEmptyView();
 
         return rootView;
     }
@@ -204,29 +204,28 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }));
     }
 
-
     private void prepareMedias() {
 
         entertainments.clear();
         switch (mediaCategory){
             case 0:
-                getFilms();
-                getBooks();
-                getGames();
+                getFilms(isArchived? 1 : 0);
+                getBooks(isArchived? 1 : 0);
+                getGames(isArchived? 1 : 0);
                 break;
             case 1:
-                getFilms();
+                getFilms(isArchived? 1 : 0);
                 break;
             case 2:
-                getBooks();
+                getBooks(isArchived? 1 : 0);
                 break;
             case 3:
-                getGames();
+                getGames(isArchived? 1 : 0);
                 break;
         }
     }
 
-    private void getFilms(){
+    private void getFilms(int isArchived){
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -250,12 +249,15 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 FilmEntry.COLUMN_FILM_WATCHED,
                 FilmEntry.COLUMN_FILM_ARCHIVED };
 
+        String selection = FilmEntry.COLUMN_FILM_ARCHIVED + "=?";
+        String[] selectionArgs = new String[] { String.valueOf(isArchived) };
+
         // Perform a query on the pets table
         Cursor cursor = db.query(
                 FilmEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 FilmEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
@@ -309,7 +311,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-    private void getBooks(){
+    private void getBooks(int isArchived){
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -333,12 +335,15 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 BookEntry.COLUMN_BOOK_READ,
                 BookEntry.COLUMN_BOOK_ARCHIVED };
 
+        String selection = BookEntry.COLUMN_BOOK_ARCHIVED + "=?";
+        String[] selectionArgs = new String[] { String.valueOf(isArchived) };
+
         // Perform a query on the pets table
         Cursor cursor = db.query(
                 BookEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 BookEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
@@ -392,7 +397,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-    private void getGames(){
+    private void getGames(int isArchived){
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -416,12 +421,15 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 GameEntry.COLUMN_GAME_PLAYED,
                 GameEntry.COLUMN_GAME_ARCHIVED };
 
+        String selection = GameEntry.COLUMN_GAME_ARCHIVED + "=?";
+        String[] selectionArgs = new String[] { String.valueOf(isArchived) };
+
         // Perform a query on the pets table
         Cursor cursor = db.query(
                 GameEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 GameEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
@@ -495,11 +503,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             // remove the item from recycler view
             mAdapter.removeItem(viewHolder.getAdapterPosition());
-            if(entertainments.size() == 0 ){
-                mRecyclerView.setVisibility(View.GONE);
-                mEmptyStateTextView.setText("You have no media yet :(");
-                mEmptyStateTextView.setVisibility(View.VISIBLE);
-            }
+            shouldDisplayEmptyView();
 
             // showing snack bar with Undo option
 
@@ -529,6 +533,24 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
+    private void shouldDisplayEmptyView(){
+        if(entertainments.isEmpty()){
+            mRecyclerView.setVisibility(View.GONE);
+            switch (isArchived ? 1 : 0){
+                case 1:
+                    mEmptyStateTextView.setText("You have no archived media.");
+                    break;
+                case 0:
+                    mEmptyStateTextView.setText("You have no media :(");
+                    break;
+            }
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mEmptyStateTextView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the films database.
