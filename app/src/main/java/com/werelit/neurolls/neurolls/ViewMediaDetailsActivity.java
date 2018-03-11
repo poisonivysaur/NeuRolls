@@ -201,7 +201,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 // get the attributes for a Game object
                 String gamePlatform = bundle.getString(MediaKeys.GAME_PLATFORM_KEY);
                 String gamePublisher = bundle.getString(MediaKeys.GAME_PUBLISHER_KEY);
-                String gameSeries = bundle.getString(MediaKeys.GAME_PLATFORM_KEY);
+                String gameSeries = bundle.getString(MediaKeys.GAME_SERIES_KEY);
                 String gameStoryline = bundle.getString(MediaKeys.GAME_STORYLINE_KEY);
 
                 // set the views of the xml layout to the attribute values
