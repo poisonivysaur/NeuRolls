@@ -72,12 +72,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON START CALLED");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         prepareMedias();
