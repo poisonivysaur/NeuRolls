@@ -70,7 +70,7 @@ public class NetworkUtils {
             }
             System.setProperty("http.proxyHost", "");
         }
-        Log.wtf(TAG, jsonResponse);
+        //Log.wtf(TAG, jsonResponse);
         return jsonResponse;
     }
 
