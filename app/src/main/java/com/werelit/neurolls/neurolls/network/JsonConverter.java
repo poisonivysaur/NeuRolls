@@ -94,8 +94,8 @@ public class JsonConverter {
                 //System.out.println(curObj.getInt("id"));
                 String gameId = "" + curObj.getInt("id");
                 String gameName = curObj.getString("name");
-                String summary = curObj.getString("summary");
                 String genre = ConnectGameDB.getCompany(curObj.getJSONArray("genres"));
+                String summary = curObj.getString("summary");
                 String release = "No Release Revealed.";
                 if (!curObj.isNull("release_dates"))
                     release = ConnectGameDB.getReleaseDate(curObj.getJSONArray("release_dates"));
@@ -106,7 +106,7 @@ public class JsonConverter {
                 String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
                 String publishers = ConnectGameDB.getCompany(curObj.getJSONArray("publishers"));
 
-                Game g = new Game(gameId, gameName, genre, release, platforms, publishers, summary, series);
+                Game g = new Game(gameId, gameName, genre, release, platforms, publishers, series, summary);
                 games.add(g);
             }
         } catch (JSONException e) {
