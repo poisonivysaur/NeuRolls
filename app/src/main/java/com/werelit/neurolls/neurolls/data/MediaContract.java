@@ -1,11 +1,40 @@
 package com.werelit.neurolls.neurolls.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class MediaContract {
 
+    /**
+     * The "Content authority" is a name for the entire content provider, similar to the
+     * relationship between a domain name and its website.  A convenient string to use for the
+     * content authority is the package name for the app, which is guaranteed to be unique on the
+     * device.
+     */
+    public static final String CONTENT_AUTHORITY = "com.werelit.neurolls.neurolls";
+
+    /**
+     * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
+     * the content provider.
+     */
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /**
+     * Possible path (appended to base content URI for possible URI's)
+     * For instance, content://com.example.android.pets/pets/ is a valid path for
+     * looking at pet data. content://com.example.android.pets/staff/ will fail,
+     * as the ContentProvider hasn't been given any information on what to do with "staff".
+     */
+    public static final String PATH_FILMS = "films";
+    public static final String PATH_BOOKS = "books";
+    public static final String PATH_GAMES = "games";
+
     public static final class FilmEntry implements BaseColumns{
-        // Table name
+
+        /** The content URI to access the pet data in the provider */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FILMS);
+
+        /** Name of database table for films */
         public static final String TABLE_NAME = "films";
 
         public static final String COLUMN_FILM_ID = "film_id";
@@ -28,7 +57,11 @@ public class MediaContract {
     }
 
     public static final class BookEntry implements BaseColumns{
-        // Table name
+
+        /** The content URI to access the pet data in the provider */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
+
+        /** Name of database table for books */
         public static final String TABLE_NAME = "books";
 
         public static final String COLUMN_BOOK_ID = "book_id";
@@ -51,7 +84,11 @@ public class MediaContract {
     }
 
     public static final class GameEntry implements BaseColumns{
-        // Table name
+
+        /** The content URI to access the pet data in the provider */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_GAMES);
+
+        /** Name of database table for games */
         public static final String TABLE_NAME = "games";
 
         public static final String COLUMN_GAME_ID = "game_id";
