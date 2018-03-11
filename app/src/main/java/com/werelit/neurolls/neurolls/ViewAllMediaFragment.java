@@ -77,7 +77,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     @Override
     public void onResume() {
         super.onResume();
-        prepareMedias();
         Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
     }
 
@@ -207,7 +206,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void prepareMedias() {
 
         entertainments.clear();
-
         switch (mediaCategory){
             case 0:
                 getFilms();
