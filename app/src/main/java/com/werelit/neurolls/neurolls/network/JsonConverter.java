@@ -34,7 +34,7 @@ public class JsonConverter {
 
             for(int i = 0; i < jsonArr.length(); i++){
                 JSONObject curObj = jsonArr.getJSONObject(i);
-                String id = "" + curObj.getInt("id");
+
                 String title = curObj.getString("title");
                 String releaseDate = curObj.getString("release_date");
                 if(releaseDate.equals(""))
@@ -49,7 +49,6 @@ public class JsonConverter {
                 System.out.println(genre);
                 */
                 Media m = new Film();
-                m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
@@ -80,12 +79,14 @@ public class JsonConverter {
 
             for(int i = 0; i < jsonArr.length(); i++) {
                 JSONObject curObj = jsonArr.getJSONObject(i);
+                String id = "" + curObj.getInt("id");
                 String title = curObj.getString("title");
                 String releaseDate = curObj.getString("release_date");
                 if (releaseDate.equals(""))
                     releaseDate = "Unreleased";
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
                 Film m = new Film();
+                m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
