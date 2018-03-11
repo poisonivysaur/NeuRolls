@@ -74,38 +74,6 @@ public class NetworkUtils {
         return jsonResponse;
     }
 
-//    public static String makeHttpRequestToigdb(String url){
-//        if(url == null || url.equals(""))
-//            return "";
-//        String jsonResponse = "";
-//        HttpResponse<JsonNode> response = null;
-//        BufferedReader reader = null;
-//        try {
-//            response = Unirest.get(url)
-//                    .header("user-key", ConnectGameDB.USER_KEY)
-//                    .header("Accept", "application/json")
-//                    .asJson();
-//
-//            reader = new BufferedReader(new InputStreamReader(response.getRawBody()));
-//            StringBuilder builder = new StringBuilder();
-//
-//            String line = reader.readLine();
-//            while (line != null) {
-//                builder.append(line);
-//                line = reader.readLine();
-//            }
-//
-//            jsonResponse = builder.toString();
-//            Unirest.shutdown();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        } catch (IOException | UnirestException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return jsonResponse;
-//    }
-
     private static String readFromStream(InputStream stream) throws IOException {
         StringBuilder builder = new StringBuilder();
         InputStreamReader inputStreamReader = null;

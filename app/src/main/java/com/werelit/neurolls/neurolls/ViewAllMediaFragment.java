@@ -193,7 +193,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }));
     }
 
-    
+
     private void prepareMedias() {
 
         // TODO query db and return the result as an ArrayList entertainments
