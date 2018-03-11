@@ -90,7 +90,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         prepareRecyclerView(rootView);
 
         mDbHelper = new NeurollsDbHelper(rootView.getContext());
-        displayDatabaseInfo();
 
         prepareMedias();
         if(entertainments.isEmpty()){
@@ -194,12 +193,26 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }));
     }
 
-    /**
-     * This method adds the dummy Media data into the Medias list.
-     */
+    
     private void prepareMedias() {
 
         // TODO query db and return the result as an ArrayList entertainments
+        switch (mediaCategory){
+            case 0:
+                getFilms();
+                getBooks();
+                getGames();
+                break;
+            case 1:
+                getFilms();
+                break;
+            case 2:
+                getBooks();
+                break;
+            case 3:
+                getGames();
+                break;
+        }
 
         /*
         entertainments.add(new Film("ID#1", "Phantom of the Opera", "Drama/Thriller", "2004",
@@ -227,6 +240,255 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 101, "Ron Howard", "Imagine Entertainment",
                 "A human drama inspired by events in the life of John Forbes Nash Jr., and in part based on the biography \"A Beautiful Mind\" by Sylvia Nasar. From the heights of notoriety to the depths of depravity, John Forbes Nash Jr. experienced it all. A mathematical genius, he made an astonishing discovery early in his career and stood on the brink of international acclaim. But the handsome and arrogant Nash soon found himself on a painful and harrowing journey of self-discovery."));
               */
+    }
+
+    private void getFilms(){
+        // Create and/or open a database to read from it
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                FilmEntry._ID,
+                FilmEntry.COLUMN_FILM_ID,
+                FilmEntry.COLUMN_FILM_NAME,
+                FilmEntry.COLUMN_FILM_GENRE,
+                FilmEntry.COLUMN_FILM_YEAR_RELEASED,
+                FilmEntry.COLUMN_FILM_IMG_DIR,
+
+                FilmEntry.COLUMN_FILM_DIRECTOR,
+                FilmEntry.COLUMN_FILM_DURATION,
+                FilmEntry.COLUMN_FILM_PRODUCTION,
+                FilmEntry.COLUMN_FILM_SYNOPSIS,
+
+                FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
+                FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
+                FilmEntry.COLUMN_FILM_WATCHED,
+                FilmEntry.COLUMN_FILM_ARCHIVED };
+
+        // Perform a query on the pets table
+        Cursor cursor = db.query(
+                FilmEntry.TABLE_NAME,   // The table to query
+                projection,            // The columns to return
+                null,                  // The columns for the WHERE clause
+                null,                  // The values for the WHERE clause
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // The sort order
+
+        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
+            int nameColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_YEAR_RELEASED);
+            int imageColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DIRECTOR);
+            int durationColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DURATION);
+            int prodColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_PRODUCTION);
+            int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
+
+            int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+            int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
+            int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                int currentDuration = cursor.getInt(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
+    }
+
+    private void getBooks(){
+        // Create and/or open a database to read from it
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_BOOK_ID,
+                BookEntry.COLUMN_BOOK_NAME,
+                BookEntry.COLUMN_BOOK_GENRE,
+                BookEntry.COLUMN_BOOK_YEAR_PUBLISHED,
+                BookEntry.COLUMN_BOOK_IMG_DIR,
+
+                BookEntry.COLUMN_BOOK_AUTHOR,
+                BookEntry.COLUMN_BOOK_PAGES,
+                BookEntry.COLUMN_BOOK_PUBLISHER,
+                BookEntry.COLUMN_BOOK_DESCRIPTION,
+
+                BookEntry.COLUMN_BOOK_DATE_TO_READ,
+                BookEntry.COLUMN_BOOK_NOTIF_SETTINGS,
+                BookEntry.COLUMN_BOOK_READ,
+                BookEntry.COLUMN_BOOK_ARCHIVED };
+
+        // Perform a query on the pets table
+        Cursor cursor = db.query(
+                BookEntry.TABLE_NAME,   // The table to query
+                projection,            // The columns to return
+                null,                  // The columns for the WHERE clause
+                null,                  // The values for the WHERE clause
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // The sort order
+
+        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ID);
+            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED);
+            int imageColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_AUTHOR);
+            int durationColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PAGES);
+            int prodColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PUBLISHER);
+            int synopsisColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DESCRIPTION);
+
+            int dateColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DATE_TO_READ);
+            int notifColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_READ);
+            int archivedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                int currentDuration = cursor.getInt(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                entertainments.add(new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
+    }
+
+    private void getGames(){
+        // Create and/or open a database to read from it
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                GameEntry._ID,
+                GameEntry.COLUMN_GAME_ID,
+                GameEntry.COLUMN_GAME_NAME,
+                GameEntry.COLUMN_GAME_GENRE,
+                GameEntry.COLUMN_GAME_YEAR_RELEASED,
+                GameEntry.COLUMN_GAME_IMG_DIR,
+
+                GameEntry.COLUMN_GAME_PLATFORM,
+                GameEntry.COLUMN_GAME_PUBLISHER,
+                GameEntry.COLUMN_GAME_SERIES,
+                GameEntry.COLUMN_GAME_STORYLINE,
+
+                GameEntry.COLUMN_GAME_DATE_TO_PLAY,
+                GameEntry.COLUMN_GAME_NOTIF_SETTINGS,
+                GameEntry.COLUMN_GAME_PLAYED,
+                GameEntry.COLUMN_GAME_ARCHIVED };
+
+        // Perform a query on the pets table
+        Cursor cursor = db.query(
+                GameEntry.TABLE_NAME,   // The table to query
+                projection,            // The columns to return
+                null,                  // The columns for the WHERE clause
+                null,                  // The values for the WHERE clause
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // The sort order
+
+        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ID);
+            int nameColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_YEAR_RELEASED);
+            int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLATFORM);
+            int durationColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PUBLISHER);
+            int prodColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_SERIES);
+            int synopsisColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_STORYLINE);
+
+            int dateColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
+            int notifColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLAYED);
+            int archivedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                String currentDuration = cursor.getString(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                entertainments.add(new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
     }
 
     @Override
@@ -361,7 +623,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDuration, currentDirector, currentProd, currentSynopsis));
+                //entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDuration, currentDirector, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
