@@ -53,6 +53,33 @@ public class JsonConverter {
         return films;
     }
 
+    public static ArrayList<Media> revisedBookSearchResult(String bookSearchJson){
+        ArrayList<Media> books = new ArrayList<>();
+
+        try {
+            JSONArray items = new JSONObject(bookSearchJson).getJSONArray("items");
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject curObj = items.getJSONObject(i);
+                String id = curObj.getString("id");
+                String title = curObj.getJSONObject("volumeInfo").getString("title");
+                String genres = ConnectBookDB.getGenres(curObj.getJSONObject("volumeInfo").optJSONArray("categories"));
+                String pageCount = Integer.toString(curObj.getJSONObject("volumeInfo").getInt("pageCount")) + " pages";
+                String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
+                String desc = curObj.getJSONObject("volumeInfo").getString("description");
+                String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
+                String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
+                Book b = new Book(id, title, genres, publishedDate, author, publisher, desc);
+                books.add(b);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return books;
+    }
+
     public static ArrayList<Media> revisedGetGameSearchResult(String gameSearchJson){
         if(TextUtils.isEmpty(gameSearchJson))
             return null;
@@ -88,32 +115,5 @@ public class JsonConverter {
         }
 
         return games;
-    }
-
-    public static ArrayList<Media> revisedBookSearchResult(String bookSearchJson){
-        ArrayList<Media> books = new ArrayList<>();
-
-        try {
-            JSONArray items = new JSONObject(bookSearchJson).getJSONArray("items");
-
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject curObj = items.getJSONObject(i);
-                String id = curObj.getString("id");
-                String title = curObj.getJSONObject("volumeInfo").getString("title");
-                String genres = ConnectBookDB.getGenres(curObj.getJSONObject("volumeInfo").optJSONArray("categories"));
-                String pageCount = Integer.toString(curObj.getJSONObject("volumeInfo").getInt("pageCount")) + " pages";
-                String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
-                String desc = curObj.getJSONObject("volumeInfo").getString("description");
-                String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
-                String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
-                Book b = new Book(id, title, genres, publishedDate, author, publisher, desc);
-                books.add(b);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, e.toString());
-        }
-
-        return books;
     }
 }
