@@ -95,13 +95,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                     break;
                 case Media.CATEGORY_BOOKS:
                     // Save book to db
-                    insertBook();
+                    saveBook();
                     // Exit activity
                     finish();
                     break;
                 case Media.CATEGORY_GAMES:
                     // Save game to db
-                    insertGame();
+                    saveGame();
                     // Exit activity
                     finish();
                     break;
@@ -309,7 +309,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void insertBook(){
+    private void saveBook(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -332,7 +332,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void insertGame(){
+    private void saveGame(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
