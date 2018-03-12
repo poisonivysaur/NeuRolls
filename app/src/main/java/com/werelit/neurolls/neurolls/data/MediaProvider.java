@@ -8,7 +8,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.werelit.neurolls.neurolls.MediaKeys;
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
@@ -173,11 +175,11 @@ public class MediaProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case FILMS:
-                return insertFilm(uri, contentValues);
+                return insertMedia(uri, contentValues, FilmEntry.TABLE_NAME);
             case BOOKS:
-                return insertFilm(uri, contentValues);
+                return insertMedia(uri, contentValues, BookEntry.TABLE_NAME);
             case GAMES:
-                return insertFilm(uri, contentValues);
+                return insertMedia(uri, contentValues, GameEntry.TABLE_NAME);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -187,7 +189,7 @@ public class MediaProvider extends ContentProvider {
      * Insert a film into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
-    private Uri insertFilm(Uri uri, ContentValues values) {
+    private Uri insertMedia(Uri uri, ContentValues values, String tableName) {
         /* no need for this as inputs are automatically provided
         // Check that the name is not null
         String id = values.getAsString(FilmEntry.COLUMN_FILM_ID);
@@ -216,13 +218,12 @@ public class MediaProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
-        long status = database.insert(FilmEntry.TABLE_NAME, null, values);
+        long status = database.insert(tableName, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (status == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-
         // Notify all listeners that the data has changed for the pet content URI
         getContext().getContentResolver().notifyChange(uri, null);
 
