@@ -8,10 +8,10 @@ import android.net.Uri;
 /**
  * {@link ContentProvider} for Medias app.
  */
-public class NeurollsProvider extends ContentProvider {
+public class MediaProvider extends ContentProvider {
 
     /** Tag for the log messages */
-    public static final String LOG_TAG = NeurollsProvider.class.getSimpleName();
+    public static final String LOG_TAG = MediaProvider.class.getSimpleName();
 
     private NeurollsDbHelper mDbHelper;
 
