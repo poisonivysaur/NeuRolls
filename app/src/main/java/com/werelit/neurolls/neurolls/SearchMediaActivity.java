@@ -218,29 +218,35 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Get a reference to the ConnectivityManager to check state of network connectivity
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                if(searchType > 0) {    // if not internal search
+                    // Get a reference to the ConnectivityManager to check state of network connectivity
+                    ConnectivityManager connMgr = (ConnectivityManager)
+                            getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                // Get details on the currently active default data network
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                    // Get details on the currently active default data network
+                    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-                // If there is a network connection, fetch data
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    if(searchType == Media.CATEGORY_GAMES){
-                        setupGameSearch(query);
+                    // If there is a network connection, fetch data
+                    if (networkInfo != null && networkInfo.isConnected()) {
+                        if (searchType == Media.CATEGORY_GAMES) {
+                            setupGameSearch(query);
+                        } else {
+                            searchMedia(query);
+                        }
+                    } else {
+                        // Otherwise, display error
+                        // First, hide loading indicator so error message will be visible
+                        View loadingIndicator = findViewById(R.id.loading_indicator);
+                        loadingIndicator.setVisibility(View.GONE);
+                        // Update empty state with no connection error message
+                        mEmptyStateTextView.setText(R.string.no_internet_connection);
+                        mEmptyStateTextView.setVisibility(View.VISIBLE);
                     }
-                    else {
-                        searchMedia(query);
-                    }
-                } else {
-                    // Otherwise, display error
-                    // First, hide loading indicator so error message will be visible
-                    View loadingIndicator = findViewById(R.id.loading_indicator);
-                    loadingIndicator.setVisibility(View.GONE);
-                    // Update empty state with no connection error message
-                    mEmptyStateTextView.setText(R.string.no_internet_connection);
-                    mEmptyStateTextView.setVisibility(View.VISIBLE);
+                }
+                else {
+//                    View loadingIndicator = findViewById(R.id.loading_indicator);
+//                    loadingIndicator.setVisibility(View.GONE);
+                    searchNeuRolls(query);
                 }
                 return false;
             }
@@ -420,5 +426,11 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onError(VolleyError volleyError) {}
         });
+    }
+
+    private void searchNeuRolls(String query){
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
+        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
     }
 }

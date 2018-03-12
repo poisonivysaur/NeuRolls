@@ -56,6 +56,7 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
                 return "";
 
             default: // search NeuRolls
+                // TODO search existing media from database and return an ArrayList<Media>
                 return "TODO: search existing media in NeuRolls list";
         }
     }
