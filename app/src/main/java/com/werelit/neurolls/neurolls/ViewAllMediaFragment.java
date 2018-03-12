@@ -46,6 +46,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private boolean isArchived = false;
     private NeurollsDbHelper mDbHelper;
 
+    private View rootView;
+
     public ViewAllMediaFragment(){
 
     }
@@ -83,6 +85,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView =  inflater.inflate(
                 R.layout.view_all_media, container, false);
+
+        this.rootView = rootView;
 
         // use a constraint layout for the delete snackbar with UNDO
         constraintLayout = rootView.findViewById(R.id.constraint_layout);
@@ -221,9 +225,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void getFilms(int isArchived){
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -248,17 +249,24 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         String[] selectionArgs = new String[] { String.valueOf(isArchived) };
 
         // Perform a query on the pets table
-        Cursor cursor = db.query(
-                FilmEntry.TABLE_NAME,   // The table to query
-                projection,            // The columns to return
-                selection,                  // The columns for the WHERE clause
-                selectionArgs,                  // The values for the WHERE clause
+        /*Cursor cursor = db.query(
+                FilmEntry.TABLE_NAME,
+                projection,
+                selection,                  //
+                selectionArgs,
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
+                FilmEntry.COLUMN_LAST_UPDATE+" DESC");
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
+        */
 
+        Cursor cursor = rootView.getContext().getContentResolver().query(
+                FilmEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
         try {
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
