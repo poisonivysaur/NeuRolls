@@ -345,6 +345,22 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                return FilmEntry.CONTENT_LIST_TYPE;
+            case FILM_ID:
+                return FilmEntry.CONTENT_ITEM_TYPE;
+            case BOOKS:
+                return BookEntry.CONTENT_LIST_TYPE;
+            case BOOK_ID:
+                return BookEntry.CONTENT_ITEM_TYPE;
+            case GAMES:
+                return GameEntry.CONTENT_LIST_TYPE;
+            case GAME_ID:
+                return GameEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
