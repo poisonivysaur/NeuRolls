@@ -186,7 +186,7 @@ public class MediaProvider extends ContentProvider {
     }
 
     /**
-     * Insert a film into the database with the given content values. Return the new content URI
+     * Insert a media into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
     private Uri insertMedia(Uri uri, ContentValues values, String tableName) {
