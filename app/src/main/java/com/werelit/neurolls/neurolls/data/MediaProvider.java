@@ -15,6 +15,7 @@ import com.werelit.neurolls.neurolls.MediaKeys;
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 
 /**
@@ -209,6 +210,8 @@ public class MediaProvider extends ContentProvider {
             throw new IllegalArgumentException("Film requires valid duratoin");
         }
         */
+        // TODO SANITY CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!
+
         // TODO: check date picker to see if date chosen is greater than or equal to the current date
 
         // TODO: same goes with notif settings
@@ -231,7 +234,7 @@ public class MediaProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-        // Notify all listeners that the data has changed for the pet content URI
+        // Notify all listeners that the data has changed for the media content URI
         getContext().getContentResolver().notifyChange(uri, null);
 
         // Return the new URI with the ID (of the newly inserted row) appended at the end
@@ -243,7 +246,59 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS: return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
+            case BOOKS: return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
+            case GAMES: return updateMedia(uri, contentValues, selection, selectionArgs, GameEntry.TABLE_NAME);
+            case FILM_ID:
+                // For the FILM_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = FilmEntry.COLUMN_FILM_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
+            case BOOK_ID:
+                selection = BookEntry.COLUMN_BOOK_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
+            case GAME_ID:
+                selection = GameEntry.COLUMN_GAME_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, GameEntry.TABLE_NAME);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Update media in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * Return the number of rows that were successfully updated.
+     */
+    private int updateMedia(Uri uri, ContentValues values, String selection, String[] selectionArgs, String tableName) {
+
+        // TODO SANITY CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*
+        // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
+        // check that the name value is not null.
+        if (values.containsKey(PetEntry.COLUMN_PET_NAME)) {
+            String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Pet requires a name");
+            }
+        }
+        * */
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Returns the number of database rows affected by the update statement
+        return database.update(tableName, values, selection, selectionArgs);
     }
 
     /**
