@@ -245,19 +245,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         String selection = FilmEntry.COLUMN_FILM_ARCHIVED + "=?";
         String[] selectionArgs = new String[] { String.valueOf(isArchived) };
 
-        // Perform a query on the pets table
-        /*Cursor cursor = db.query(
-                FilmEntry.TABLE_NAME,
-                projection,
-                selection,                  //
-                selectionArgs,
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                FilmEntry.COLUMN_LAST_UPDATE+" DESC");
-
-        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-        */
-
         Cursor cursor = rootView.getContext().getContentResolver().query(
                 FilmEntry.CONTENT_URI,          // The content URI of the films table
                 projection,                     // The columns to return for each row
