@@ -176,6 +176,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 else if(media instanceof Book){
                     bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
                     bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
+                    bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)entertainments.get(position)).getPages());
                     bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
                     bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
                 }

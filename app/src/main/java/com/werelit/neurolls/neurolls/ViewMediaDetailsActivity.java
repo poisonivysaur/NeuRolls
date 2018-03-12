@@ -153,14 +153,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 // set the content of the detail to the film detail xml layout then
                 // get the views of that view group
                 setContentView(R.layout.view_film_detail);
-                TextView duration = (TextView) findViewById(R.id.duration);
                 TextView director = (TextView) findViewById(R.id.director);
+                TextView duration = (TextView) findViewById(R.id.duration);
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
 
                 // get the attributes for a Film object
-                int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmDirector = bundle.getString(MediaKeys.FILM_DIRECTOR_KEY);
+                int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
 
@@ -177,11 +177,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 // get the views of that view group
                 setContentView(R.layout.view_book_detail);
                 TextView author = (TextView) findViewById(R.id.author);
+                TextView pages = (TextView) findViewById(R.id.pages);
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView description = (TextView) findViewById(R.id.description);
 
                 // get the attributes for a Book object
                 String bookAuthor = bundle.getString(MediaKeys.BOOK_AUTHOR_KEY);
+                String bookPages = bundle.getString(MediaKeys.BOOK_PAGES_KEY);
                 String bookPublisher = bundle.getString(MediaKeys.BOOK_PUBLISHER_KEY);
                 String bookDescription = bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY);
 
