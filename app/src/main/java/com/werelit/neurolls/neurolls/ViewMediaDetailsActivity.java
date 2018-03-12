@@ -307,16 +307,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
         showFeedback(newUri);
-
-        /*long newRowID = -1;
-        try{
-            newRowID = db.insertOrThrow(FilmEntry.TABLE_NAME, null, values);
-            //Toast.makeText(this, "Successfully inserted " + newRowID + " into films table", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
-            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
-        }catch (SQLiteConstraintException e){
-            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     private void insertBook(){
@@ -340,14 +330,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
         showFeedback(newUri);
-/*        long newRowID = -1;
-        try{
-            newRowID = db.insertOrThrow(BookEntry.TABLE_NAME, null, values);
-            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
-            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
-        }catch (SQLiteConstraintException e){
-            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     private void insertGame(){
@@ -371,15 +353,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
         showFeedback(newUri);
-        /*
-        long newRowID = -1;
-        try{
-            newRowID = db.insertOrThrow(GameEntry.TABLE_NAME, null, values);
-            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
-            Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
-        }catch (SQLiteConstraintException e){
-            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     private void showFeedback(Uri uri){
