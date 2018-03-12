@@ -354,11 +354,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
         */
         Cursor cursor = rootView.getContext().getContentResolver().query(
-                FilmEntry.CONTENT_URI,          // The content URI of the films table
+                BookEntry.CONTENT_URI,          // The content URI of the films table
                 projection,                     // The columns to return for each row
                 selection,                      // The columns for the WHERE clause; selection criteria
                 selectionArgs,                  // The values for the WHERE clause
-                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
+                BookEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
         try {
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ID);
@@ -446,11 +446,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
         */
         Cursor cursor = rootView.getContext().getContentResolver().query(
-                FilmEntry.CONTENT_URI,          // The content URI of the films table
+                GameEntry.CONTENT_URI,          // The content URI of the films table
                 projection,                     // The columns to return for each row
                 selection,                      // The columns for the WHERE clause; selection criteria
                 selectionArgs,                  // The values for the WHERE clause
-                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
+                GameEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
         try {
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ID);
