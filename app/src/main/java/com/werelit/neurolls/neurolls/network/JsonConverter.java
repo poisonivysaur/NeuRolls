@@ -64,12 +64,12 @@ public class JsonConverter {
                 String id = curObj.getString("id");
                 String title = curObj.getJSONObject("volumeInfo").getString("title");
                 String genres = ConnectBookDB.getGenres(curObj.getJSONObject("volumeInfo").optJSONArray("categories"));
-                String pageCount = Integer.toString(curObj.getJSONObject("volumeInfo").getInt("pageCount")) + " pages";
+                int pageCount = curObj.getJSONObject("volumeInfo").getInt("pageCount");
                 String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
                 String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
-                Book b = new Book(id, title, genres, publishedDate, author, publisher, desc);
+                Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
             }
         } catch (JSONException e) {

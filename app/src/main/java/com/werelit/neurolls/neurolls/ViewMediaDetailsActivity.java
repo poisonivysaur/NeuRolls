@@ -189,6 +189,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
                 // set the views of the xml layout to the attribute values
                 author.setText(bookAuthor);
+                pages.setText(bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
 
