@@ -29,9 +29,11 @@ public class MediaContract {
     public static final String PATH_BOOKS = "books";
     public static final String PATH_GAMES = "games";
 
+    // TODO path anime, tv-series, comics, manga paths
+
     public static final class FilmEntry implements BaseColumns{
 
-        /** The content URI to access the pet data in the provider */
+        /** The content URI to access the film data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FILMS);
 
         /** Name of database table for films */
@@ -58,7 +60,7 @@ public class MediaContract {
 
     public static final class BookEntry implements BaseColumns{
 
-        /** The content URI to access the pet data in the provider */
+        /** The content URI to access the book data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /** Name of database table for books */
@@ -85,7 +87,7 @@ public class MediaContract {
 
     public static final class GameEntry implements BaseColumns{
 
-        /** The content URI to access the pet data in the provider */
+        /** The content URI to access the game data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_GAMES);
 
         /** Name of database table for games */

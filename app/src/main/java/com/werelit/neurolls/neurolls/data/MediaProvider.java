@@ -25,6 +25,8 @@ public class MediaProvider extends ContentProvider {
     /** URI matcher code for the content URI for a single film in the films table */
     private static final int FILM_ID = 101;
 
+    // TODO for animes, tv series, there will be an additional parameter in the URI
+
     /** URI matcher code for the content URI for the books table */
     private static final int BOOKS = 200;
 
