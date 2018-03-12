@@ -306,7 +306,38 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(FilmEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOKS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case GAMES:
+                // Delete all rows that match the selection and selection args
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
+            case FILM_ID:
+                // Delete a single row given by the ID in the URI
+                selection = FilmEntry.COLUMN_FILM_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(FilmEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOK_ID:
+                // Delete a single row given by the ID in the URI
+                selection = BookEntry.COLUMN_BOOK_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case GAME_ID:
+                // Delete a single row given by the ID in the URI
+                selection = GameEntry.COLUMN_GAME_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     /**
