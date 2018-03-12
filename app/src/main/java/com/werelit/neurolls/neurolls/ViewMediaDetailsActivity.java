@@ -306,6 +306,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         // into the pets database table.
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+        showFeedback(newUri);
 
         /*long newRowID = -1;
         try{
@@ -337,7 +338,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
-        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+        showFeedback(newUri);
 /*        long newRowID = -1;
         try{
             newRowID = db.insertOrThrow(BookEntry.TABLE_NAME, null, values);
@@ -367,7 +369,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
-        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
+        showFeedback(newUri);
         /*
         long newRowID = -1;
         try{
@@ -377,5 +380,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }catch (SQLiteConstraintException e){
             Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
         }*/
+    }
+
+    private void showFeedback(Uri uri){
+        // Show a toast message depending on whether or not the insertion was successful.
+        if (uri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
