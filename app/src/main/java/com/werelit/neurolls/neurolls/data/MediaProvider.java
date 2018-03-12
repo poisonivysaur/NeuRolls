@@ -7,9 +7,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+import com.werelit.neurolls.neurolls.model.Film;
 
 /**
  * {@link ContentProvider} for NeuRolls app.
@@ -167,7 +170,64 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                return insertFilm(uri, contentValues);
+            case BOOKS:
+                return insertFilm(uri, contentValues);
+            case GAMES:
+                return insertFilm(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Insert a film into the database with the given content values. Return the new content URI
+     * for that specific row in the database.
+     */
+    private Uri insertFilm(Uri uri, ContentValues values) {
+        /* no need for this as inputs are automatically provided
+        // Check that the name is not null
+        String id = values.getAsString(FilmEntry.COLUMN_FILM_ID);
+        if (id == null) {
+            throw new IllegalArgumentException("Film requires an ID");
+        }
+
+        String name = values.getAsString(FilmEntry.COLUMN_FILM_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Film requires a name");
+        }
+
+        // If the duration is provided, check that it's greater than or equal to 0 mins
+        Integer duration = values.getAsInteger(FilmEntry.COLUMN_FILM_DURATION);
+        if (duration != null && duration < 0) {
+            throw new IllegalArgumentException("Film requires valid duratoin");
+        }
+        */
+        // TODO: check date picker to see if date chosen is greater than or equal to the current date
+
+        // TODO: same goes with notif settings
+
+        // No need to check the other attributes, any value is valid (including null).
+
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Insert the new pet with the given values
+        long status = database.insert(FilmEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (status == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        // Notify all listeners that the data has changed for the pet content URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, status);
     }
 
     /**

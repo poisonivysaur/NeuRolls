@@ -4,9 +4,7 @@ package com.werelit.neurolls.neurolls;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteAbortException;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -43,14 +41,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
-    private NeurollsDbHelper mDbHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupUI();
         setupClickListeners();
-        mDbHelper = new NeurollsDbHelper(this, mediaCategory);
     }
 
     @Override
@@ -93,7 +89,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
                     // Save film to db
-                    insertFilm();
+                    saveFilm();
                     // Exit activity
                     finish();
                     break;
@@ -286,8 +282,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void insertFilm(){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+    private void saveFilm(){
+
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
         values.put(FilmEntry.COLUMN_FILM_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
@@ -305,7 +301,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
 
-        long newRowID = -1;
+        // Insert a new row for Toto into the provider using the ContentResolver.
+        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
+        // into the pets database table.
+        // Receive the new content URI that will allow us to access Toto's data in the future.
+        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+
+        /*long newRowID = -1;
         try{
             newRowID = db.insertOrThrow(FilmEntry.TABLE_NAME, null, values);
             //Toast.makeText(this, "Successfully inserted " + newRowID + " into films table", Toast.LENGTH_SHORT).show();
@@ -313,11 +315,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
         }catch (SQLiteConstraintException e){
             Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     private void insertBook(){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_BOOK_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
@@ -335,18 +337,19 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
-        long newRowID = -1;
+        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+/*        long newRowID = -1;
         try{
             newRowID = db.insertOrThrow(BookEntry.TABLE_NAME, null, values);
             Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!", Toast.LENGTH_SHORT).show();
             Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
         }catch (SQLiteConstraintException e){
             Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     private void insertGame(){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
         values.put(GameEntry.COLUMN_GAME_ID, bundle.getString(MediaKeys.MEDIA_ID_KEY));
@@ -364,6 +367,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
+        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+        /*
         long newRowID = -1;
         try{
             newRowID = db.insertOrThrow(GameEntry.TABLE_NAME, null, values);
@@ -371,6 +376,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
         }catch (SQLiteConstraintException e){
             Toast.makeText(this, bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " already added!", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }
