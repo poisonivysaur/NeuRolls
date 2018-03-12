@@ -80,6 +80,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 setTitle(R.string.search_games);
                 searchView.setHint("Search Games");
                 break;
+            default:
+                setTitle(R.string.search_media);
+                searchView.setHint("Search NeuRolls");
+                break;
         }
     }
 
@@ -107,6 +111,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             case Media.CATEGORY_BOOKS:
                 m = JsonConverter.revisedBookSearchResult(data);
                 break;
+            case Media.CATEGORY_GAMES:
+                break;
+            default:
+                Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
         }
 
         for(Media a : m) {

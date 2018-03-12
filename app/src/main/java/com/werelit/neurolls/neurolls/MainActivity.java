@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
+    public static final int SEARCH_NEUROLLS = 0;
     public static final int FILM_FAB = 1;
     public static final int BOOK_FAB = 2;
     public static final int GAME_FAB = 3;
@@ -115,7 +116,9 @@ public class MainActivity extends AppCompatActivity
             pressedArchive = true;
             archiveColor = getResources().getColor(R.color.item_name);
         } else if (id == R.id.nav_search) {
-
+            Intent intent = new Intent(MainActivity.this, SearchMediaActivity.class);
+            intent.putExtra(MediaKeys.FAB_PRESSED, SEARCH_NEUROLLS);
+            startActivity(intent);
         } else if (id == R.id.nav_films) {
             viewPager.setCurrentItem(CategoryAdapter.CATEGORY_FILMS);
         } else if (id == R.id.nav_books) {

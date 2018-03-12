@@ -54,7 +54,9 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
 
             case Media.CATEGORY_GAMES:
                 return "";
+
+            default: // search NeuRolls
+                return "TODO: search existing media in NeuRolls list";
         }
-        return "outside switch"; // todo no net, etc.
     }
 }
