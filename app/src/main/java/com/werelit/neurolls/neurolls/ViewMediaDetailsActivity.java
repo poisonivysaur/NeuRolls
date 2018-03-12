@@ -183,13 +183,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
                 // get the attributes for a Book object
                 String bookAuthor = bundle.getString(MediaKeys.BOOK_AUTHOR_KEY);
-                String bookPages = bundle.getString(MediaKeys.BOOK_PAGES_KEY);
+                int bookPages = bundle.getInt(MediaKeys.BOOK_PAGES_KEY);
                 String bookPublisher = bundle.getString(MediaKeys.BOOK_PUBLISHER_KEY);
                 String bookDescription = bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY);
 
                 // set the views of the xml layout to the attribute values
                 author.setText(bookAuthor);
-                pages.setText(bookPages);
+                pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
 

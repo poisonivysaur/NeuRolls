@@ -204,9 +204,9 @@ public class NotificationSettings extends DialogFragment {
         Notification.Builder builder = new Notification.Builder(getContext());
 
         //sets notificationbuilder properties
-        builder.setContentTitle("Scheduled Notification");
+        builder.setContentTitle("Time to check off that movie ;)");
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_alarm_black);
+        builder.setSmallIcon(R.drawable.ic_movie_filter);
         builder.setDefaults(Notification.DEFAULT_SOUND);
 
         return builder.build();
