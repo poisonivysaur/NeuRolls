@@ -557,10 +557,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the films database.
-     */
+     *//*
     private void displayDatabaseInfo() {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -643,10 +644,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             cursor.close();
         }
     }
+    */
 
     /**
      * Helper method to insert hardcoded media data into the database. For debugging purposes only.
-     */
+     *//*
     private void insertMedia() {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -670,5 +672,5 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
-
+    */
 }
