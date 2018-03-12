@@ -44,7 +44,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     private int mediaCategory = -1;
     private boolean isArchived = false;
-    private NeurollsDbHelper mDbHelper;
 
     private View rootView;
 
@@ -100,8 +99,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // setup the recycler view adapter, layout, etc.
         prepareRecyclerView(rootView);
-
-        mDbHelper = new NeurollsDbHelper(rootView.getContext());
 
         prepareMedias();
         mAdapter.notifyDataSetChanged();
@@ -315,9 +312,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void getBooks(int isArchived){
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -407,9 +401,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void getGames(int isArchived){
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
