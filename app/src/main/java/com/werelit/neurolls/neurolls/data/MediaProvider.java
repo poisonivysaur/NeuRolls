@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
@@ -217,9 +218,15 @@ public class MediaProvider extends ContentProvider {
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
-        long status = database.insert(tableName, null, values);
-        // If the ID is -1, then the insertion failed. Log an error and return null.
+        long status = -1;
+        try {
+            // Insert the new pet with the given values
+            status = database.insertOrThrow(tableName, null, values);
+            // If the ID is -1, then the insertion failed. Log an error and return null.
+        }catch (SQLiteConstraintException e){
+            Log.e(LOG_TAG, "Media already exists!" + uri);
+            return null;
+        }
         if (status == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
