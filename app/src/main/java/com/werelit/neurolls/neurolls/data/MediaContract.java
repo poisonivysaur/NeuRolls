@@ -1,5 +1,6 @@
 package com.werelit.neurolls.neurolls.data;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -36,6 +37,18 @@ public class MediaContract {
         /** The content URI to access the film data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FILMS);
 
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a list of films.
+         */
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FILMS;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single film.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FILMS;
+
         /** Name of database table for films */
         public static final String TABLE_NAME = "films";
 
@@ -63,6 +76,18 @@ public class MediaContract {
         /** The content URI to access the book data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a list of books.
+         */
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single book.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+
         /** Name of database table for books */
         public static final String TABLE_NAME = "books";
 
@@ -89,6 +114,18 @@ public class MediaContract {
 
         /** The content URI to access the game data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_GAMES);
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a list of games.
+         */
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GAMES;
+
+        /**
+         * The MIME type of the {@link #CONTENT_URI} for a single game.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GAMES;
 
         /** Name of database table for games */
         public static final String TABLE_NAME = "games";

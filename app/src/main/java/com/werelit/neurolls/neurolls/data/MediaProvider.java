@@ -5,11 +5,18 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.werelit.neurolls.neurolls.MediaKeys;
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
 
 /**
  * {@link ContentProvider} for NeuRolls app.
@@ -167,7 +174,71 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                return insertMedia(uri, contentValues, FilmEntry.TABLE_NAME);
+            case BOOKS:
+                return insertMedia(uri, contentValues, BookEntry.TABLE_NAME);
+            case GAMES:
+                return insertMedia(uri, contentValues, GameEntry.TABLE_NAME);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Insert a media into the database with the given content values. Return the new content URI
+     * for that specific row in the database.
+     */
+    private Uri insertMedia(Uri uri, ContentValues values, String tableName) {
+        /* no need for this as inputs are automatically provided
+        // Check that the name is not null
+        String id = values.getAsString(FilmEntry.COLUMN_FILM_ID);
+        if (id == null) {
+            throw new IllegalArgumentException("Film requires an ID");
+        }
+
+        String name = values.getAsString(FilmEntry.COLUMN_FILM_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Film requires a name");
+        }
+
+        // If the duration is provided, check that it's greater than or equal to 0 mins
+        Integer duration = values.getAsInteger(FilmEntry.COLUMN_FILM_DURATION);
+        if (duration != null && duration < 0) {
+            throw new IllegalArgumentException("Film requires valid duratoin");
+        }
+        */
+        // TODO SANITY CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // TODO: check date picker to see if date chosen is greater than or equal to the current date
+
+        // TODO: same goes with notif settings
+
+        // No need to check the other attributes, any value is valid (including null).
+
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        long status = -1;
+        try {
+            // Insert the new pet with the given values
+            status = database.insertOrThrow(tableName, null, values);
+            // If the ID is -1, then the insertion failed. Log an error and return null.
+        }catch (SQLiteConstraintException e){
+            Log.e(LOG_TAG, "Media already exists!" + uri);
+            return null;
+        }
+        if (status == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+        // Notify all listeners that the data has changed for the media content URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, status);
     }
 
     /**
@@ -175,7 +246,59 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS: return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
+            case BOOKS: return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
+            case GAMES: return updateMedia(uri, contentValues, selection, selectionArgs, GameEntry.TABLE_NAME);
+            case FILM_ID:
+                // For the FILM_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = FilmEntry.COLUMN_FILM_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
+            case BOOK_ID:
+                selection = BookEntry.COLUMN_BOOK_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
+            case GAME_ID:
+                selection = GameEntry.COLUMN_GAME_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateMedia(uri, contentValues, selection, selectionArgs, GameEntry.TABLE_NAME);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Update media in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * Return the number of rows that were successfully updated.
+     */
+    private int updateMedia(Uri uri, ContentValues values, String selection, String[] selectionArgs, String tableName) {
+
+        // TODO SANITY CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*
+        // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
+        // check that the name value is not null.
+        if (values.containsKey(PetEntry.COLUMN_PET_NAME)) {
+            String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Pet requires a name");
+            }
+        }
+        * */
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Returns the number of database rows affected by the update statement
+        return database.update(tableName, values, selection, selectionArgs);
     }
 
     /**
@@ -183,7 +306,38 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(FilmEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOKS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case GAMES:
+                // Delete all rows that match the selection and selection args
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
+            case FILM_ID:
+                // Delete a single row given by the ID in the URI
+                selection = FilmEntry.COLUMN_FILM_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(FilmEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOK_ID:
+                // Delete a single row given by the ID in the URI
+                selection = BookEntry.COLUMN_BOOK_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case GAME_ID:
+                // Delete a single row given by the ID in the URI
+                selection = GameEntry.COLUMN_GAME_ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     /**
@@ -191,6 +345,22 @@ public class MediaProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case FILMS:
+                return FilmEntry.CONTENT_LIST_TYPE;
+            case FILM_ID:
+                return FilmEntry.CONTENT_ITEM_TYPE;
+            case BOOKS:
+                return BookEntry.CONTENT_LIST_TYPE;
+            case BOOK_ID:
+                return BookEntry.CONTENT_ITEM_TYPE;
+            case GAMES:
+                return GameEntry.CONTENT_LIST_TYPE;
+            case GAME_ID:
+                return GameEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }

@@ -44,7 +44,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     private int mediaCategory = -1;
     private boolean isArchived = false;
-    private NeurollsDbHelper mDbHelper;
 
     private View rootView;
 
@@ -100,8 +99,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // setup the recycler view adapter, layout, etc.
         prepareRecyclerView(rootView);
-
-        mDbHelper = new NeurollsDbHelper(rootView.getContext());
 
         prepareMedias();
         mAdapter.notifyDataSetChanged();
@@ -206,20 +203,35 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void prepareMedias() {
 
         entertainments.clear();
+        Film dummyFilm = new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
+                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
+                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
+        Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
+        Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
+                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
+        dummyFilm.setArchived(true);
+        dummyBook.setArchived(true);
+        dummyGame.setArchived(true);
         switch (mediaCategory){
             case 0:
                 getFilms(isArchived? 1 : 0);
                 getBooks(isArchived? 1 : 0);
                 getGames(isArchived? 1 : 0);
+                entertainments.add(dummyFilm);
+                entertainments.add(dummyBook);
+                entertainments.add(dummyGame);
                 break;
             case 1:
                 getFilms(isArchived? 1 : 0);
+                entertainments.add(dummyFilm);
                 break;
             case 2:
                 getBooks(isArchived? 1 : 0);
+                entertainments.add(dummyBook);
                 break;
             case 3:
                 getGames(isArchived? 1 : 0);
+                entertainments.add(dummyGame);
                 break;
         }
     }
@@ -247,19 +259,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         String selection = FilmEntry.COLUMN_FILM_ARCHIVED + "=?";
         String[] selectionArgs = new String[] { String.valueOf(isArchived) };
-
-        // Perform a query on the pets table
-        /*Cursor cursor = db.query(
-                FilmEntry.TABLE_NAME,
-                projection,
-                selection,                  //
-                selectionArgs,
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                FilmEntry.COLUMN_LAST_UPDATE+" DESC");
-
-        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-        */
 
         Cursor cursor = rootView.getContext().getContentResolver().query(
                 FilmEntry.CONTENT_URI,          // The content URI of the films table
@@ -315,9 +314,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void getBooks(int isArchived){
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -342,7 +338,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         String[] selectionArgs = new String[] { String.valueOf(isArchived) };
 
         // Perform a query on the pets table
-        Cursor cursor = db.query(
+        /*Cursor cursor = db.query(
                 BookEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 selection,                  // The columns for the WHERE clause
@@ -352,7 +348,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 BookEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-
+        */
+        Cursor cursor = rootView.getContext().getContentResolver().query(
+                BookEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                BookEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
         try {
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ID);
@@ -401,9 +403,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void getGames(int isArchived){
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -428,7 +427,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         String[] selectionArgs = new String[] { String.valueOf(isArchived) };
 
         // Perform a query on the pets table
-        Cursor cursor = db.query(
+        /*Cursor cursor = db.query(
                 GameEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 selection,                  // The columns for the WHERE clause
@@ -438,7 +437,13 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 GameEntry.COLUMN_LAST_UPDATE+" DESC");                   // The sort order
 
         //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-
+        */
+        Cursor cursor = rootView.getContext().getContentResolver().query(
+                GameEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                GameEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
         try {
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ID);
@@ -554,10 +559,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             mRecyclerView.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the films database.
-     */
+     *//*
     private void displayDatabaseInfo() {
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -640,10 +646,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             cursor.close();
         }
     }
+    */
 
     /**
      * Helper method to insert hardcoded media data into the database. For debugging purposes only.
-     */
+     *//*
     private void insertMedia() {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -667,5 +674,5 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
-
+    */
 }
