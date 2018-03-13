@@ -1,5 +1,8 @@
 package com.werelit.neurolls.neurolls;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,12 @@ import java.util.List;
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder> {
 
     private List<Media> mediaList;
+    // Because RecyclerView.Adapter in its current form doesn't natively
+    // support cursors, we wrap a CursorAdapter that will do all the job
+    // for us.
+    CursorAdapter mCursorAdapter;
+    Context mContext;
+
 
     /** Resource ID for the background tint for image of the media */
     private int category;
@@ -37,7 +46,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         this(mediaList, -1, false);
     }
 
-        @Override
+    @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         if(!isArchived){
@@ -72,7 +81,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
                 break;
         }
         holder.modelIndex = position;
-
     }
 
     @Override
