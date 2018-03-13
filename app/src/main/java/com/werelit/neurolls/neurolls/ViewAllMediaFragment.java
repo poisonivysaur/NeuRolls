@@ -208,7 +208,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
         Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
         Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
-                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega."));
+                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
         dummyFilm.setArchived(true);
         dummyBook.setArchived(true);
         dummyGame.setArchived(true);
@@ -218,6 +218,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 getBooks(isArchived? 1 : 0);
                 getGames(isArchived? 1 : 0);
                 entertainments.add(dummyFilm);
+                entertainments.add(dummyBook);
+                entertainments.add(dummyGame);
                 break;
             case 1:
                 getFilms(isArchived? 1 : 0);
@@ -225,9 +227,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 break;
             case 2:
                 getBooks(isArchived? 1 : 0);
+                entertainments.add(dummyBook);
                 break;
             case 3:
                 getGames(isArchived? 1 : 0);
+                entertainments.add(dummyGame);
                 break;
         }
     }
