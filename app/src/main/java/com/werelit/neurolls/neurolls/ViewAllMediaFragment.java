@@ -40,7 +40,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
-    /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
+    /** TextView that is displayed when the list is empty */    private View mEmptyStateTextView;
 
     private int mediaCategory = -1;
     private boolean isArchived = false;
@@ -91,7 +91,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         constraintLayout = rootView.findViewById(R.id.constraint_layout);
 
         // set visibility of the empty view to be GONE initially
-        mEmptyStateTextView = (TextView) rootView.findViewById(R.id.empty_view);
+        mEmptyStateTextView = (View) rootView.findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
 
         // add Media items into the Medias list
@@ -203,35 +203,35 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void prepareMedias() {
 
         entertainments.clear();
-        Film dummyFilm = new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
-                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
-                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
-        Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
-        Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
-                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
-        dummyFilm.setArchived(true);
-        dummyBook.setArchived(true);
-        dummyGame.setArchived(true);
+//        Film dummyFilm = new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
+//                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
+//                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
+//        Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
+//        Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
+//                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
+//        dummyFilm.setArchived(true);
+//        dummyBook.setArchived(true);
+//        dummyGame.setArchived(true);
         switch (mediaCategory){
             case 0:
                 getFilms(isArchived? 1 : 0);
                 getBooks(isArchived? 1 : 0);
                 getGames(isArchived? 1 : 0);
-                entertainments.add(dummyFilm);
-                entertainments.add(dummyBook);
-                entertainments.add(dummyGame);
+//                entertainments.add(dummyFilm);
+//                entertainments.add(dummyBook);
+//                entertainments.add(dummyGame);
                 break;
             case 1:
                 getFilms(isArchived? 1 : 0);
-                entertainments.add(dummyFilm);
+//                entertainments.add(dummyFilm);
                 break;
             case 2:
                 getBooks(isArchived? 1 : 0);
-                entertainments.add(dummyBook);
+//                entertainments.add(dummyBook);
                 break;
             case 3:
                 getGames(isArchived? 1 : 0);
-                entertainments.add(dummyGame);
+//                entertainments.add(dummyGame);
                 break;
         }
     }
@@ -544,12 +544,17 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void shouldDisplayEmptyView(){
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
+            TextView title = (TextView) mEmptyStateTextView.findViewById(R.id.empty_title_text);
+            TextView subtitle = (TextView) mEmptyStateTextView.findViewById(R.id.empty_subtitle_text);
             switch (isArchived ? 1 : 0){
                 case 1:
-                    mEmptyStateTextView.setText("You have no archived media.");
+                    //mEmptyStateTextView.setText("You have no archived media.");
+                    title.setText("You have no archived media.");
+                    subtitle.setText("");
                     break;
                 case 0:
-                    mEmptyStateTextView.setText("You have no media :(");
+                    title.setText(R.string.empty_view_title_text);
+                    subtitle.setText(R.string.empty_view_subtitle_text);
                     break;
             }
             mEmptyStateTextView.setVisibility(View.VISIBLE);
