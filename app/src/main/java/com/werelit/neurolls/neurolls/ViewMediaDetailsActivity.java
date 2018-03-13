@@ -297,6 +297,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_SYNOPSIS, bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY));
 
         // TODO get text from UI for notif settings and date picker
+
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
