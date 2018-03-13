@@ -219,6 +219,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 getGames(isArchived? 1 : 0);
                 break;
         }
+        entertainments.add(new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
+                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
+                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies."));
     }
 
     private void getFilms(int isArchived){
