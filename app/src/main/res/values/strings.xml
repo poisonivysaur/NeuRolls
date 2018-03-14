@@ -33,6 +33,8 @@
     <string name="search_books">Search Books</string>
     <string name="search_games">Search Games</string>
 
+    <string name="share_via"> Share via</string>
+
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">No internet connection.</string>
 
