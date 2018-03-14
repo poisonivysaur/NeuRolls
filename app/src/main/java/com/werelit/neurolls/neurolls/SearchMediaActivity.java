@@ -52,6 +52,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
     private int searchType = 1;
 
+    private boolean hasSearchedFilmAlready;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         // set visibility of the empty view to be GONE initially
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
+
+        hasSearchedFilmAlready = false;
 
         searchType = getIntent().getExtras().getInt(MediaKeys.FAB_PRESSED, 1);
         switch (searchType){
@@ -101,33 +105,41 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
-        // clear previous data
-        mediaList.clear();
+        if(hasSearchedFilmAlready){
 
-        ArrayList<Media> m = new ArrayList<>();
-        switch (searchType) {
-            case Media.CATEGORY_FILMS:
-                m = JsonConverter.revisedSearchFilms(data);
-                break;
-            case Media.CATEGORY_BOOKS:
-                m = JsonConverter.revisedBookSearchResult(data);
-                break;
-            case Media.CATEGORY_GAMES:
-                break;
-            default:
-                Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+            // TODO
+            //film.set
         }
+        else {
+            // Clear the adapter of previous earthquake data
+            mediaList.clear();
 
-        for (Media a : m) {
-            mediaList.add(a);
-        }
+            ArrayList<Media> m = new ArrayList<>();
+            switch (searchType) {
+                case Media.CATEGORY_FILMS:
+                    m = JsonConverter.revisedSearchFilms(data);
+                    hasSearchedFilmAlready = true;
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    m = JsonConverter.revisedBookSearchResult(data);
+                    break;
+                case Media.CATEGORY_GAMES:
+                    break;
+                default:
+                    Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+            }
 
-        mediaAdapter.notifyDataSetChanged();
-        if (mediaList.size() == 0) {
-            recyclerView.setVisibility(View.GONE);
-            // Set empty state text to display "No matching results :("
-            mEmptyStateTextView.setText(R.string.no_matching_results);
-            mEmptyStateTextView.setVisibility(View.VISIBLE);
+            for (Media a : m) {
+                mediaList.add(a);
+            }
+
+            mediaAdapter.notifyDataSetChanged();
+            if (mediaList.size() == 0) {
+                recyclerView.setVisibility(View.GONE);
+                // Set empty state text to display "No matching results :("
+                mEmptyStateTextView.setText(R.string.no_matching_results);
+                mEmptyStateTextView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -351,6 +363,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         switch (searchType){
             case Media.CATEGORY_FILMS:
 
+
                 String data = ConnectMovieDB.getMovieDetails(mediaList.get(position).getMediaID());
                 Film completeFilm = JsonConverter.revisedSpecificFilm(data);
 
@@ -359,6 +372,25 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 bundle.putInt(MediaKeys.FILM_DURATION_KEY, completeFilm.getDuration());
                 bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, completeFilm.getProduction());
                 bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, completeFilm.getSynopsis());
+
+                // TODO get the ID first before sending another http request --> mediaList.get(position).getMediaID();
+                // TODO call the method in JSONConverter/MovieDBconnection, then check in the onLoadFinished
+                if(hasSearchedFilmAlready) {
+
+                    bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
+                    bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film) mediaList.get(position)).getDirector());
+                    bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film) mediaList.get(position)).getDuration());
+                    bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film) mediaList.get(position)).getProduction());
+                    bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film) mediaList.get(position)).getSynopsis());
+                }else {
+                    mediaTaskLoader.setHasSearchedFilmAlready(true);
+
+                    // TODO call the method that requests the details here
+//                    Bundle queryBundle = new Bundle();
+//                    queryBundle.putString(MediaKeys.SEARCH_QUERY, "THE FILM DETAILS URL SEARCH");
+//                    getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
+                }
+
                 break;
 
             case Media.CATEGORY_BOOKS:
@@ -378,8 +410,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 break;
         }
 
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if(hasSearchedFilmAlready) {
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     private void searchMedia(String query){
@@ -437,9 +471,5 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Bundle queryBundle = new Bundle();
         queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
         getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-    }
-
-    private void getFilmDetails(){
-
     }
 }
