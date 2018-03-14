@@ -19,12 +19,6 @@ import java.util.List;
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder> {
 
     private List<Media> mediaList;
-    // Because RecyclerView.Adapter in its current form doesn't natively
-    // support cursors, we wrap a CursorAdapter that will do all the job
-    // for us.
-    CursorAdapter mCursorAdapter;
-    Context mContext;
-
 
     /** Resource ID for the background tint for image of the media */
     private int category;
