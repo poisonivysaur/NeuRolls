@@ -4,12 +4,14 @@ package com.werelit.neurolls.neurolls;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
@@ -79,8 +82,16 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             // TODO db update happens here
         }
         else if(item.getItemId() == R.id.action_share) {
-            Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
-            // TODO Twitter api
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this out! #" + name.getText());
+            //shareIntent.putExtra(Intent.EXTRA_STREAM, "sdf");
+            //shareIntent.setType("image/*,text/plain");
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));
+
+            //shareToTwitter();
+
         }
         else if(item.getItemId() == R.id.action_save) {
             //this.finish();
@@ -366,5 +377,23 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void shareToTwitter(){
+        // Create intent using ACTION_VIEW and a normal Twitter url:
+        String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
+                StringUtils.urlEncode("Tweet sample text"),
+                StringUtils.urlEncode("https://www.google.fi/"));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+
+        // Narrow down to official Twitter app, if available:
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.twitter")) {
+                intent.setPackage(info.activityInfo.packageName);
+            }
+        }
+
+        startActivity(intent);
     }
 }
