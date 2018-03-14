@@ -392,8 +392,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)mediaList.get(position)).getStoryline());
                 break;
         }
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if(searchType != Media.CATEGORY_FILMS){
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     private void prepareFilmDetails(Film film){
