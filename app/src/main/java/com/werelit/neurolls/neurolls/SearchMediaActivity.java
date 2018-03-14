@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private int searchType = 1;
 
     private boolean hasSearchedFilmAlready;
+
+    private String incompleteFilmID = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +97,11 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
+        Toast.makeText(this,"CALLED ON CREATE LOADER!",Toast.LENGTH_SHORT).show();
         mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
         mediaTaskLoader.setMediaCategory(searchType);
+        mediaTaskLoader.setHasSearchedFilmAlready(hasSearchedFilmAlready);
+        mediaTaskLoader.setFilmdID(incompleteFilmID);
         return mediaTaskLoader;
     }
 
@@ -106,19 +112,19 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-
-            // TODO
-            //film.set
+            Log.wtf(LOG_TAG,"DATA: "+data);
+            Film completeFilm = JsonConverter.revisedSpecificFilm(data);
+            Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
+            prepareFilmDetails(completeFilm);
         }
         else {
-            // Clear the adapter of previous earthquake data
+            // Clear the adapter of previous data
             mediaList.clear();
 
             ArrayList<Media> m = new ArrayList<>();
             switch (searchType) {
                 case Media.CATEGORY_FILMS:
                     m = JsonConverter.revisedSearchFilms(data);
-                    hasSearchedFilmAlready = true;
                     break;
                 case Media.CATEGORY_BOOKS:
                     m = JsonConverter.revisedBookSearchResult(data);
@@ -362,34 +368,11 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         switch (searchType){
             case Media.CATEGORY_FILMS:
-
-
-                String data = ConnectMovieDB.getMovieDetails(mediaList.get(position).getMediaID());
-                Film completeFilm = JsonConverter.revisedSpecificFilm(data);
-
-                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-                bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, completeFilm.getDirector());
-                bundle.putInt(MediaKeys.FILM_DURATION_KEY, completeFilm.getDuration());
-                bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, completeFilm.getProduction());
-                bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, completeFilm.getSynopsis());
-
-                // TODO get the ID first before sending another http request --> mediaList.get(position).getMediaID();
-                // TODO call the method in JSONConverter/MovieDBconnection, then check in the onLoadFinished
-                if(hasSearchedFilmAlready) {
-
-                    bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-                    bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film) mediaList.get(position)).getDirector());
-                    bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film) mediaList.get(position)).getDuration());
-                    bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film) mediaList.get(position)).getProduction());
-                    bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film) mediaList.get(position)).getSynopsis());
-                }else {
-                    mediaTaskLoader.setHasSearchedFilmAlready(true);
-
-                    // TODO call the method that requests the details here
-//                    Bundle queryBundle = new Bundle();
-//                    queryBundle.putString(MediaKeys.SEARCH_QUERY, "THE FILM DETAILS URL SEARCH");
-//                    getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-                }
+                hasSearchedFilmAlready = true;
+                incompleteFilmID = mediaList.get(position).getMediaID();
+                Bundle queryBundle = new Bundle();
+                queryBundle.putString(MediaKeys.SEARCH_QUERY, "test query");
+                getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
 
                 break;
 
@@ -409,11 +392,31 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)mediaList.get(position)).getStoryline());
                 break;
         }
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
-        if(hasSearchedFilmAlready) {
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+    private void prepareFilmDetails(Film film){
+        // Make a bundle containing the current media details
+        Bundle bundle = new Bundle();
+
+        Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
+
+        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
+        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, true);
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, film.getMediaID());
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, film.getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, film.getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, film.getmMediaYear());
+
+        bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
+        bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, film.getDirector());
+        bundle.putInt(MediaKeys.FILM_DURATION_KEY, film.getDuration());
+        bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, film.getProduction());
+        bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, film.getSynopsis());
+
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void searchMedia(String query){
