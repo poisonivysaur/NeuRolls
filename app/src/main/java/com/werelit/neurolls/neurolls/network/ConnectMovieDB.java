@@ -35,6 +35,7 @@ public class ConnectMovieDB {
     private static final String API_GENRE = "/genre/movie/list";
     private static final String API_PEOPLE = "/person";
     private static final String API_CREDIT = "/credits";
+    private static final String API_APPEND_CREDITS = "&append_to_response=credits";
 
     private ConnectMovieDB(){}
 
@@ -52,7 +53,7 @@ public class ConnectMovieDB {
     }
 
     public static String getMovieDetails(int movieId){
-        String url = API_URL + API_MOVIE + "/" + movieId + API_KEY;
+        String url = API_URL + API_MOVIE + "/" + movieId + API_KEY + API_APPEND_CREDITS;
         return NetworkUtils.httpGetRequestToAny(url);
     }
 
@@ -87,23 +88,51 @@ public class ConnectMovieDB {
         return genre.substring(0, genre.length() - 1);
     }
 
-    public static String getDirector(int filmId){
-        String director = "";
-        String response = NetworkUtils.httpGetRequestToAny(API_URL + API_MOVIE + "/" + filmId + API_CREDIT + API_KEY);
-        if(response == null)
+    public static String getGenreV2(JSONArray genres){
+        if(genres.length() == 0)
             return "";
-        try{
-            JSONObject baseObject = new JSONObject(response);
-            JSONArray crewArray = baseObject.getJSONArray("crew");
+        String genre = "";
+        try {
+            for (int i = 0; i < genres.length(); i++) {
+                genre += genres.getString(i) + "/";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
 
-            for(int i = 0; i < crewArray.length(); i++){
-                JSONObject curObj = crewArray.getJSONObject(i);
+        return genre.substring(0, genre.length() - 1);
+    }
+
+    public static String getProduction(JSONArray productions){
+        if(productions.length() == 0)
+            return "No Production Companies";
+        String production = "";
+
+        try{
+            for(int i = 0; i < productions.length(); i++)
+                production += productions.getJSONObject(i).getString("name") + ",";
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return production.substring(0, production.length() - 1);
+    }
+
+    public static String getDirector(JSONArray crews){
+        if(crews.length() == 0)
+            return "No Director";
+        String director = "";
+
+        try{
+            for(int i = 0; i < crews.length(); i++){
+                JSONObject curObj = crews.getJSONObject(i);
                 if(curObj.getString("job").equals("Director")){
                     director = curObj.getString("name");
                     break;
                 }
             }
-
         }catch(Exception e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
