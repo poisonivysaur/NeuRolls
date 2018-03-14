@@ -13,19 +13,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import com.werelit.neurolls.neurolls.model.Media;
 
 import java.util.List;
 
-public class MediaCursorAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder> {
+public class MediaCursorAdapter extends RecyclerView.Adapter<MediaCursorAdapter.MyViewHolder> {
 
-    private List<Media> mediaList;
     // Because RecyclerView.Adapter in its current form doesn't natively
     // support cursors, we wrap a CursorAdapter that will do all the job
     // for us.
-    CursorAdapter mCursorAdapter;
-    Context mContext;
-
+    private CursorAdapter mCursorAdapter;
+    private Context mContext;
+    private int mPosition;
+    private MyViewHolder holder;
+    private Media media;
+    private List<Media> mediaList;
 
     /** Resource ID for the background tint for image of the media */
     private int category;
@@ -33,30 +38,41 @@ public class MediaCursorAdapter extends RecyclerView.Adapter<MediaAdapter.MyView
     /** Resource ID for the background layout of the media */
     private boolean isArchived;
 
-    public MediaAdapter(List<Media> mediaList, int category, boolean isArchived) {
+    public MediaCursorAdapter(List<Media> mediaList, int category, boolean isArchived) {
         this.mediaList = mediaList;
         this.category = category;
         this.isArchived = isArchived;
     }
 
-    public MediaAdapter(List<Media> mediaList, int category) {
+    public MediaCursorAdapter(List<Media> mediaList, int category) {
         this(mediaList, category, false);
     }
 
-    public MediaAdapter(List<Media> mediaList) {
+    public MediaCursorAdapter(List<Media> mediaList) {
         this(mediaList, -1, false);
     }
 
     // wrap around solution for cursor adapters
-    public MediaAdapter(Context context, Cursor c) {
+    public MediaCursorAdapter(Context context, Cursor c, final int category, final boolean isArchived) {
+        //this.mediaList = mediaList;
+        this.category = category;
+        this.isArchived = isArchived;
         mContext = context;
-
         mCursorAdapter = new CursorAdapter(mContext, c, 0) {
 
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
                 // Inflate the view here
-                return null;
+                View itemView;
+                if(!isArchived){
+                    itemView = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_unarchived_media, parent, false);
+                }else {
+                    itemView = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.item_archived_media, parent, false);
+                }
+
+                return itemView;
             }
 
             /**
@@ -71,75 +87,84 @@ public class MediaCursorAdapter extends RecyclerView.Adapter<MediaAdapter.MyView
              */
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                // Find individual views that we want to modify in the list item layout
-                TextView nameTextView = (TextView) view.findViewById(R.id.name);
-                TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
+
+                // TODO switch case with category to know which table to get data from
 
                 // Find the columns of pet attributes that we're interested in
-                int nameColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
-                int breedColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
+                int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
+                int nameColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NAME);
+                int genreColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_GENRE);
+                int yearColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_YEAR_RELEASED);
+
+                // TODO get all columns and set it to media
 
                 // Read the pet attributes from the Cursor for the current pet
-                String petName = cursor.getString(nameColumnIndex);
-                String petBreed = cursor.getString(breedColumnIndex);
+                String mediaID = cursor.getString(idColumnIndex);
+                String mediaName = cursor.getString(nameColumnIndex);
+                String mediaGenre = cursor.getString(genreColumnIndex);
+                String mediaYear = cursor.getString(yearColumnIndex);
 
-                // If the pet breed is empty string or null, then use some default text
-                // that says "Unknown breed", so the TextView isn't blank.
-                if (TextUtils.isEmpty(petBreed)) {
-                    petBreed = context.getString(R.string.unknown_breed);
+                media = new Media(mediaID, mediaName, mediaGenre, mediaYear);
+
+                //Media entertainment = mediaList.get(mPosition);
+
+
+                switch (category){
+                    case CategoryAdapter.CATEGORY_ALL:
+                        holder.image.setBackgroundColor(view.getContext().getResources().getColor(R.color.colorAccent));
+//                        getFilms();
+//                        getBooks();
+//                        getGames();
+                        break;
+                    case CategoryAdapter.CATEGORY_FILMS:
+                        holder.image.setBackgroundColor(view.getContext().getResources().getColor(R.color.films));
+                        //getFilms(context, cursor);
+                        break;
+                    case CategoryAdapter.CATEGORY_BOOKS:
+                        holder.image.setBackgroundColor(view.getContext().getResources().getColor(R.color.books));
+                        //getBooks();
+                        break;
+                    case CategoryAdapter.CATEGORY_GAMES:
+                        holder.image.setBackgroundColor(view.getContext().getResources().getColor(R.color.games));
+                        //getGames();
+                        break;
                 }
 
-                // Update the TextViews with the attributes for the current pet
-                nameTextView.setText(petName);
-                summaryTextView.setText(petBreed);
+                // Update the TextViews with the attributes for the current media
+                holder.name.setText(media.getmMediaName());
+                holder.genre.setText(media.getmMediaGenre());
+                holder.year.setText(media.getmMediaYear());
+                // TODO holder.image.setImage here
             }
         };
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView;
-        if(!isArchived){
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_unarchived_media, parent, false);
-        }else {
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_archived_media, parent, false);
-        }
-
+        // Passing the inflater job to the cursor-adapter
+        View itemView = mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // Passing the binding operation to cursor loader
+        mPosition = position;
         mCursorAdapter.getCursor().moveToPosition(position); //EDITED: added this line as suggested in the comments below, thanks :)
         mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
-
-        Media entertainment = mediaList.get(position);
-        holder.name.setText(entertainment.getmMediaName());
-        holder.genre.setText(entertainment.getmMediaGenre());
-        holder.year.setText("" + entertainment.getmMediaYear());
-        switch (category){
-            case 0:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
-                break;
-            case 1:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
-                break;
-            case 2:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
-                break;
-            case 3:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
-                break;
-        }
-        holder.modelIndex = position;
     }
 
     @Override
     public int getItemCount() {
         return mediaList.size();
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
     }
 
     public void removeItem(int position) {
@@ -156,6 +181,18 @@ public class MediaCursorAdapter extends RecyclerView.Adapter<MediaAdapter.MyView
         // notify item added by position
         notifyItemInserted(position);
     }
+
+//    private void getFilms(Context context, Cursor cursor){
+//
+//    }
+//
+//    private void getFilms(Context context, Cursor cursor){
+//
+//    }
+//
+//    private void getFilms(Context context, Cursor cursor){
+//
+//    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, genre, year;
@@ -178,25 +215,6 @@ public class MediaCursorAdapter extends RecyclerView.Adapter<MediaAdapter.MyView
 
             viewBackground = view.findViewById(R.id.view_background);
             viewForeground = view.findViewById(R.id.view_foreground);
-
-            /*
-            editItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Activity activity = (Activity) itemView.getContext();
-                    Intent intent = new Intent(activity, MainActivity.class);
-
-                    // Make a bundle containing the current restaurant details
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(AddRestaurant.EDIT_MODEL_INDEX_KEY, modelIndex);
-                    bundle.putString(AddRestaurant.RESTAURANT_NAME_KEY, name.getText().toString());
-                    bundle.putString(AddRestaurant.RESTAURANT_DESC_KEY, genre.getText().toString());
-                    bundle.putDouble(AddRestaurant.WEIGHT_KEY, Double.parseDouble(weight.getText().toString()));
-                    // Edit the restaurant item
-                    intent.putExtras(bundle);
-                    activity.startActivityForResult(intent, RestaurantActivity.EDIT_RESTO_REQUEST);
-                }
-            });*/
         }
     }
 }
