@@ -94,7 +94,7 @@ public class ConnectMovieDB {
         String genre = "";
         try {
             for (int i = 0; i < genres.length(); i++) {
-                genre += genres.getString(i) + "/";
+                genre += genres.getJSONObject(i).getString("name") + "/";
             }
         } catch (JSONException e) {
             e.printStackTrace();
