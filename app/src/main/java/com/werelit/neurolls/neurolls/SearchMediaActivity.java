@@ -350,6 +350,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         switch (searchType){
             case Media.CATEGORY_FILMS:
+
                 String data = ConnectMovieDB.getMovieDetails(mediaList.get(position).getMediaID());
                 Film completeFilm = JsonConverter.revisedSpecificFilm(data);
 
