@@ -1,5 +1,8 @@
 package com.werelit.neurolls.neurolls;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +40,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         this(mediaList, -1, false);
     }
 
-        @Override
+    @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         if(!isArchived){
@@ -58,21 +61,20 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
         switch (category){
-            case 0:
+            case CategoryAdapter.CATEGORY_ALL:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
                 break;
-            case 1:
+            case CategoryAdapter.CATEGORY_FILMS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
                 break;
-            case 2:
+            case CategoryAdapter.CATEGORY_BOOKS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
                 break;
-            case 3:
+            case CategoryAdapter.CATEGORY_GAMES:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
                 break;
         }
         holder.modelIndex = position;
-
     }
 
     @Override
