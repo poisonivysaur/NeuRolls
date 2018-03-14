@@ -48,7 +48,7 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
      */
     @Override
     public String loadInBackground() {
-        Log.wtf(LOG_TAG, "MEDIA TASK LOADER HAS SEARCHED FILM ALREADY = " + hasSearchedFilmAlready + " film id: "+filmdID);
+
         if(hasSearchedFilmAlready){
             Log.wtf(LOG_TAG, "MEDIA TASK LOADER IN HAS SEARCHED FILM ALREADY HAHAHA " + ConnectMovieDB.getMovieDetails(filmdID));
             return ConnectMovieDB.getMovieDetails(filmdID);

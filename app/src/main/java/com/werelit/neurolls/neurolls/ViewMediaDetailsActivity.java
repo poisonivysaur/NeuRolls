@@ -227,7 +227,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
 
-            name.setText("" + "test name");
+            name.setText("" + mediaName);
             genre.setText("" + mediaGenre);
             year.setText("" + mediaYear);
         }

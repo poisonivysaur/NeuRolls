@@ -112,7 +112,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-            Log.wtf(LOG_TAG,"DATA: "+data);
             Film completeFilm = JsonConverter.revisedSpecificFilm(data);
             Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
             prepareFilmDetails(completeFilm);
