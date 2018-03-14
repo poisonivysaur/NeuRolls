@@ -105,7 +105,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-            Film film = mediaTaskLoader.getIncompleteFilm();
+
             // TODO
             //film.set
         }
@@ -372,7 +372,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film) mediaList.get(position)).getSynopsis());
                 }else {
                     mediaTaskLoader.setHasSearchedFilmAlready(true);
-                    mediaTaskLoader.setIncompleteFilm((Film) mediaList.get(position));
+
                     // TODO call the method that requests the details here
 //                    Bundle queryBundle = new Bundle();
 //                    queryBundle.putString(MediaKeys.SEARCH_QUERY, "THE FILM DETAILS URL SEARCH");

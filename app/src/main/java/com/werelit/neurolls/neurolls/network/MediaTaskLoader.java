@@ -20,8 +20,6 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
 
     private boolean hasSearchedFilmAlready;
 
-    private Film incompleteFilm;
-
     private int mediaCategory = 1; // TODO make a new attribute searchType to which method to call in movie db utils
 
     /**
@@ -72,13 +70,5 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
 
     public void setHasSearchedFilmAlready(boolean hasSearchedFilmAlready) {
         this.hasSearchedFilmAlready = hasSearchedFilmAlready;
-    }
-
-    public Film getIncompleteFilm() {
-        return incompleteFilm;
-    }
-
-    public void setIncompleteFilm(Film incompleteFilm) {
-        this.incompleteFilm = incompleteFilm;
     }
 }
