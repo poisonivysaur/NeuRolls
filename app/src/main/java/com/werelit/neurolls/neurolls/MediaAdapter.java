@@ -61,16 +61,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
         switch (category){
-            case 0:
+            case CategoryAdapter.CATEGORY_ALL:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
                 break;
-            case 1:
+            case CategoryAdapter.CATEGORY_FILMS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
                 break;
-            case 2:
+            case CategoryAdapter.CATEGORY_BOOKS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
                 break;
-            case 3:
+            case CategoryAdapter.CATEGORY_GAMES:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
                 break;
         }
