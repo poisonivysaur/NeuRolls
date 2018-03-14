@@ -52,7 +52,7 @@ public class ConnectMovieDB {
         return jsonResponse;
     }
 
-    public static String getMovieDetails(int movieId){
+    public static String getMovieDetails(String movieId){
         String url = API_URL + API_MOVIE + "/" + movieId + API_KEY + API_APPEND_CREDITS;
         return NetworkUtils.httpGetRequestToAny(url);
     }

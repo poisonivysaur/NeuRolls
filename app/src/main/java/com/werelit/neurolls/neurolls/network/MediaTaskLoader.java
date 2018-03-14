@@ -18,8 +18,6 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
     /** Query URL */
     private String query;
 
-    private boolean hasSearchedFilmAlready;
-
     private int mediaCategory = 1; // TODO make a new attribute searchType to which method to call in movie db utils
 
     /**
@@ -46,7 +44,6 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
     @Override
     public String loadInBackground() {
 
-
         // depending on what is the value of media category set in searchable activity
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
@@ -62,13 +59,5 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
                 // TODO search existing media from database and return an ArrayList<Media>
                 return "TODO: search existing media in NeuRolls list";
         }
-    }
-
-    public boolean isHasSearchedFilmAlready() {
-        return hasSearchedFilmAlready;
-    }
-
-    public void setHasSearchedFilmAlready(boolean hasSearchedFilmAlready) {
-        this.hasSearchedFilmAlready = hasSearchedFilmAlready;
     }
 }
