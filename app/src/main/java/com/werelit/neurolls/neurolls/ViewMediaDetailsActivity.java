@@ -85,7 +85,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this out! #" + name.getText());
-            //shareIntent.putExtra(Intent.EXTRA_STREAM, "sdf");
+            //shareIntent.putExtra(Intent.EXTRA_STREAM, "imagePath here");
             //shareIntent.setType("image/*,text/plain");
             shareIntent.setType("text/plain");
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));
@@ -226,10 +226,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
+            image = (ImageView) findViewById(R.id.image);
 
             name.setText("" + mediaName);
             genre.setText("" + mediaGenre);
             year.setText("" + mediaYear);
+
+            // TODO set image url
+            //image.setImageResource("TODO");
         }
     }
 
