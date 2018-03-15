@@ -2,6 +2,7 @@ package com.werelit.neurolls.neurolls;
 
 
 import android.app.DatePickerDialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -77,9 +78,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-            Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
-            // TODO db update happens here
+            willArchive = true;
+            saveMedia(willArchive);
+            //Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -94,37 +97,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         }
         else if(item.getItemId() == R.id.action_save) {
-            //this.finish();
-            //Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
-            // TODO db insertion happens here
-            switch (mediaCategory){
-                case Media.CATEGORY_FILMS:
-                    // Save film to db
-                    saveFilm();
-                    // Exit activity
-                    finish();
-                    break;
-                case Media.CATEGORY_BOOKS:
-                    // Save book to db
-                    saveBook();
-                    // Exit activity
-                    finish();
-                    break;
-                case Media.CATEGORY_GAMES:
-                    // Save game to db
-                    saveGame();
-                    // Exit activity
-                    finish();
-                    break;
-            }
+            saveMedia(willArchive);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
-            // TODO db update happens here
+            saveMedia(willArchive);
+            //Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_delete) {
             //this.finish();
@@ -297,7 +277,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void saveFilm(){
+    private void saveFilm(boolean archiveFilm){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -317,15 +297,42 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
 
-        // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
-        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
-        showFeedback(newUri);
+        // Determine if this is a new or existing film by checking if isForAdding is true or false
+        if(isForAdding){
+            // Insert a new row into the provider using the ContentResolver.
+            // Use the {@link FilmEntry#CONTENT_URI} to indicate that we want to insert
+            // into the films database table.
+            // Receive the new content URI that will allow us to access data in the future.
+            Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+            showFeedback(newUri);
+        }
+        else{
+            // check if film should be archived or unarchived
+            if(archiveFilm){
+                values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
+            }
+            else{
+                values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
+            }
+            // Otherwise this is an EXISTING film, so update the film with content URI: mCurrentPetUri
+            // and pass in the new ContentValues.
+            Uri currentUri = ContentUris.withAppendedId(FilmEntry.CONTENT_URI, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+            int rowsAffected = getContentResolver().update(currentUri, values, null, null);
+
+            // Show a toast message depending on whether or not the update was successful.
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_update_media_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_update_media_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
-    private void saveBook(){
+    private void saveBook(boolean archiveBook){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -348,7 +355,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(){
+    private void saveGame(boolean archiveGame){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -371,6 +378,29 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
+    private void saveMedia(boolean archiveMedia){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                // Save film to db
+                saveFilm(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+            case Media.CATEGORY_BOOKS:
+                // Save book to db
+                saveBook(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+            case Media.CATEGORY_GAMES:
+                // Save game to db
+                saveGame(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+        }
+    }
+
     private void showFeedback(Uri uri){
         // Show a toast message depending on whether or not the insertion was successful.
         if (uri == null) {
@@ -382,6 +412,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void shareToTwitter(){
         // Create intent using ACTION_VIEW and a normal Twitter url:

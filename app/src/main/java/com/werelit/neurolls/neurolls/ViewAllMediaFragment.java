@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.data.MediaContract;
 import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
@@ -305,7 +306,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                film.setArchived((n == 1)? true : false);
+                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
+                entertainments.add(0, film);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
