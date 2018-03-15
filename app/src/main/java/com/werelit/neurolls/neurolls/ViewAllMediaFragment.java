@@ -550,12 +550,25 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             switch (isArchived ? 1 : 0){
                 case 1:
                     //mEmptyStateTextView.setText("You have no archived media.");
-                    title.setText("You have no archived media.");
+                    title.setText(R.string.empty_archived_view_subtitle_text);
                     subtitle.setText("");
                     break;
                 case 0:
                     title.setText(R.string.empty_view_title_text);
-                    subtitle.setText(R.string.empty_view_subtitle_text);
+                    switch (mediaCategory){
+                        case CategoryAdapter.CATEGORY_ALL:
+                            subtitle.setText(R.string.empty_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_FILMS:
+                            subtitle.setText(R.string.empty_film_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_BOOKS:
+                            subtitle.setText(R.string.empty_book_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_GAMES:
+                            subtitle.setText(R.string.empty_game_view_subtitle_text);
+                            break;
+                    }
                     break;
             }
             mEmptyStateTextView.setVisibility(View.VISIBLE);
