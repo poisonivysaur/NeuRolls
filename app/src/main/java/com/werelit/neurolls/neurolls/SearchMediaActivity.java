@@ -97,7 +97,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
-        Toast.makeText(this,"CALLED ON CREATE LOADER!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"CALLED ON CREATE LOADER!",Toast.LENGTH_SHORT).show();
         mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
         mediaTaskLoader.setMediaCategory(searchType);
         mediaTaskLoader.setHasSearchedFilmAlready(hasSearchedFilmAlready);
@@ -113,7 +113,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         if(hasSearchedFilmAlready){
             Film completeFilm = JsonConverter.revisedSpecificFilm(data);
-            Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
             prepareFilmDetails(completeFilm);
         }
         else {
@@ -394,6 +394,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         if(searchType != Media.CATEGORY_FILMS){
             intent.putExtras(bundle);
             startActivity(intent);
+            this.finish();
         }
     }
 
@@ -418,6 +419,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         intent.putExtras(bundle);
         startActivity(intent);
+        this.finish();
     }
 
     private void searchMedia(String query){

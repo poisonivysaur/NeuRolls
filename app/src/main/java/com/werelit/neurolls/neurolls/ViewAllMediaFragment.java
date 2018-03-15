@@ -234,6 +234,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 //                entertainments.add(dummyGame);
                 break;
         }
+        shouldDisplayEmptyView();
     }
 
     private void getFilms(int isArchived){
