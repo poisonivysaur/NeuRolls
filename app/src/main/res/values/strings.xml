@@ -58,5 +58,8 @@
     <!-- Toast message in editor when current pet has failed to be updated [CHAR LIMIT=NONE] -->
     <string name="editor_update_media_failed">Media not updated (0 rows affected)</string>
 
+    <!-- Dialog message to ask the user to confirm deleting the current media [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this media?</string>
+
     <string name="synopsis_test">From his hideout beneath a 19th century Paris opera house, the brooding Phantom (Gerard Butler) schemes to get closer to vocalist Christine Daae (Emmy Rossum). The Phantom, wearing a mask to hide a congenital disfigurement, strong-arms management into giving the budding starlet key roles, but Christine instead falls for arts benefactor Raoul (Patrick Wilson). Terrified at the notion of her absence, the Phantom enacts a plan to keep Christine by his side, while Raoul tries to foil the scheme.</string>
 </resources>
