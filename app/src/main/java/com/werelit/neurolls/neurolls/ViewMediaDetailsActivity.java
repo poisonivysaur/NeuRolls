@@ -144,8 +144,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             //Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_delete) {
-            //this.finish();
-            //Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
             showDeleteConfirmationDialog();
         }
         return super.onOptionsItemSelected(item);
@@ -408,6 +406,26 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 // Save game to db
                 saveGame(archiveMedia);
                 // Exit activity
+                finish();
+                break;
+        }
+    }
+
+    private void preUpdateMedia(boolean willArchive){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                // Save film to db
+                updateMedia(willArchive, FilmEntry.CONTENT_URI);
+                finish();
+                break;
+            case Media.CATEGORY_BOOKS:
+                // Save book to db
+                updateMedia(willArchive, BookEntry.CONTENT_URI);
+                finish();
+                break;
+            case Media.CATEGORY_GAMES:
+                // Save game to db
+                updateMedia(willArchive, GameEntry.CONTENT_URI);
                 finish();
                 break;
         }
