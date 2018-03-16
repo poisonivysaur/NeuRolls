@@ -83,25 +83,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
             willArchive = true;
-            //saveMedia(willArchive);
-            switch (mediaCategory){
-                case Media.CATEGORY_FILMS:
-                    // Save film to db
-                    updateMedia(willArchive, FilmEntry.CONTENT_URI);
-                    finish();
-                    break;
-                case Media.CATEGORY_BOOKS:
-                    // Save book to db
-                    updateMedia(willArchive, BookEntry.CONTENT_URI);
-                    finish();
-                    break;
-                case Media.CATEGORY_GAMES:
-                    // Save game to db
-                    updateMedia(willArchive, GameEntry.CONTENT_URI);
-                    finish();
-                    break;
-            }
-            //Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
+            preUpdateMedia(willArchive);
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -122,26 +104,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            //saveMedia(willArchive);
-            switch (mediaCategory){
-                case Media.CATEGORY_FILMS:
-                    // Save film to db
-                    updateMedia(willArchive, FilmEntry.CONTENT_URI);
-                    finish();
-                    break;
-                case Media.CATEGORY_BOOKS:
-                    // Save book to db
-                    updateMedia(willArchive, BookEntry.CONTENT_URI);
-                    finish();
-                    break;
-                case Media.CATEGORY_GAMES:
-                    // Save game to db
-                    updateMedia(willArchive, GameEntry.CONTENT_URI);
-                    finish();
-                    break;
-            }
-
-            //Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
+            preUpdateMedia(willArchive);
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
