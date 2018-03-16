@@ -18,6 +18,8 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 
+import java.net.URI;
+
 /**
  * {@link ContentProvider} for NeuRolls app.
  */
@@ -259,8 +261,10 @@ public class MediaProvider extends ContentProvider {
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
             case BOOK_ID:
+                // the id of the books from Google API are Strings
+                String bookUri = String.valueOf(BookEntry.CONTENT_URI);
                 selection = BookEntry.COLUMN_BOOK_ID + "=?";
-                selectionArgs = new String[] { String.valueOf(uri) };
+                selectionArgs = new String[] { String.valueOf(uri).substring(bookUri.length() + 1) }; // +1 for the front slash
                 return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
             case GAME_ID:
                 selection = GameEntry.COLUMN_GAME_ID + "=?";
