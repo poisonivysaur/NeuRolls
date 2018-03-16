@@ -333,38 +333,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
-        if(isForAdding){
-            // Insert a new row into the provider using the ContentResolver.
-            // Use the {@link FilmEntry#CONTENT_URI} to indicate that we want to insert
-            // into the films database table.
-            // Receive the new content URI that will allow us to access data in the future.
-            Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
-            showFeedback(newUri);
-        }
-        else{
-            // check if film should be archived or unarchived
-            if(archiveFilm){
-                values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
-            }
-            else{
-                values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
-            }
-            // Otherwise this is an EXISTING film, so update the film with content URI: mCurrentPetUri
-            // and pass in the new ContentValues.
-            Uri currentUri = ContentUris.withAppendedId(FilmEntry.CONTENT_URI, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
-            int rowsAffected = getContentResolver().update(currentUri, values, null, null);
 
-            // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_media_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_media_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
+        // Insert a new row into the provider using the ContentResolver.
+        // Use the {@link FilmEntry#CONTENT_URI} to indicate that we want to insert
+        // into the films database table.
+        // Receive the new content URI that will allow us to access data in the future.
+        Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
+        showFeedback(newUri);
     }
 
     private void saveBook(boolean archiveBook){
