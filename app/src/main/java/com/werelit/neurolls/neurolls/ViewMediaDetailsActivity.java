@@ -379,17 +379,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             case Media.CATEGORY_FILMS:
                 // Save film to db
                 updateMedia(willArchive, FilmEntry.CONTENT_URI);
-                finish();
                 break;
             case Media.CATEGORY_BOOKS:
                 // Save book to db
                 updateMedia(willArchive, BookEntry.CONTENT_URI);
-                finish();
                 break;
             case Media.CATEGORY_GAMES:
                 // Save game to db
                 updateMedia(willArchive, GameEntry.CONTENT_URI);
-                finish();
                 break;
         }
     }
@@ -404,22 +401,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
         }
 
-        Uri currentUri = null;
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                // Save film to db
-                currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
-                break;
-            case Media.CATEGORY_BOOKS:
-                // Save book to db
-                //currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
-                currentUri = Uri.withAppendedPath(uri, bundle.getString(MediaKeys.MEDIA_ID_KEY));
-                break;
-            case Media.CATEGORY_GAMES:
-                // Save game to db
-                currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
-                break;
-        }
+        Uri currentUri = getCurrentUri(uri);
 
         int rowsAffected = getContentResolver().update(currentUri, values, null, null);
 
@@ -431,10 +413,37 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             // Otherwise, the update was successful and we can display a toast.
             Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
         }
+        finish();
     }
 
     private void deleteMedia(){
+        Uri currentUri = null;
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                currentUri = getCurrentUri(FilmEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_BOOKS:
+                currentUri = getCurrentUri(BookEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_GAMES:
+                currentUri = getCurrentUri(GameEntry.CONTENT_URI);
+                break;
+        }
+        // Call the ContentResolver to delete the media at the given content URI.
+        // content URI already identifies the media that we want.
+        int rowsDeleted = getContentResolver().delete(currentUri, null, null);
 
+        // Show a toast message depending on whether or not the delete was successful.
+        if (rowsDeleted == 0) {
+            // If no rows were deleted, then there was an error with the delete.
+            Toast.makeText(this, getString(R.string.editor_delete_media_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the delete was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_delete_media_successful),
+                    Toast.LENGTH_SHORT).show();
+        }
+        finish();
     }
 
     private void showFeedback(Uri uri){
@@ -476,6 +485,18 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private Uri getCurrentUri(Uri uri){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                return ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+            case Media.CATEGORY_BOOKS:
+                return Uri.withAppendedPath(uri, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+            case Media.CATEGORY_GAMES:
+                return ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+            default: return null;
+        }
     }
 
     private void shareToTwitter(){
