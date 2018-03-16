@@ -74,7 +74,7 @@ public class MediaProvider extends ContentProvider {
         sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_FILMS + "/#", FILM_ID);
 
         sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_BOOKS, BOOKS);
-        sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_BOOKS + "/#", BOOK_ID);
+        sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_BOOKS + "/*", BOOK_ID);
 
         sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_GAMES, GAMES);
         sUriMatcher.addURI(MediaContract.CONTENT_AUTHORITY, MediaContract.PATH_GAMES + "/#", GAME_ID);
@@ -260,7 +260,7 @@ public class MediaProvider extends ContentProvider {
                 return updateMedia(uri, contentValues, selection, selectionArgs, FilmEntry.TABLE_NAME);
             case BOOK_ID:
                 selection = BookEntry.COLUMN_BOOK_ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[] { String.valueOf(uri) };
                 return updateMedia(uri, contentValues, selection, selectionArgs, BookEntry.TABLE_NAME);
             case GAME_ID:
                 selection = GameEntry.COLUMN_GAME_ID + "=?";

@@ -81,7 +81,24 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
             willArchive = true;
-            saveMedia(willArchive);
+            //saveMedia(willArchive);
+            switch (mediaCategory){
+                case Media.CATEGORY_FILMS:
+                    // Save film to db
+                    updateMedia(willArchive, FilmEntry.CONTENT_URI);
+                    finish();
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    // Save book to db
+                    updateMedia(willArchive, BookEntry.CONTENT_URI);
+                    finish();
+                    break;
+                case Media.CATEGORY_GAMES:
+                    // Save game to db
+                    updateMedia(willArchive, GameEntry.CONTENT_URI);
+                    finish();
+                    break;
+            }
             //Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_share) {
@@ -103,7 +120,25 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            saveMedia(willArchive);
+            //saveMedia(willArchive);
+            switch (mediaCategory){
+                case Media.CATEGORY_FILMS:
+                    // Save film to db
+                    updateMedia(willArchive, FilmEntry.CONTENT_URI);
+                    finish();
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    // Save book to db
+                    updateMedia(willArchive, BookEntry.CONTENT_URI);
+                    finish();
+                    break;
+                case Media.CATEGORY_GAMES:
+                    // Save game to db
+                    updateMedia(willArchive, GameEntry.CONTENT_URI);
+                    finish();
+                    break;
+            }
+
             //Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
         }
         else if(item.getItemId() == R.id.action_delete) {
@@ -398,6 +433,45 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 // Exit activity
                 finish();
                 break;
+        }
+    }
+
+    private void updateMedia(boolean archiveMedia, Uri uri){
+        ContentValues values = new ContentValues();
+        // check if film should be archived or unarchived
+        if(archiveMedia){
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
+        }
+        else{
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
+        }
+
+        Uri currentUri = null;
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                // Save film to db
+                currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+                break;
+            case Media.CATEGORY_BOOKS:
+                // Save book to db
+                //currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+                currentUri = Uri.withAppendedPath(uri, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+                break;
+            case Media.CATEGORY_GAMES:
+                // Save game to db
+                currentUri = ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+                break;
+        }
+
+        int rowsAffected = getContentResolver().update(currentUri, values, null, null);
+
+        // Show a toast message depending on whether or not the update was successful.
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
         }
     }
 

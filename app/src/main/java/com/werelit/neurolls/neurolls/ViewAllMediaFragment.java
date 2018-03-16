@@ -399,7 +399,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                book.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, book);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -488,7 +492,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                game.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, game);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
