@@ -331,8 +331,10 @@ public class MediaProvider extends ContentProvider {
                 return database.delete(FilmEntry.TABLE_NAME, selection, selectionArgs);
             case BOOK_ID:
                 // Delete a single row given by the ID in the URI
+                // the id of the books from Google API are Strings
+                String bookUri = String.valueOf(BookEntry.CONTENT_URI);
                 selection = BookEntry.COLUMN_BOOK_ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[] { String.valueOf(uri).substring(bookUri.length() + 1) }; // +1 for the front slash
                 return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
             case GAME_ID:
                 // Delete a single row given by the ID in the URI
