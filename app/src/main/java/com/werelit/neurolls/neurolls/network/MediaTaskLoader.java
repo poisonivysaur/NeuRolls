@@ -50,7 +50,7 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
     public String loadInBackground() {
 
         if(hasSearchedFilmAlready){
-            Log.wtf(LOG_TAG, "MEDIA TASK LOADER IN HAS SEARCHED FILM ALREADY HAHAHA " + ConnectMovieDB.getMovieDetails(filmdID));
+            //Log.wtf(LOG_TAG, "MEDIA TASK LOADER IN HAS SEARCHED FILM ALREADY HAHAHA " + ConnectMovieDB.getMovieDetails(filmdID));
             return ConnectMovieDB.getMovieDetails(filmdID);
         }else {
             Log.wtf(LOG_TAG, "GOING INSIDE ELSE ");

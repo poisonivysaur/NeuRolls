@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.data.MediaContract;
 import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
@@ -234,6 +235,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 //                entertainments.add(dummyGame);
                 break;
         }
+        shouldDisplayEmptyView();
     }
 
     private void getFilms(int isArchived){
@@ -304,7 +306,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                film.setArchived((n == 1)? true : false);
+                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
+                entertainments.add(0, film);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -393,7 +399,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                book.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, book);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -482,7 +492,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                game.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, game);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -549,12 +563,25 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             switch (isArchived ? 1 : 0){
                 case 1:
                     //mEmptyStateTextView.setText("You have no archived media.");
-                    title.setText("You have no archived media.");
+                    title.setText(R.string.empty_archived_view_subtitle_text);
                     subtitle.setText("");
                     break;
                 case 0:
                     title.setText(R.string.empty_view_title_text);
-                    subtitle.setText(R.string.empty_view_subtitle_text);
+                    switch (mediaCategory){
+                        case CategoryAdapter.CATEGORY_ALL:
+                            subtitle.setText(R.string.empty_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_FILMS:
+                            subtitle.setText(R.string.empty_film_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_BOOKS:
+                            subtitle.setText(R.string.empty_book_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_GAMES:
+                            subtitle.setText(R.string.empty_game_view_subtitle_text);
+                            break;
+                    }
                     break;
             }
             mEmptyStateTextView.setVisibility(View.VISIBLE);
