@@ -37,6 +37,8 @@ public class ConnectMovieDB {
     private static final String API_CREDIT = "/credits";
     private static final String API_APPEND_CREDITS = "&append_to_response=credits";
 
+    public static final String API_MOVIE_IMAGE_PATH = "https://image.tmdb.org/t/p/w1280";
+
     private ConnectMovieDB(){}
 
     public static String searchMovie(String query){

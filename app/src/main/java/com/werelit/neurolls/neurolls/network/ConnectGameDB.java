@@ -10,7 +10,8 @@ public class ConnectGameDB {
 
     private static final String TAG = ConnectGameDB.class.getSimpleName();
 
-    public static final String USER_KEY = "dfdc187e8ee5ee5673d66e5b5435a37d";
+    //public static final String USER_KEY = "dfdc187e8ee5ee5673d66e5b5435a37d";
+    public static final String USER_KEY = "a2fc64829017cd594a7ebecaf2959029";
     public static final String API_ENDPOINT = "https://api-endpoint.igdb.com";
 
     public static final String GAME = "/games";
@@ -19,6 +20,8 @@ public class ConnectGameDB {
     public static final String SEARCH = "/?search=";
 
     public static final String SEARCH_FILTER = "&fields=name,summary,collection,cover,release_dates,publishers,developers,platforms,genres&expand=game,collection,developers,publishers,platforms,genres&filter[developers][exists]=true&filter[publishers][exists]=true&filter[category][eq]=0&filter[platforms][any]=6,48,9,38,11,12,37,20,130,5,41";
+
+    public static final String GAME_IMAGE_URL = "https://images.igdb.com/igdb/image/upload/t_cover_big";
 
     private ConnectGameDB() {}
 

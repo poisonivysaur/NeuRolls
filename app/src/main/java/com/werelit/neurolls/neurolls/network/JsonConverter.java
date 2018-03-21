@@ -38,11 +38,16 @@ public class JsonConverter {
                 if (releaseDate.equals(""))
                     releaseDate = "Unreleased";
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
+                String imageSource = "";
+                if(curObj.optString("poster_path") != null){
+                    imageSource = ConnectMovieDB.API_MOVIE_IMAGE_PATH + curObj.getString("poster_path");
+                }
                 Film m = new Film();
                 m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
+                m.setImageDir(imageSource);
                 films.add(m);
             }
         }catch(JSONException e){
