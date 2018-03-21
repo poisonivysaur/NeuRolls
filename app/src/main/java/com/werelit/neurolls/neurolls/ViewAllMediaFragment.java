@@ -707,5 +707,4 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
     }
     */
-
 }
