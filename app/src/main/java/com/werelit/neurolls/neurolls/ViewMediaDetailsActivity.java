@@ -80,10 +80,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-            willArchive = true;
-            preUpdateMedia(willArchive);
+            preUpdateMedia();
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -98,13 +96,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         }
         else if(item.getItemId() == R.id.action_save) {
-            saveMedia(willArchive);
+            saveMedia();
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            preUpdateMedia(willArchive);
+            preUpdateMedia();
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
@@ -275,7 +273,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void saveFilm(boolean archiveFilm){
+    private void saveFilm(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -305,7 +303,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveBook(boolean archiveBook){
+    private void saveBook(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -328,7 +326,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(boolean archiveGame){
+    private void saveGame(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -351,50 +349,50 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveMedia(boolean archiveMedia){
+    private void saveMedia(){
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
                 // Save film to db
-                saveFilm(archiveMedia);
+                saveFilm();
                 // Exit activity
                 finish();
                 break;
             case Media.CATEGORY_BOOKS:
                 // Save book to db
-                saveBook(archiveMedia);
+                saveBook();
                 // Exit activity
                 finish();
                 break;
             case Media.CATEGORY_GAMES:
                 // Save game to db
-                saveGame(archiveMedia);
+                saveGame();
                 // Exit activity
                 finish();
                 break;
         }
     }
 
-    private void preUpdateMedia(boolean willArchive){
+    private void preUpdateMedia(){
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
                 // Save film to db
-                updateMedia(willArchive, FilmEntry.CONTENT_URI);
+                updateMedia(FilmEntry.CONTENT_URI);
                 break;
             case Media.CATEGORY_BOOKS:
                 // Save book to db
-                updateMedia(willArchive, BookEntry.CONTENT_URI);
+                updateMedia(BookEntry.CONTENT_URI);
                 break;
             case Media.CATEGORY_GAMES:
                 // Save game to db
-                updateMedia(willArchive, GameEntry.CONTENT_URI);
+                updateMedia(GameEntry.CONTENT_URI);
                 break;
         }
     }
 
-    private void updateMedia(boolean archiveMedia, Uri uri){
+    private void updateMedia(Uri uri){
         ContentValues values = new ContentValues();
         // check if film should be archived or unarchived
-        if(archiveMedia){
+        if(!isArchived){
             values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
         }
         else{
