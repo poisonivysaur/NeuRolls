@@ -33,6 +33,8 @@ import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -352,25 +354,41 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     }
 
     private void saveMedia(){
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                // Save film to db
-                saveFilm();
-                // Exit activity
-                finish();
-                break;
-            case Media.CATEGORY_BOOKS:
-                // Save book to db
-                saveBook();
-                // Exit activity
-                finish();
-                break;
-            case Media.CATEGORY_GAMES:
-                // Save game to db
-                saveGame();
-                // Exit activity
-                finish();
-                break;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date releaseYear = null;
+
+        try {
+            releaseYear = format.parse(bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date today = new Date();
+
+        if (releaseYear.compareTo(today) <= 0) {
+            System.out.println("earlier");
+            switch (mediaCategory){
+                case Media.CATEGORY_FILMS:
+                    // Save film to db
+                    saveFilm();
+                    // Exit activity
+                    finish();
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    // Save book to db
+                    saveBook();
+                    // Exit activity
+                    finish();
+                    break;
+                case Media.CATEGORY_GAMES:
+                    // Save game to db
+                    saveGame();
+                    // Exit activity
+                    finish();
+                    break;
+            }
+        }
+        else {
+            Toast.makeText(this, "Media not yet released yet :(", Toast.LENGTH_SHORT).show();
         }
     }
 
