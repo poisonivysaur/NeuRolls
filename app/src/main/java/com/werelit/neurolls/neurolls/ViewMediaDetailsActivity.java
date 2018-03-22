@@ -258,7 +258,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
-                displayNotifSettings(v);
+                if(!isArchived){
+                    displayNotifSettings(v);
+                }
             }
         });
     }
