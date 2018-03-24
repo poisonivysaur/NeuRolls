@@ -14,6 +14,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,7 +86,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_archive) {
-            preUpdateMedia();
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -95,7 +98,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));
 
             //shareToTwitter();
-
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
@@ -104,7 +106,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            preUpdateMedia();
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
@@ -395,23 +397,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void preUpdateMedia(){
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                // Save film to db
-                updateMedia(FilmEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_BOOKS:
-                // Save book to db
-                updateMedia(BookEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_GAMES:
-                // Save game to db
-                updateMedia(GameEntry.CONTENT_URI);
-                break;
-        }
-    }
-
     private void updateMedia(Uri uri){
         ContentValues values = new ContentValues();
         // check if film should be archived or unarchived
@@ -437,19 +422,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         finish();
     }
 
-    private void deleteMedia(){
-        Uri currentUri = null;
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                currentUri = getCurrentUri(FilmEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_BOOKS:
-                currentUri = getCurrentUri(BookEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_GAMES:
-                currentUri = getCurrentUri(GameEntry.CONTENT_URI);
-                break;
-        }
+    private void deleteMedia(Uri uri){
+        Uri currentUri = getCurrentUri(uri);
+
         // Call the ContentResolver to delete the media at the given content URI.
         // content URI already identifies the media that we want.
         int rowsDeleted = getContentResolver().delete(currentUri, null, null);
@@ -490,7 +465,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the media.
-                deleteMedia();
+                deleteMedia(getContentUri());
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -517,6 +492,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             case Media.CATEGORY_GAMES:
                 return ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
             default: return null;
+        }
+    }
+
+    private Uri getContentUri(){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                return FilmEntry.CONTENT_URI;
+            case Media.CATEGORY_BOOKS:
+                return BookEntry.CONTENT_URI;
+            default:
+                return GameEntry.CONTENT_URI;
         }
     }
 
