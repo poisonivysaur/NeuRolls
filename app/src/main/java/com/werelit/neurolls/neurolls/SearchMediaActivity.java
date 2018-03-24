@@ -490,6 +490,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     private void searchNeuRolls(String query){
         getFilms(query);
+        getBooks(query);
+        getGames(query);
         updateSearchResultsUI();
 
 //        Bundle queryBundle = new Bundle();
