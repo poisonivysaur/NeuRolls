@@ -86,9 +86,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-          updateMedia(getContentUri());
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -103,13 +102,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
-            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
+            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-          updateMedia(getContentUri());
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
@@ -292,7 +291,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void saveFilm(boolean archiveFilm){
+    private void saveFilm(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -322,7 +321,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveBook(boolean archiveBook){
+    private void saveBook(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -345,7 +344,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(boolean archiveGame){
+    private void saveGame(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -432,7 +431,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         finish();
     }
 
-
     private void deleteMedia(Uri uri){
         Uri currentUri = getCurrentUri(uri);
 
@@ -505,6 +503,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             default: return null;
         }
     }
+
     private Uri getContentUri(){
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:

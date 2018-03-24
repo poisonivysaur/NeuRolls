@@ -334,7 +334,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onClick(View view, int position) {
                 // Toast.makeText(SearchMediaActivity.this, mediaList.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
-                // TODO call MOVIE api again, put it in bundle (prepareData method)
                 prepareData(position);
             }
 

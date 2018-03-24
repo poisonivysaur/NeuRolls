@@ -100,11 +100,12 @@ public class ConnectGameDB {
     public static String getReleaseDate(JSONArray release){
         if(release.length() == 0)
             return "No Release Date";
-        String releaseYear = "";
+        String releaseYear = "No Release Date";
 
         try {
             JSONObject releaseObj = release.getJSONObject(0);
             releaseYear = releaseObj.getString("human");
+            releaseYear = getReleaseDate(releaseYear);
         }catch (JSONException e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
@@ -112,6 +113,74 @@ public class ConnectGameDB {
         }
 
         return releaseYear;
+    }
+
+    private static String getReleaseDate(String releaseDate){
+        String returnDate = "2019-01-01";
+        String[] splitRelease = releaseDate.split("-");
+
+        switch (splitRelease.length) {
+            case 1:
+                returnDate = splitRelease[0] + "-01-01";
+                break;
+            case 2:
+                returnDate = splitRelease[0] + "-" + changeMonthToNum(splitRelease[1]) + "-01";
+                break;
+            case 3:
+                returnDate = splitRelease[0] + "-" + changeMonthToNum(splitRelease[1]) + "-" + splitRelease[2];
+                break;
+            default:
+                break;
+        }
+
+        return returnDate;
+    }
+
+    private static String changeMonthToNum(String month){
+        String returnMonth = "01";
+        month = month.toLowerCase();
+        switch(month){
+            case "jan":
+                returnMonth = "01";
+                break;
+            case "feb":
+                returnMonth = "02";
+                break;
+            case "mar":
+                returnMonth = "03";
+                break;
+            case "apr":
+                returnMonth = "04";
+                break;
+            case "may":
+                returnMonth = "05";
+                break;
+            case "jun":
+                returnMonth = "06";
+                break;
+            case "jul":
+                returnMonth = "07";
+                break;
+            case "aug":
+                returnMonth = "08";
+                break;
+            case "sep":
+                returnMonth = "09";
+                break;
+            case "oct":
+                returnMonth = "10";
+                break;
+            case "nov":
+                returnMonth = "11";
+                break;
+            case "dec":
+                returnMonth = "12";
+                break;
+            default:
+                returnMonth = "01";
+        }
+
+        return returnMonth;
     }
 
 }
