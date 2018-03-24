@@ -64,12 +64,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-
-        }
-
         // Inflate the menu; this adds items to the action bar if it is present.
         if(isArchived){ // if item is archived, menu shows delete or unarchive options
             getMenuInflater().inflate(R.menu.archived_media_menu, menu);

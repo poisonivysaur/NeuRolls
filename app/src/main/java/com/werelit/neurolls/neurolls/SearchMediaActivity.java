@@ -1,9 +1,12 @@
 package com.werelit.neurolls.neurolls;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.LoaderManager;
@@ -14,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +36,10 @@ import com.werelit.neurolls.neurolls.model.Media;
 import com.werelit.neurolls.neurolls.network.ConnectMovieDB;
 import com.werelit.neurolls.neurolls.network.JsonConverter;
 import com.werelit.neurolls.neurolls.network.MediaTaskLoader;
+
+import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
+import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import org.json.JSONArray;
 
@@ -56,6 +62,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private boolean hasSearchedFilmAlready;
 
     private String incompleteFilmID = "0";
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +122,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         if(hasSearchedFilmAlready){
             Film completeFilm = JsonConverter.revisedSpecificFilm(data);
             //Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
-            prepareFilmDetails(completeFilm);
+            retrieveFilmDetails(completeFilm);
         }
         else {
             // Clear the adapter of previous data
@@ -138,13 +146,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 mediaList.add(a);
             }
 
-            mediaAdapter.notifyDataSetChanged();
-            if (mediaList.size() == 0) {
-                recyclerView.setVisibility(View.GONE);
-                // Set empty state text to display "No matching results :("
-                mEmptyStateTextView.setText(R.string.no_matching_results);
-                mEmptyStateTextView.setVisibility(View.VISIBLE);
-            }
+            updateSearchResultsUI();
         }
     }
 
@@ -262,8 +264,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     }
                 }
                 else {
-//                    View loadingIndicator = findViewById(R.id.loading_indicator);
-//                    loadingIndicator.setVisibility(View.GONE);
+                    View loadingIndicator = findViewById(R.id.loading_indicator);
+                    loadingIndicator.setVisibility(View.GONE);
                     searchNeuRolls(query);
                 }
                 return false;
@@ -350,20 +352,14 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     private void prepareData(int position){
 
-        // Make a bundle containing the current media details
-        Bundle bundle = new Bundle();
+        Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
+        Media media = mediaList.get(position);
 
-        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
-        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, true);
-        bundle.putString(MediaKeys.MEDIA_ID_KEY, mediaList.get(position).getMediaID());
-        bundle.putString(MediaKeys.MEDIA_NAME_KEY, mediaList.get(position).getmMediaName());
-        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, mediaList.get(position).getmMediaGenre());
-        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, mediaList.get(position).getmMediaYear());
+        // Make a bundle containing the current media details
+        bundle = new Bundle();
+        prepareMediaDetails(media);
 
         // View the details depending what category the media is
-        Media media = mediaList.get(position);
-        Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
-
         switch (searchType){
             case Media.CATEGORY_FILMS:
                 hasSearchedFilmAlready = true;
@@ -371,24 +367,24 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 Bundle queryBundle = new Bundle();
                 queryBundle.putString(MediaKeys.SEARCH_QUERY, "test query");
                 getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-
                 break;
 
             case Media.CATEGORY_BOOKS:
-                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
-                bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)mediaList.get(position)).getAuthor());
-                bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)mediaList.get(position)).getPages());
-                bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)mediaList.get(position)).getPublisher());
-                bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)mediaList.get(position)).getDescription());
+                prepareBookDetails((Book) media);
                 break;
 
             case Media.CATEGORY_GAMES:
-                bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
-                bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)mediaList.get(position)).getPlatform());
-                bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)mediaList.get(position)).getPublisher());
-                bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)mediaList.get(position)).getSeries());
-                bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)mediaList.get(position)).getStoryline());
+                prepareGameDetails((Game) media);
                 break;
+
+            default:
+                if(media instanceof Film){
+                    prepareFilmDetails((Film) media);
+                } else if(media instanceof Book){
+                    prepareBookDetails((Book) media);
+                } else {
+                    prepareGameDetails((Game) media);
+                }
         }
         if(searchType != Media.CATEGORY_FILMS){
             intent.putExtras(bundle);
@@ -397,28 +393,48 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-    private void prepareFilmDetails(Film film){
-        // Make a bundle containing the current media details
-        Bundle bundle = new Bundle();
-
+    private void retrieveFilmDetails(Film film){
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
-
-        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
-        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, true);
-        bundle.putString(MediaKeys.MEDIA_ID_KEY, film.getMediaID());
-        bundle.putString(MediaKeys.MEDIA_NAME_KEY, film.getmMediaName());
-        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, film.getmMediaGenre());
-        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, film.getmMediaYear());
-
-        bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-        bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, film.getDirector());
-        bundle.putInt(MediaKeys.FILM_DURATION_KEY, film.getDuration());
-        bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, film.getProduction());
-        bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, film.getSynopsis());
+        // Make a bundle containing the current media details
+        bundle = new Bundle();
+        prepareMediaDetails(film);
+        prepareFilmDetails(film);
 
         intent.putExtras(bundle);
         startActivity(intent);
         this.finish();
+    }
+
+    private void prepareMediaDetails(Media media){
+        boolean isForAdding = (searchType != MainActivity.SEARCH_NEUROLLS);
+        //bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, isArchived); // change this later to mediaList.get(i).isArchived()
+        bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, isForAdding);
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
+        bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
+    }
+
+    private void prepareFilmDetails(Film film){
+        bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, film.getDirector());
+        bundle.putInt(MediaKeys.FILM_DURATION_KEY, film.getDuration());
+        bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, film.getProduction());
+        bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, film.getSynopsis());
+    }
+
+    private void prepareBookDetails(Book book){
+        bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, book.getAuthor());
+        bundle.putInt(MediaKeys.BOOK_PAGES_KEY, book.getPages());
+        bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, book.getPublisher());
+        bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, book.getDescription());
+    }
+
+    private void prepareGameDetails(Game game){
+        bundle.putString(MediaKeys.GAME_PLATFORM_KEY, game.getPlatform());
+        bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, game.getPublisher());
+        bundle.putString(MediaKeys.GAME_SERIES_KEY, game.getSeries());
+        bundle.putString(MediaKeys.GAME_STORYLINE_KEY, game.getStoryline());
     }
 
     private void searchMedia(String query){
@@ -473,8 +489,275 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void searchNeuRolls(String query){
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
-        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
+        getFilms(query);
+        updateSearchResultsUI();
+
+//        Bundle queryBundle = new Bundle();
+//        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
+//        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
+    }
+
+    private void getFilms(String query){
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                //FilmEntry._ID,
+                FilmEntry.COLUMN_FILM_ID,
+                FilmEntry.COLUMN_FILM_NAME,
+                FilmEntry.COLUMN_FILM_GENRE,
+                FilmEntry.COLUMN_FILM_YEAR_RELEASED,
+                FilmEntry.COLUMN_FILM_IMG_DIR,
+
+                FilmEntry.COLUMN_FILM_DIRECTOR,
+                FilmEntry.COLUMN_FILM_DURATION,
+                FilmEntry.COLUMN_FILM_PRODUCTION,
+                FilmEntry.COLUMN_FILM_SYNOPSIS,
+
+                FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
+                FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
+                FilmEntry.COLUMN_FILM_WATCHED,
+                FilmEntry.COLUMN_FILM_ARCHIVED };
+
+        String selection = FilmEntry.COLUMN_FILM_NAME + " LIKE ?";
+        String[] selectionArgs = new String[] { query + "%"};
+
+        Cursor cursor = getContentResolver().query(
+                FilmEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                FilmEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
+            int nameColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_YEAR_RELEASED);
+            int imageColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DIRECTOR);
+            int durationColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DURATION);
+            int prodColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_PRODUCTION);
+            int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
+
+            int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+            int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
+            int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                int currentDuration = cursor.getInt(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                film.setArchived((n == 1)? true : false);
+                film.setNotifSettings(currentNotif);
+                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
+                mediaList.add(0, film);
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
+    }
+
+    private void getBooks(String query){
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                //BookEntry._ID,
+                BookEntry.COLUMN_BOOK_ID,
+                BookEntry.COLUMN_BOOK_NAME,
+                BookEntry.COLUMN_BOOK_GENRE,
+                BookEntry.COLUMN_BOOK_YEAR_PUBLISHED,
+                BookEntry.COLUMN_BOOK_IMG_DIR,
+
+                BookEntry.COLUMN_BOOK_AUTHOR,
+                BookEntry.COLUMN_BOOK_PAGES,
+                BookEntry.COLUMN_BOOK_PUBLISHER,
+                BookEntry.COLUMN_BOOK_DESCRIPTION,
+
+                BookEntry.COLUMN_BOOK_DATE_TO_READ,
+                BookEntry.COLUMN_BOOK_NOTIF_SETTINGS,
+                BookEntry.COLUMN_BOOK_READ,
+                BookEntry.COLUMN_BOOK_ARCHIVED };
+
+        String selection = BookEntry.COLUMN_BOOK_ARCHIVED + " LIKE ?";
+        String[] selectionArgs = new String[] { query + "%"};
+
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                BookEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ID);
+            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED);
+            int imageColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_AUTHOR);
+            int durationColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PAGES);
+            int prodColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PUBLISHER);
+            int synopsisColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DESCRIPTION);
+
+            int dateColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DATE_TO_READ);
+            int notifColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_READ);
+            int archivedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                int currentDuration = cursor.getInt(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                book.setArchived((n == 1)? true : false);
+
+                mediaList.add(0, book);
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
+    }
+
+    private void getGames(String query){
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                //GameEntry._ID,
+                GameEntry.COLUMN_GAME_ID,
+                GameEntry.COLUMN_GAME_NAME,
+                GameEntry.COLUMN_GAME_GENRE,
+                GameEntry.COLUMN_GAME_YEAR_RELEASED,
+                GameEntry.COLUMN_GAME_IMG_DIR,
+
+                GameEntry.COLUMN_GAME_PLATFORM,
+                GameEntry.COLUMN_GAME_PUBLISHER,
+                GameEntry.COLUMN_GAME_SERIES,
+                GameEntry.COLUMN_GAME_STORYLINE,
+
+                GameEntry.COLUMN_GAME_DATE_TO_PLAY,
+                GameEntry.COLUMN_GAME_NOTIF_SETTINGS,
+                GameEntry.COLUMN_GAME_PLAYED,
+                GameEntry.COLUMN_GAME_ARCHIVED };
+
+        String selection = GameEntry.COLUMN_GAME_ARCHIVED + " LIKE ?";
+        String[] selectionArgs = new String[] { query + "%"};
+
+        Cursor cursor = getContentResolver().query(
+                GameEntry.CONTENT_URI,          // The content URI of the films table
+                projection,                     // The columns to return for each row
+                selection,                      // The columns for the WHERE clause; selection criteria
+                selectionArgs,                  // The values for the WHERE clause
+                GameEntry.COLUMN_LAST_UPDATE+" DESC");                // The sort order for the returned rows
+        try {
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ID);
+            int nameColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME);
+            int genreColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_GENRE);
+            int yearColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_YEAR_RELEASED);
+            int imageColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_IMG_DIR);
+
+            int directorColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLATFORM);
+            int durationColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PUBLISHER);
+            int prodColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_SERIES);
+            int synopsisColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_STORYLINE);
+
+            int dateColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
+            int notifColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
+            int watchedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLAYED);
+            int archivedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ARCHIVED);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                String currentID = cursor.getString(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentGenre = cursor.getString(genreColumnIndex);
+                String currentYear = cursor.getString(yearColumnIndex);
+                String currentImage = cursor.getString(imageColumnIndex);
+
+                String currentDirector = cursor.getString(directorColumnIndex);
+                String currentDuration = cursor.getString(durationColumnIndex);
+                String currentProd = cursor.getString(prodColumnIndex);
+                String currentSynopsis = cursor.getString(synopsisColumnIndex);
+
+                String currentDate = cursor.getString(dateColumnIndex);
+                String currentNotif = cursor.getString(notifColumnIndex);
+                String currentWatched = cursor.getString(watchedColumnIndex);
+                String currentArchived = cursor.getString(archivedColumnIndex);
+
+                Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                game.setArchived((n == 1)? true : false);
+
+                mediaList.add(0, game);
+            }
+        } finally {
+            // Always close the cursor when you're done reading from it. This releases all its
+            // resources and makes it invalid.
+            cursor.close();
+        }
+    }
+
+    private void updateSearchResultsUI(){
+        mediaAdapter.notifyDataSetChanged();
+        if (mediaList.size() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            // Set empty state text to display "No matching results :("
+            mEmptyStateTextView.setText(R.string.no_matching_results);
+            mEmptyStateTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private int getCategoryCode(Media media){
+        if(media instanceof Film){
+            return CategoryAdapter.CATEGORY_FILMS;
+        } else if(media instanceof Book){
+            return CategoryAdapter.CATEGORY_BOOKS;
+        } else {
+            return CategoryAdapter.CATEGORY_GAMES;
+        }
     }
 }
