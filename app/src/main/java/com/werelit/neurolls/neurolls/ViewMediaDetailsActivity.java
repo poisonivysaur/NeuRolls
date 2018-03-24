@@ -1,15 +1,20 @@
 package com.werelit.neurolls.neurolls;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +35,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
@@ -41,6 +47,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
+    private NotificationSettings notifSettings;
+    private String notifID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,51 +82,35 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-            Toast.makeText(this, "TO DO: set media to Archived!", Toast.LENGTH_SHORT).show();
-            // TODO db update happens here
+            willArchive = true;
+            preUpdateMedia(willArchive);
         }
         else if(item.getItemId() == R.id.action_share) {
-            Toast.makeText(this, "TO DO: Share by calling implicit intent!", Toast.LENGTH_SHORT).show();
-            // TODO Twitter api
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Check this out! #" + name.getText());
+            //shareIntent.putExtra(Intent.EXTRA_STREAM, "imagePath here");
+            //shareIntent.setType("image/*,text/plain");
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));
+
+            //shareToTwitter();
+
         }
         else if(item.getItemId() == R.id.action_save) {
-            //this.finish();
-            //Toast.makeText(this, "TO DO: insert new media to db!", Toast.LENGTH_SHORT).show();
-            // TODO db insertion happens here
-            switch (mediaCategory){
-                case Media.CATEGORY_FILMS:
-                    // Save film to db
-                    saveFilm();
-                    // Exit activity
-                    finish();
-                    break;
-                case Media.CATEGORY_BOOKS:
-                    // Save book to db
-                    saveBook();
-                    // Exit activity
-                    finish();
-                    break;
-                case Media.CATEGORY_GAMES:
-                    // Save game to db
-                    saveGame();
-                    // Exit activity
-                    finish();
-                    break;
-            }
+            saveMedia(willArchive);
+            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: set media to unarchived!", Toast.LENGTH_SHORT).show();
-            // TODO db update happens here
+            preUpdateMedia(willArchive);
         }
         else if(item.getItemId() == R.id.action_delete) {
-            //this.finish();
-            Toast.makeText(this, "TO DO: delete media from db!", Toast.LENGTH_SHORT).show();
-            // TODO db deletion happens here
+            showDeleteConfirmationDialog();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -159,6 +151,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
+
+                notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
 
                 // set the views of the xml layout to the attribute values
                 duration.setText("" + filmDuration);
@@ -215,10 +209,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
+            image = (ImageView) findViewById(R.id.image);
 
             name.setText("" + mediaName);
             genre.setText("" + mediaGenre);
             year.setText("" + mediaYear);
+
+            // TODO set image url
+            //image.setImageResource("TODO");
         }
     }
 
@@ -267,7 +265,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
-                displayNotifSettings(v);
+                if (!isArchived) {
+                    displayNotifSettings(v);
+                }
             }
         });
     }
@@ -277,12 +277,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         //Calls and displays NotificationSettings dialog
         if (view == findViewById(R.id.notif_settings)) {
             FragmentManager fm = getSupportFragmentManager();
-            NotificationSettings notifSettings = new NotificationSettings();
+            notifSettings = new NotificationSettings();
             notifSettings.show(fm, "Notification Settings");
+            notifSettings.setMediaName(name.getText().toString());////////////////////////////////////////////////
+            notifSettings.setNotifID(notifID);
+            notifSettings.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+            notifID = null;
         }
     }
 
-    private void saveFilm(){
+    private void saveFilm(boolean archiveFilm){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -300,17 +305,19 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
-        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
-        // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        // Determine if this is a new or existing film by checking if isForAdding is true or false
+
+        // Insert a new row into the provider using the ContentResolver.
+        // Use the {@link FilmEntry#CONTENT_URI} to indicate that we want to insert
+        // into the films database table.
+        // Receive the new content URI that will allow us to access data in the future.
         Uri newUri = getContentResolver().insert(FilmEntry.CONTENT_URI, values);
         showFeedback(newUri);
     }
 
-    private void saveBook(){
+    private void saveBook(boolean archiveBook){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -333,7 +340,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(){
+    private void saveGame(boolean archiveGame){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -356,6 +363,101 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
+    private void saveMedia(boolean archiveMedia){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                // Save film to db
+                saveFilm(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+            case Media.CATEGORY_BOOKS:
+                // Save book to db
+                saveBook(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+            case Media.CATEGORY_GAMES:
+                // Save game to db
+                saveGame(archiveMedia);
+                // Exit activity
+                finish();
+                break;
+        }
+    }
+
+    private void preUpdateMedia(boolean willArchive){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                // Save film to db
+                updateMedia(willArchive, FilmEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_BOOKS:
+                // Save book to db
+                updateMedia(willArchive, BookEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_GAMES:
+                // Save game to db
+                updateMedia(willArchive, GameEntry.CONTENT_URI);
+                break;
+        }
+    }
+
+    private void updateMedia(boolean archiveMedia, Uri uri){
+        ContentValues values = new ContentValues();
+        // check if film should be archived or unarchived
+        if(archiveMedia){
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
+        }
+        else{
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
+        }
+
+        Uri currentUri = getCurrentUri(uri);
+
+        int rowsAffected = getContentResolver().update(currentUri, values, null, null);
+
+        // Show a toast message depending on whether or not the update was successful.
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
+        }
+        finish();
+    }
+
+    private void deleteMedia(){
+        Uri currentUri = null;
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                currentUri = getCurrentUri(FilmEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_BOOKS:
+                currentUri = getCurrentUri(BookEntry.CONTENT_URI);
+                break;
+            case Media.CATEGORY_GAMES:
+                currentUri = getCurrentUri(GameEntry.CONTENT_URI);
+                break;
+        }
+        // Call the ContentResolver to delete the media at the given content URI.
+        // content URI already identifies the media that we want.
+        int rowsDeleted = getContentResolver().delete(currentUri, null, null);
+
+        // Show a toast message depending on whether or not the delete was successful.
+        if (rowsDeleted == 0) {
+            // If no rows were deleted, then there was an error with the delete.
+            Toast.makeText(this, getString(R.string.editor_delete_media_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the delete was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_delete_media_successful),
+                    Toast.LENGTH_SHORT).show();
+        }
+        finish();
+    }
+
     private void showFeedback(Uri uri){
         // Show a toast message depending on whether or not the insertion was successful.
         if (uri == null) {
@@ -366,5 +468,68 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Toast.makeText(this, "Successfully added " + bundle.getString(MediaKeys.MEDIA_NAME_KEY) + " to your list!",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Prompt the user to confirm that they want to delete this media.
+     */
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the media.
+                deleteMedia();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the media.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private Uri getCurrentUri(Uri uri){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                return ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+            case Media.CATEGORY_BOOKS:
+                return Uri.withAppendedPath(uri, bundle.getString(MediaKeys.MEDIA_ID_KEY));
+            case Media.CATEGORY_GAMES:
+                return ContentUris.withAppendedId(uri, Long.parseLong(bundle.getString(MediaKeys.MEDIA_ID_KEY)));
+            default: return null;
+        }
+    }
+
+    private void shareToTwitter(){
+        // Create intent using ACTION_VIEW and a normal Twitter url:
+        String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
+                StringUtils.urlEncode("Tweet sample text"),
+                StringUtils.urlEncode("https://www.google.fi/"));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+
+        // Narrow down to official Twitter app, if available:
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.twitter")) {
+                intent.setPackage(info.activityInfo.packageName);
+            }
+        }
+
+        startActivity(intent);
+    }
+
+    public boolean isForAdding() {
+        return isForAdding;
     }
 }

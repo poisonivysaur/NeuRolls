@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.data.MediaContract;
 import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
@@ -40,7 +41,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
-    /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
+    /** TextView that is displayed when the list is empty */    private View mEmptyStateTextView;
 
     private int mediaCategory = -1;
     private boolean isArchived = false;
@@ -91,7 +92,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         constraintLayout = rootView.findViewById(R.id.constraint_layout);
 
         // set visibility of the empty view to be GONE initially
-        mEmptyStateTextView = (TextView) rootView.findViewById(R.id.empty_view);
+        mEmptyStateTextView = (View) rootView.findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
 
         // add Media items into the Medias list
@@ -160,6 +161,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
                 bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
                 bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
+                bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
 
                 // TODO add image directory to bundle
 
@@ -203,37 +205,38 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void prepareMedias() {
 
         entertainments.clear();
-        Film dummyFilm = new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
-                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
-                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
-        Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
-        Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
-                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
-        dummyFilm.setArchived(true);
-        dummyBook.setArchived(true);
-        dummyGame.setArchived(true);
+//        Film dummyFilm = new Film("ID#1", "Sherlock Holmes", "Thriller/Action", "2009",
+//                "Guy Ritchie", 130, "Silver Pictures, Wigram Productions, Village Roadshow Pictures",
+//                "When a string of brutal murders terrorizes London, it doesn't take long for legendary detective Sherlock Holmes (Robert Downey Jr.) and his crime-solving partner, Dr. Watson (Jude Law), to find the killer, Lord Blackwood (Mark Strong). A devotee of the dark arts, Blackwood has a bigger scheme in mind, and his execution plays right into his plans. The game is afoot when Blackwood seems to rise from the grave, plunging Holmes and Watson into the world of the occult and strange technologies.");
+//        Book dummyBook = new Book("ID#1", "Charlotte's Web", "Children's literature", "1952", "E. B. White", 192, "Harper & Brothers", "Charlotte's Web is a children's novel by American author E. B. White and illustrated by Garth Williams; it was published on October 15, 1952, by Harper & Brothers.");
+//        Game dummyGame = new Game("ID#1", "Shadow the Hedgehog", "Platformer, action-adventure, third-person shooter", "2005",
+//                "Nintendo GameCube, PlayStation 2, Xbox", "Sega", "Sonic the Hedgehog", "Shadow the Hedgehog is a platform video game developed by Sega Studio USA, the former United States division of Sega's Sonic Team, and published by Sega.");
+//        dummyFilm.setArchived(true);
+//        dummyBook.setArchived(true);
+//        dummyGame.setArchived(true);
         switch (mediaCategory){
             case 0:
                 getFilms(isArchived? 1 : 0);
                 getBooks(isArchived? 1 : 0);
                 getGames(isArchived? 1 : 0);
-                entertainments.add(dummyFilm);
-                entertainments.add(dummyBook);
-                entertainments.add(dummyGame);
+//                entertainments.add(dummyFilm);
+//                entertainments.add(dummyBook);
+//                entertainments.add(dummyGame);
                 break;
             case 1:
                 getFilms(isArchived? 1 : 0);
-                entertainments.add(dummyFilm);
+//                entertainments.add(dummyFilm);
                 break;
             case 2:
                 getBooks(isArchived? 1 : 0);
-                entertainments.add(dummyBook);
+//                entertainments.add(dummyBook);
                 break;
             case 3:
                 getGames(isArchived? 1 : 0);
-                entertainments.add(dummyGame);
+//                entertainments.add(dummyGame);
                 break;
         }
+        shouldDisplayEmptyView();
     }
 
     private void getFilms(int isArchived){
@@ -304,7 +307,12 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                film.setArchived((n == 1)? true : false);
+                film.setNotifSettings(currentNotif);
+                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
+                entertainments.add(0, film);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -393,7 +401,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                book.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, book);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -482,7 +494,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                entertainments.add(0, new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
+                Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
+                int n = Integer.parseInt(currentArchived);
+                game.setArchived((n == 1)? true : false);
+
+                entertainments.add(0, game);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -544,12 +560,30 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     private void shouldDisplayEmptyView(){
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
+            TextView title = (TextView) mEmptyStateTextView.findViewById(R.id.empty_title_text);
+            TextView subtitle = (TextView) mEmptyStateTextView.findViewById(R.id.empty_subtitle_text);
             switch (isArchived ? 1 : 0){
                 case 1:
-                    mEmptyStateTextView.setText("You have no archived media.");
+                    //mEmptyStateTextView.setText("You have no archived media.");
+                    title.setText(R.string.empty_archived_view_subtitle_text);
+                    subtitle.setText("");
                     break;
                 case 0:
-                    mEmptyStateTextView.setText("You have no media :(");
+                    title.setText(R.string.empty_view_title_text);
+                    switch (mediaCategory){
+                        case CategoryAdapter.CATEGORY_ALL:
+                            subtitle.setText(R.string.empty_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_FILMS:
+                            subtitle.setText(R.string.empty_film_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_BOOKS:
+                            subtitle.setText(R.string.empty_book_view_subtitle_text);
+                            break;
+                        case CategoryAdapter.CATEGORY_GAMES:
+                            subtitle.setText(R.string.empty_game_view_subtitle_text);
+                            break;
+                    }
                     break;
             }
             mEmptyStateTextView.setVisibility(View.VISIBLE);
