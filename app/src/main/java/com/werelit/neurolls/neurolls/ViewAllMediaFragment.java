@@ -1,7 +1,9 @@
 package com.werelit.neurolls.neurolls;
 
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -125,6 +128,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // use a linear layout manager for the recycler view
         mLayoutManager = new LinearLayoutManager(rootView.getContext());
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator()); // does not change anything
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // This draws a line separator for each row, but card views are used so no need for this
@@ -520,11 +524,12 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             String action = " archived!";
             if(!deletedItem.isArchived()){  // if item is not yet archived
                 deletedItem.setArchived(true);  // archive it!
-                updateMedia(getContentUri(deletedItem), deletedItem);
+                updateMedia(getContentUri(deletedItem), deletedItem, true);
             }
             if(isArchived){
-                action = " deleted from media roll!";
-                deleteMedia(getContentUri(deletedItem), deletedItem);
+                //action = " deleted from media roll!";
+                //deleteMedia(getContentUri(deletedItem), deletedItem);
+                showDeleteConfirmationDialog(deletedItem, deletedIndex);
             }
 
             // remove the item from recycler view
@@ -533,29 +538,29 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             // showing snack bar with Undo option
 
-            Snackbar snackbar = Snackbar
-                    .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            if(!isArchived) {
+                Snackbar snackbar = Snackbar
+                        .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    // undo is selected, restore the deleted item
-                    if(deletedItem.isArchived()){
-                        deletedItem.setArchived(false);
+                        // undo is selected, restore back to how it was before
+                        if (deletedItem.isArchived()) { // if it was archived, then unarchive it
+                            deletedItem.setArchived(false);
+                            updateMedia(getContentUri(deletedItem), deletedItem, false);
+                        }
+
+                        mAdapter.restoreItem(deletedItem, deletedIndex);
+                        mEmptyStateTextView.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+
                     }
+                });
+                snackbar.setActionTextColor(Color.YELLOW);
 
-                    mAdapter.restoreItem(deletedItem, deletedIndex);
-                    mEmptyStateTextView.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-
-            snackbar.show();
-
-            // TODO perform DELETE on the db if an item was removed completely & if that media is already archived
-            // TODO if it just archived, then UPDATE the db only and not DELETE
+                snackbar.show();
+            }
         }
     }
 
@@ -596,9 +601,14 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-    private void updateMedia(Uri uri, Media media){  // media will always be archived upon udpate
+    private void updateMedia(Uri uri, Media media, boolean willArchive){
         ContentValues values = new ContentValues();
-        values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
+        if(willArchive){
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
+        }
+        else{
+            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
+        }
 
         Uri currentUri = getCurrentUri(uri, media);
 
@@ -631,6 +641,38 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             Toast.makeText(rootView.getContext(), getString(R.string.editor_delete_media_successful),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Prompt the user to confirm that they want to delete this media.
+     */
+    private void showDeleteConfirmationDialog(final Media deletedItem, final int deletedIndex) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the media.
+                deleteMedia(getContentUri(deletedItem), deletedItem);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the media.
+                if (dialog != null) {
+                    mAdapter.restoreItem(deletedItem, deletedIndex);
+                    mEmptyStateTextView.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private Uri getCurrentUri(Uri uri, Media media){
