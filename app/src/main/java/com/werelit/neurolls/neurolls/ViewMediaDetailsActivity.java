@@ -292,7 +292,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
     }
 
-    private void saveFilm(boolean archiveFilm){
+    private void saveFilm(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -322,7 +322,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveBook(boolean archiveBook){
+    private void saveBook(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -345,7 +345,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(boolean archiveGame){
+    private void saveGame(){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -432,7 +432,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         finish();
     }
 
-
     private void deleteMedia(Uri uri){
         Uri currentUri = getCurrentUri(uri);
 
@@ -505,6 +504,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             default: return null;
         }
     }
+
     private Uri getContentUri(){
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
