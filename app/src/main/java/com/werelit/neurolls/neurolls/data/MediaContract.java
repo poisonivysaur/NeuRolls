@@ -65,6 +65,7 @@ public class MediaContract {
 
         public static final String COLUMN_FILM_DATE_TO_WATCH = "date_to_watch";
         public static final String COLUMN_FILM_NOTIF_SETTINGS = "notif_settings";
+        public static final String COLUMN_FILM_NOTIF_TIME = "notif_time";
         public static final String COLUMN_FILM_WATCHED = "isWatched";
         public static final String COLUMN_FILM_ARCHIVED = "isArchived";
 
@@ -104,6 +105,7 @@ public class MediaContract {
 
         public static final String COLUMN_BOOK_DATE_TO_READ = "date_to_read";
         public static final String COLUMN_BOOK_NOTIF_SETTINGS = "notif_settings";
+        public static final String COLUMN_BOOK_NOTIF_TIME = "notif_time";
         public static final String COLUMN_BOOK_READ = "isRead";
         public static final String COLUMN_BOOK_ARCHIVED = "isArchived";
 
@@ -143,6 +145,7 @@ public class MediaContract {
 
         public static final String COLUMN_GAME_DATE_TO_PLAY = "date_to_play";
         public static final String COLUMN_GAME_NOTIF_SETTINGS = "notif_settings";
+        public static final String COLUMN_GAME_NOTIF_TIME = "notif_time";
         public static final String COLUMN_GAME_PLAYED = "isPlayed";
         public static final String COLUMN_GAME_ARCHIVED = "isArchived";
 
