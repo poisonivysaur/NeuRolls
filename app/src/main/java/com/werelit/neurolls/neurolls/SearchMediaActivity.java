@@ -238,6 +238,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mediaList.clear();
                 if(searchType > 0) {    // if not internal search
                     // Get a reference to the ConnectivityManager to check state of network connectivity
                     ConnectivityManager connMgr = (ConnectivityManager)
