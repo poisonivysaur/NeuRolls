@@ -73,7 +73,8 @@ public class JsonConverter {
                 String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
-                String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
+                String publishedDate = curObj.getJSONObject("volumeInfo").optString("publishedDate");
+                publishedDate = formatBookPublishedDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
             }
@@ -163,4 +164,28 @@ public class JsonConverter {
         return f;
     }
 
+
+
+    private static String formatBookPublishedDate(String publishedDate){
+        if(TextUtils.isEmpty(publishedDate))
+            return "2019-01-01";
+        String returnDate = "";
+        String[] splitPublishedDate = publishedDate.split("-");
+
+        switch (splitPublishedDate.length){
+            case 1:
+                returnDate = splitPublishedDate[0] + "-01-01";
+                break;
+            case 2:
+                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-01";
+                break;
+            case 3:
+                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-" + splitPublishedDate[2];
+                break;
+            default:
+                returnDate = "2019-01-01";
+        }
+
+        return returnDate;
+    }
 }
