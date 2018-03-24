@@ -34,9 +34,8 @@ public class JsonConverter {
                 JSONObject curObj = jsonArr.getJSONObject(i);
                 String id = "" + curObj.getInt("id");
                 String title = curObj.getString("title");
-                String releaseDate = curObj.getString("release_date");
-                if (releaseDate.equals(""))
-                    releaseDate = "Unreleased";
+                String releaseDate = curObj.optString("release_date");
+                releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
                 String imageSource = "";
                 if(curObj.optString("poster_path") != null){
@@ -73,7 +72,8 @@ public class JsonConverter {
                 String author = ConnectBookDB.getAuthor(curObj.getJSONObject("volumeInfo").getJSONArray("authors"));
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
-                String publishedDate = curObj.getJSONObject("volumeInfo").getString("publishedDate");
+                String publishedDate = curObj.getJSONObject("volumeInfo").optString("publishedDate");
+                publishedDate = formatDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
             }
@@ -137,8 +137,7 @@ public class JsonConverter {
             String id = Integer.toString(baseObject.getInt("id"));
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
-            if(filmRelease == null)
-                filmRelease = "No Release Date";
+            filmRelease = formatDate(filmRelease);
             String genre = "No Genres";
             if(genres != null)
                 genre = ConnectMovieDB.getGenreV2(genres);
@@ -163,4 +162,28 @@ public class JsonConverter {
         return f;
     }
 
+
+
+    private static String formatDate(String publishedDate){
+        if(TextUtils.isEmpty(publishedDate))
+            return "9999-01-01";
+        String returnDate = "";
+        String[] splitPublishedDate = publishedDate.split("-");
+
+        switch (splitPublishedDate.length){
+            case 1:
+                returnDate = splitPublishedDate[0] + "-01-01";
+                break;
+            case 2:
+                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-01";
+                break;
+            case 3:
+                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-" + splitPublishedDate[2];
+                break;
+            default:
+                returnDate = "9999-01-01";
+        }
+
+        return returnDate;
+    }
 }
