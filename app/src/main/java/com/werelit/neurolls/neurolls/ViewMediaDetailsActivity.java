@@ -86,9 +86,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-          updateMedia(getContentUri());
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -103,13 +102,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
-            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
+            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-          updateMedia(getContentUri());
+            updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
