@@ -14,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +35,8 @@ import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -84,8 +88,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-            willArchive = true;
-            preUpdateMedia(willArchive);
+          updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -97,17 +100,16 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));
 
             //shareToTwitter();
-
         }
         else if(item.getItemId() == R.id.action_save) {
-            saveMedia(willArchive);
+            saveMedia();
             notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            preUpdateMedia(willArchive);
+          updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
@@ -254,7 +256,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 dateTextView.setText(StringDateformat_US);
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.show();
+                if(!isArchived){
+                    datePickerDialog.show();
+                }
+
                 //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -265,7 +270,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Notif Settings Modal!", Toast.LENGTH_SHORT).show();
-                if (!isArchived) {
+                if(!isArchived){
                     displayNotifSettings(v);
                 }
             }
@@ -362,51 +367,50 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
         showFeedback(newUri);
     }
+  
+    private void saveMedia(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date releaseYear = null;
 
-    private void saveMedia(boolean archiveMedia){
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                // Save film to db
-                saveFilm(archiveMedia);
-                // Exit activity
-                finish();
-                break;
-            case Media.CATEGORY_BOOKS:
-                // Save book to db
-                saveBook(archiveMedia);
-                // Exit activity
-                finish();
-                break;
-            case Media.CATEGORY_GAMES:
-                // Save game to db
-                saveGame(archiveMedia);
-                // Exit activity
-                finish();
-                break;
+        try {
+            releaseYear = format.parse(bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date today = new Date();
+
+        if (releaseYear.compareTo(today) <= 0) {
+            System.out.println("earlier");
+            switch (mediaCategory){
+                case Media.CATEGORY_FILMS:
+                    // Save film to db
+                    saveFilm();
+                    // Exit activity
+                    finish();
+                    break;
+                case Media.CATEGORY_BOOKS:
+                    // Save book to db
+                    saveBook();
+                    // Exit activity
+                    finish();
+                    break;
+                case Media.CATEGORY_GAMES:
+                    // Save game to db
+                    saveGame();
+                    // Exit activity
+                    finish();
+                    break;
+            }
+        }
+        else {
+            Toast.makeText(this, "Media not yet released yet :(", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void preUpdateMedia(boolean willArchive){
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                // Save film to db
-                updateMedia(willArchive, FilmEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_BOOKS:
-                // Save book to db
-                updateMedia(willArchive, BookEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_GAMES:
-                // Save game to db
-                updateMedia(willArchive, GameEntry.CONTENT_URI);
-                break;
-        }
-    }
-
-    private void updateMedia(boolean archiveMedia, Uri uri){
+    private void updateMedia(Uri uri){
         ContentValues values = new ContentValues();
         // check if film should be archived or unarchived
-        if(archiveMedia){
+        if(!isArchived){
             values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
         }
         else{
@@ -428,19 +432,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         finish();
     }
 
-    private void deleteMedia(){
-        Uri currentUri = null;
-        switch (mediaCategory){
-            case Media.CATEGORY_FILMS:
-                currentUri = getCurrentUri(FilmEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_BOOKS:
-                currentUri = getCurrentUri(BookEntry.CONTENT_URI);
-                break;
-            case Media.CATEGORY_GAMES:
-                currentUri = getCurrentUri(GameEntry.CONTENT_URI);
-                break;
-        }
+
+    private void deleteMedia(Uri uri){
+        Uri currentUri = getCurrentUri(uri);
+
         // Call the ContentResolver to delete the media at the given content URI.
         // content URI already identifies the media that we want.
         int rowsDeleted = getContentResolver().delete(currentUri, null, null);
@@ -481,7 +476,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the media.
-                deleteMedia();
+                deleteMedia(getContentUri());
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -510,7 +505,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             default: return null;
         }
     }
-
+    private Uri getContentUri(){
+        switch (mediaCategory){
+            case Media.CATEGORY_FILMS:
+                return FilmEntry.CONTENT_URI;
+            case Media.CATEGORY_BOOKS:
+                return BookEntry.CONTENT_URI;
+            default:
+                return GameEntry.CONTENT_URI;
+        }
+    }
+  
     private void shareToTwitter(){
         // Create intent using ACTION_VIEW and a normal Twitter url:
         String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
@@ -528,7 +533,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         startActivity(intent);
     }
-
+  
     public boolean isForAdding() {
         return isForAdding;
     }

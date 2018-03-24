@@ -1,19 +1,14 @@
 package com.werelit.neurolls.neurolls;
 
-import android.app.AlertDialog;
-import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -22,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.werelit.neurolls.neurolls.data.MediaContract;
 import com.werelit.neurolls.neurolls.data.NeurollsDbHelper;
@@ -38,12 +32,12 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class ViewAllMediaCursorFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     public static final String LOG_TAG = ViewAllMediaFragment.class.getSimpleName();
     /** The list containing Media objects */                    private List<Media> entertainments;
     /** The recycler view containing the Media items */         private RecyclerView mRecyclerView;
-    /** The adapter used for the recycler view */               private MediaAdapter mAdapter;
+    /** The adapter used for the recycler view */               private MediaCursorAdapter mAdapter;
     /** The layout manager for the recycler view */             private RecyclerView.LayoutManager mLayoutManager;
     /** The layout for the snackbar with undo delete */         private ConstraintLayout constraintLayout;
     /** TextView that is displayed when the list is empty */    private View mEmptyStateTextView;
@@ -53,11 +47,11 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
     private View rootView;
 
-    public ViewAllMediaFragment(){
+    public ViewAllMediaCursorFragment(){
 
     }
 
-    public ViewAllMediaFragment(int mediaCategory){
+    public ViewAllMediaCursorFragment(int mediaCategory){
         this.mediaCategory = mediaCategory;
     }
 
@@ -66,10 +60,10 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         if(isArchived){
             // query here later on for isArchived attribute from the db for the entertainments array list
             // TODO enetertainments = dbHelper.query ...
-            mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
+            //mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
         }
         else {
-            mAdapter = new MediaAdapter(entertainments, mediaCategory);
+            //mAdapter = new MediaAdapter(entertainments, mediaCategory);
         }
         if(mRecyclerView != null) {
             mRecyclerView.setAdapter(mAdapter);
@@ -128,7 +122,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // use a linear layout manager for the recycler view
         mLayoutManager = new LinearLayoutManager(rootView.getContext());
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator()); // does not change anything
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // This draws a line separator for each row, but card views are used so no need for this
@@ -136,10 +129,10 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
         // specify an adapter
         if(isArchived){
-            mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
+            //mAdapter = new MediaAdapter(entertainments, mediaCategory, isArchived);
         }
         else {
-            mAdapter = new MediaAdapter(entertainments, mediaCategory);
+            //mAdapter = new MediaAdapter(entertainments, mediaCategory);
         }
 
         mRecyclerView.setAdapter(mAdapter);
@@ -167,7 +160,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
                 bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
                 bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
-                bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
 
                 // TODO add image directory to bundle
 
@@ -242,7 +234,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 //                entertainments.add(dummyGame);
                 break;
         }
-        shouldDisplayEmptyView();
     }
 
     private void getFilms(int isArchived){
@@ -313,12 +304,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
-                int n = Integer.parseInt(currentArchived);
-                film.setArchived((n == 1)? true : false);
-                film.setNotifSettings(currentNotif);
-                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
-                entertainments.add(0, film);
+                entertainments.add(0, new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -407,11 +393,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
-                int n = Integer.parseInt(currentArchived);
-                book.setArchived((n == 1)? true : false);
-
-                entertainments.add(0, book);
+                entertainments.add(0, new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -500,11 +482,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
-                Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
-                int n = Integer.parseInt(currentArchived);
-                game.setArchived((n == 1)? true : false);
-
-                entertainments.add(0, game);
+                entertainments.add(0, new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -526,12 +504,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             String action = " archived!";
             if(!deletedItem.isArchived()){  // if item is not yet archived
                 deletedItem.setArchived(true);  // archive it!
-                updateMedia(getContentUri(deletedItem), deletedItem, true);
             }
             if(isArchived){
-                //action = " deleted from media roll!";
-                //deleteMedia(getContentUri(deletedItem), deletedItem);
-                showDeleteConfirmationDialog(deletedItem, deletedIndex);
+                action = " deleted from media roll!";
             }
 
             // remove the item from recycler view
@@ -540,29 +515,29 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             // showing snack bar with Undo option
 
-            if(!isArchived) {
-                Snackbar snackbar = Snackbar
-                        .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
-                snackbar.setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+            Snackbar snackbar = Snackbar
+                    .make(constraintLayout, name + action, Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                        // undo is selected, restore back to how it was before
-                        if (deletedItem.isArchived()) { // if it was archived, then unarchive it
-                            deletedItem.setArchived(false);
-                            updateMedia(getContentUri(deletedItem), deletedItem, false);
-                        }
-
-                        mAdapter.restoreItem(deletedItem, deletedIndex);
-                        mEmptyStateTextView.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-
+                    // undo is selected, restore the deleted item
+                    if(deletedItem.isArchived()){
+                        deletedItem.setArchived(false);
                     }
-                });
-                snackbar.setActionTextColor(Color.YELLOW);
 
-                snackbar.show();
-            }
+                    mAdapter.restoreItem(deletedItem, deletedIndex);
+                    mEmptyStateTextView.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+
+            snackbar.show();
+
+            // TODO perform DELETE on the db if an item was removed completely & if that media is already archived
+            // TODO if it just archived, then UPDATE the db only and not DELETE
         }
     }
 
@@ -574,25 +549,12 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             switch (isArchived ? 1 : 0){
                 case 1:
                     //mEmptyStateTextView.setText("You have no archived media.");
-                    title.setText(R.string.empty_archived_view_subtitle_text);
+                    title.setText("You have no archived media.");
                     subtitle.setText("");
                     break;
                 case 0:
                     title.setText(R.string.empty_view_title_text);
-                    switch (mediaCategory){
-                        case CategoryAdapter.CATEGORY_ALL:
-                            subtitle.setText(R.string.empty_view_subtitle_text);
-                            break;
-                        case CategoryAdapter.CATEGORY_FILMS:
-                            subtitle.setText(R.string.empty_film_view_subtitle_text);
-                            break;
-                        case CategoryAdapter.CATEGORY_BOOKS:
-                            subtitle.setText(R.string.empty_book_view_subtitle_text);
-                            break;
-                        case CategoryAdapter.CATEGORY_GAMES:
-                            subtitle.setText(R.string.empty_game_view_subtitle_text);
-                            break;
-                    }
+                    subtitle.setText(R.string.empty_view_subtitle_text);
                     break;
             }
             mEmptyStateTextView.setVisibility(View.VISIBLE);
@@ -600,100 +562,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         else {
             mEmptyStateTextView.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void updateMedia(Uri uri, Media media, boolean willArchive){
-        ContentValues values = new ContentValues();
-        if(willArchive){
-            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "1");
-        }
-        else{
-            values.put(FilmEntry.COLUMN_FILM_ARCHIVED, "0");
-        }
-
-        Uri currentUri = getCurrentUri(uri, media);
-
-        int rowsAffected = rootView.getContext().getContentResolver().update(currentUri, values, null, null);
-
-        // Show a toast message depending on whether or not the update was successful.
-        if (rowsAffected == 0) {
-            // If no rows were affected, then there was an error with the update.
-            Toast.makeText(rootView.getContext(), getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(rootView.getContext(), getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void deleteMedia(Uri uri, Media media){
-        Uri currentUri = getCurrentUri(uri, media);
-
-        // Call the ContentResolver to delete the media at the given content URI.
-        // content URI already identifies the media that we want.
-        int rowsDeleted = rootView.getContext().getContentResolver().delete(currentUri, null, null);
-
-        // Show a toast message depending on whether or not the delete was successful.
-        if (rowsDeleted == 0) {
-            // If no rows were deleted, then there was an error with the delete.
-            Toast.makeText(rootView.getContext(), getString(R.string.editor_delete_media_failed),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the delete was successful and we can display a toast.
-            Toast.makeText(rootView.getContext(), getString(R.string.editor_delete_media_successful),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Prompt the user to confirm that they want to delete this media.
-     */
-    private void showDeleteConfirmationDialog(final Media deletedItem, final int deletedIndex) {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
-        builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the media.
-                deleteMedia(getContentUri(deletedItem), deletedItem);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the media.
-                if (dialog != null) {
-                    mAdapter.restoreItem(deletedItem, deletedIndex);
-                    mEmptyStateTextView.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private Uri getCurrentUri(Uri uri, Media media){
-        if(media instanceof Film){
-            return ContentUris.withAppendedId(uri, Long.parseLong(media.getMediaID()));
-        } else if(media instanceof Book){
-            return Uri.withAppendedPath(uri, media.getMediaID());
-        } else {
-            return ContentUris.withAppendedId(uri, Long.parseLong(media.getMediaID()));
-        }
-    }
-
-    private Uri getContentUri(Media media){
-        if(media instanceof Film){
-            return FilmEntry.CONTENT_URI;
-        } else if(media instanceof Book){
-            return BookEntry.CONTENT_URI;
-        } else {
-            return GameEntry.CONTENT_URI;
         }
     }
 }

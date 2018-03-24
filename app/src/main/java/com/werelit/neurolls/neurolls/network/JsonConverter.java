@@ -38,11 +38,16 @@ public class JsonConverter {
                 if (releaseDate.equals(""))
                     releaseDate = "Unreleased";
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
+                String imageSource = "";
+                if(curObj.optString("poster_path") != null){
+                    imageSource = ConnectMovieDB.API_MOVIE_IMAGE_PATH + curObj.getString("poster_path");
+                }
                 Film m = new Film();
                 m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
+                m.setImageDir(imageSource);
                 films.add(m);
             }
         }catch(JSONException e){
@@ -118,4 +123,44 @@ public class JsonConverter {
 
         return games;
     }
+
+    public static Film revisedSpecificFilm(String filmJson){
+        if(TextUtils.isEmpty(filmJson))
+            return null;
+        Film f = null;
+
+        try{
+            JSONObject baseObject = new JSONObject(filmJson);
+            JSONArray genres = baseObject.optJSONArray("genres");
+            JSONArray crews = baseObject.getJSONObject("credits").optJSONArray("crew");
+
+            String id = Integer.toString(baseObject.getInt("id"));
+            String filmTitle = baseObject.getString("title");
+            String filmRelease = baseObject.optString("release_date");
+            if(filmRelease == null)
+                filmRelease = "No Release Date";
+            String genre = "No Genres";
+            if(genres != null)
+                genre = ConnectMovieDB.getGenreV2(genres);
+            int duration = baseObject.optInt("runtime");
+
+            String director = "No Director";
+            if(crews != null)
+                director = ConnectMovieDB.getDirector(crews);
+            String productionCompany = "";
+            if(baseObject.optJSONArray("production_companies") != null)
+                productionCompany = ConnectMovieDB.getProduction(baseObject.getJSONArray("production_companies"));
+            String synopsis = "";
+            if(baseObject.optString("overview") != null)
+                synopsis = baseObject.getString("overview");
+
+            f = new Film(id, filmTitle, genre, filmRelease, director, duration, productionCompany, synopsis);
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return f;
+    }
+
 }
