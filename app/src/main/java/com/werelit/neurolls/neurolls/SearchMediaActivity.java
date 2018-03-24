@@ -602,7 +602,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 BookEntry.COLUMN_BOOK_READ,
                 BookEntry.COLUMN_BOOK_ARCHIVED };
 
-        String selection = BookEntry.COLUMN_BOOK_ARCHIVED + " LIKE ?";
+        String selection = BookEntry.COLUMN_BOOK_NAME + " LIKE ?";
         String[] selectionArgs = new String[] { query + "%"};
 
         Cursor cursor = getContentResolver().query(
@@ -683,7 +683,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 GameEntry.COLUMN_GAME_PLAYED,
                 GameEntry.COLUMN_GAME_ARCHIVED };
 
-        String selection = GameEntry.COLUMN_GAME_ARCHIVED + " LIKE ?";
+        String selection = GameEntry.COLUMN_GAME_NAME + " LIKE ?";
         String[] selectionArgs = new String[] { query + "%"};
 
         Cursor cursor = getContentResolver().query(
