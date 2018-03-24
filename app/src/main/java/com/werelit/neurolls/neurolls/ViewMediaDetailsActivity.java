@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.network.StringUtils;
@@ -52,6 +51,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
+    private NotificationSettings notifSettings;
+    private String notifID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,8 +86,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean willArchive = false;
         if(item.getItemId() == R.id.action_archive) {
-            updateMedia(getContentUri());
+          updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -101,12 +103,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
+            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
         }
         else if(item.getItemId() == R.id.action_unarchive) {
-            updateMedia(getContentUri());
+          updateMedia(getContentUri());
         }
         else if(item.getItemId() == R.id.action_delete) {
             showDeleteConfirmationDialog();
@@ -150,6 +153,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
+
+                notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
 
                 // set the views of the xml layout to the attribute values
                 duration.setText("" + filmDuration);
@@ -277,12 +282,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         //Calls and displays NotificationSettings dialog
         if (view == findViewById(R.id.notif_settings)) {
             FragmentManager fm = getSupportFragmentManager();
-            NotificationSettings notifSettings = new NotificationSettings();
+            notifSettings = new NotificationSettings();
             notifSettings.show(fm, "Notification Settings");
+            notifSettings.setMediaName(name.getText().toString());////////////////////////////////////////////////
+            notifSettings.setNotifID(notifID);
+            notifSettings.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+            notifID = null;
         }
     }
 
-    private void saveFilm(){
+    private void saveFilm(boolean archiveFilm){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -300,7 +310,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
-        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
 
@@ -312,7 +322,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveBook(){
+    private void saveBook(boolean archiveBook){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -335,7 +345,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         showFeedback(newUri);
     }
 
-    private void saveGame(){
+    private void saveGame(boolean archiveGame){
 
         // Create a ContentValues object where column names are the keys
         ContentValues values = new ContentValues();
@@ -357,7 +367,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
         showFeedback(newUri);
     }
-
+  
     private void saveMedia(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date releaseYear = null;
@@ -421,6 +431,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         finish();
     }
+
 
     private void deleteMedia(Uri uri){
         Uri currentUri = getCurrentUri(uri);
@@ -494,7 +505,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             default: return null;
         }
     }
-
     private Uri getContentUri(){
         switch (mediaCategory){
             case Media.CATEGORY_FILMS:
@@ -505,7 +515,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 return GameEntry.CONTENT_URI;
         }
     }
-
+  
     private void shareToTwitter(){
         // Create intent using ACTION_VIEW and a normal Twitter url:
         String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
@@ -522,5 +532,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
 
         startActivity(intent);
+    }
+  
+    public boolean isForAdding() {
+        return isForAdding;
     }
 }

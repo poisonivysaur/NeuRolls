@@ -35,6 +35,10 @@ public class NotificationSettings extends DialogFragment {
     private Spinner spinner;
     public static final String PREFS_NAME = "MyPrefsFile";
     private int count;
+    private long delay;
+    private boolean isForAdding = true;
+    private String notifID;
+    private String mediaName;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -110,12 +114,21 @@ public class NotificationSettings extends DialogFragment {
                         Log.d("MONTHS", "" + monthsToMillis);
                         Log.d("SECONDS", "" + secsToMillis);
 
-                        long total = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
+                        delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
 
-                        Log.d("TOTAL", total + "");
-                        scheduleNotification(getNotification(total + ""), total);
-                        Toast.makeText(getContext(), total + " ms delay", Toast.LENGTH_SHORT).show();
+                        Log.d("TOTAL", delay + "");
 
+                        if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
+                            scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
+                            Toast.makeText(getContext(), mediaName, Toast.LENGTH_SHORT).show();
+                        }
+
+                        SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putInt("count", count);
+
+                        editor.apply();
+                        Log.d("WORKING?", "count saved" + count);
                     }
                 });
 
@@ -179,29 +192,35 @@ public class NotificationSettings extends DialogFragment {
 //        }
 //    }
 
-    private void scheduleNotification(Notification notification, long delay) {
+    public void scheduleNotification(Notification notification, long delay, Context context) {
 
         //initiates new notification intent
-        Intent notificationIntent = new Intent(getContext(), NotificationPublisher.class);
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);///////////////////////////////////////////////////////
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1); //adds notificationpublisher id constant 1
-        count ++;
-        notificationIntent.setAction("" + count);
+        if (notifID != null) {
+            notificationIntent.setAction(notifID);
+            Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
+        } else {
+            notificationIntent.setAction("" + count);
+            count ++;
+        }
+
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //sets notification runtime in milliseconds
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         //gets system alarm service
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //sets notification runtime in alarm service when it will notify
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    private Notification getNotification(String content) {
+    public Notification getNotification(String content, Context context) {
         //initiates notification builder
-        Notification.Builder builder = new Notification.Builder(getContext());
+        Notification.Builder builder = new Notification.Builder(context);///////////////////////////////////
 
         //sets notificationbuilder properties
         builder.setContentTitle("Time to check off that movie ;)");
@@ -212,7 +231,23 @@ public class NotificationSettings extends DialogFragment {
         return builder.build();
     }
 
-    @Override
+    public long getDelay() {
+        return delay;
+    }
+
+    public void setForAdding(boolean isForAdding) {
+        this.isForAdding = isForAdding;
+    }
+
+    public void setNotifID(String notifID) {
+        this.notifID = notifID;
+    }
+
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
+
+    /*@Override
     public void onStop() {
         super.onStop();
 
@@ -222,5 +257,5 @@ public class NotificationSettings extends DialogFragment {
 
         editor.apply();
         Log.d("onStop", "count saved" + count);
-    }
+    }*/
 }
