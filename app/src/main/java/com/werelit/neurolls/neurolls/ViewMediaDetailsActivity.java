@@ -249,7 +249,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 dateTextView.setText(StringDateformat_US);
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.show();
+                if(!isArchived){
+                    datePickerDialog.show();
+                }
+
                 //Toast.makeText(ViewMediaDetailsActivity.this, "TO DO: Date Picker!", Toast.LENGTH_SHORT).show();
             }
         });
