@@ -518,6 +518,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             String action = " archived!";
             if(!deletedItem.isArchived()){  // if item is not yet archived
                 deletedItem.setArchived(true);  // archive it!
+
             }
             if(isArchived){
                 action = " deleted from media roll!";
@@ -592,119 +593,5 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the films database.
-     *//*
-    private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                FilmEntry._ID,
-                FilmEntry.COLUMN_FILM_ID,
-                FilmEntry.COLUMN_FILM_NAME,
-                FilmEntry.COLUMN_FILM_GENRE,
-                FilmEntry.COLUMN_FILM_YEAR_RELEASED,
-                FilmEntry.COLUMN_FILM_IMG_DIR,
-
-                FilmEntry.COLUMN_FILM_DIRECTOR,
-                FilmEntry.COLUMN_FILM_DURATION,
-                FilmEntry.COLUMN_FILM_PRODUCTION,
-                FilmEntry.COLUMN_FILM_SYNOPSIS,
-
-                FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
-                FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
-                FilmEntry.COLUMN_FILM_WATCHED,
-                FilmEntry.COLUMN_FILM_ARCHIVED };
-
-        // Perform a query on the pets table
-        Cursor cursor = db.query(
-                FilmEntry.TABLE_NAME,   // The table to query
-                projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                null);                   // The sort order
-
-        //TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-
-        try {
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ID);
-            int nameColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NAME);
-            int genreColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_GENRE);
-            int yearColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_YEAR_RELEASED);
-            int imageColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_IMG_DIR);
-
-            int directorColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DIRECTOR);
-            int durationColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DURATION);
-            int prodColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_PRODUCTION);
-            int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
-
-            int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
-            int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
-            int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
-            int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                String currentID = cursor.getString(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                String currentGenre = cursor.getString(genreColumnIndex);
-                String currentYear = cursor.getString(yearColumnIndex);
-                String currentImage = cursor.getString(imageColumnIndex);
-
-                String currentDirector = cursor.getString(directorColumnIndex);
-                int currentDuration = cursor.getInt(durationColumnIndex);
-                String currentProd = cursor.getString(prodColumnIndex);
-                String currentSynopsis = cursor.getString(synopsisColumnIndex);
-
-                String currentDate = cursor.getString(dateColumnIndex);
-                String currentNotif = cursor.getString(notifColumnIndex);
-                String currentWatched = cursor.getString(watchedColumnIndex);
-                String currentArchived = cursor.getString(archivedColumnIndex);
-
-                //entertainments.add(new Film(currentID, currentName, currentGenre, currentYear, currentDuration, currentDirector, currentProd, currentSynopsis));
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
-    }
-    */
-
-    /**
-     * Helper method to insert hardcoded media data into the database. For debugging purposes only.
-     *//*
-    private void insertMedia() {
-
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // Create a ContentValues object where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_ID, "Test ID");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_NAME, "Astro Boy");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_GENRE, "Action/Adventure");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_YEAR_RELEASED, "2009-03-10");
-
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_DIRECTOR, "David Bowers");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_DURATION, 94);
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_PRODUCTION, "Imagi Animation Studios");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_SYNOPSIS, "In futuristic Metro City, a brilliant scientist named Tenma builds Astro Boy (Freddie Highmore), a robotic child with superstrength, X-ray vision and the ability to fly. Astro Boy sets out to explore the world and find acceptance, learning what being human is all about in the process. Finding that his friends and family in Metro City are in danger, he uses his incredible powers to save all that he loves.");
-
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
-        values.put(MediaContract.FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, "test notif settings");
-
-        long newRowID = db.insert(MediaContract.FilmEntry.TABLE_NAME, null, values);
-
-        Log.wtf("VIEW ALL MEDIA FRAGMENT", "" + newRowID);
-    }
-    */
+    
 }
