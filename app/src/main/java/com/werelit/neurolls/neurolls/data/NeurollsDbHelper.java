@@ -72,6 +72,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
                 + FilmEntry.COLUMN_FILM_IMG_DIR + " TEXT, "
                 + FilmEntry.COLUMN_FILM_DATE_TO_WATCH + " DATE, "
                 + FilmEntry.COLUMN_FILM_NOTIF_SETTINGS + " TEXT,"
+                + FilmEntry.COLUMN_FILM_NOTIF_TIME + " TEXT,"
                 + FilmEntry.COLUMN_FILM_ARCHIVED + " INTEGER NOT NULL DEFAULT 0, "
                 + FilmEntry.COLUMN_FILM_WATCHED + " INTEGER NOT NULL DEFAULT 0); ";
 
@@ -91,6 +92,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
                 + BookEntry.COLUMN_BOOK_IMG_DIR + " TEXT, "
                 + BookEntry.COLUMN_BOOK_DATE_TO_READ + " DATE, "
                 + BookEntry.COLUMN_BOOK_NOTIF_SETTINGS + " TEXT,"
+                + BookEntry.COLUMN_BOOK_NOTIF_TIME + " TEXT,"
                 + BookEntry.COLUMN_BOOK_ARCHIVED + " INTEGER NOT NULL DEFAULT 0, "
                 + BookEntry.COLUMN_BOOK_READ + " INTEGER NOT NULL DEFAULT 0); ";
 
@@ -110,6 +112,7 @@ public class NeurollsDbHelper extends SQLiteOpenHelper {
                 + GameEntry.COLUMN_GAME_IMG_DIR + " TEXT, "
                 + GameEntry.COLUMN_GAME_DATE_TO_PLAY + " DATE, "
                 + GameEntry.COLUMN_GAME_NOTIF_SETTINGS + " TEXT,"
+                + GameEntry.COLUMN_GAME_NOTIF_TIME + " TEXT,"
                 + GameEntry.COLUMN_GAME_ARCHIVED + " INTEGER NOT NULL DEFAULT 0, "
                 + GameEntry.COLUMN_GAME_PLAYED + " INTEGER NOT NULL DEFAULT 0); ";
 
