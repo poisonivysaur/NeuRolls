@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import com.werelit.neurolls.neurolls.model.Game;
 import com.werelit.neurolls.neurolls.model.Media;
 import com.werelit.neurolls.neurolls.network.ConnectMovieDB;
 import com.werelit.neurolls.neurolls.network.JsonConverter;
+import com.werelit.neurolls.neurolls.network.MediaLoader;
 import com.werelit.neurolls.neurolls.network.MediaTaskLoader;
 
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
@@ -47,7 +49,7 @@ import java.util.ArrayList;
 
 import br.com.mauker.materialsearchview.MaterialSearchView;
 
-public class SearchMediaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>{
+public class SearchMediaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Media>>{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -55,7 +57,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private ArrayList<Media> mediaList;
     private RecyclerView recyclerView;
     private MediaAdapter mediaAdapter;
-    private MediaTaskLoader mediaTaskLoader;
+    //private MediaTaskLoader mediaTaskLoader;
+    private MediaLoader mediaTaskLoader;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
     private int searchType = 1;
 
@@ -104,9 +107,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public Loader<String> onCreateLoader(int id, Bundle args) {
+    public Loader<ArrayList<Media>> onCreateLoader(int id, Bundle args) {
         //Toast.makeText(this,"CALLED ON CREATE LOADER!",Toast.LENGTH_SHORT).show();
-        mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
+        //mediaTaskLoader = new MediaTaskLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
+        mediaTaskLoader = new MediaLoader(this, args.getString(MediaKeys.SEARCH_QUERY));
         mediaTaskLoader.setMediaCategory(searchType);
         mediaTaskLoader.setHasSearchedFilmAlready(hasSearchedFilmAlready);
         mediaTaskLoader.setFilmdID(incompleteFilmID);
@@ -114,15 +118,15 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(Loader<ArrayList<Media>> loader, ArrayList<Media> data) {
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-            Film completeFilm = JsonConverter.revisedSpecificFilm(data);
+            //Film completeFilm = JsonConverter.revisedSpecificFilm(data);
             //Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
-            retrieveFilmDetails(completeFilm);
+            //retrieveFilmDetails(completeFilm);
         }
         else {
             // Clear the adapter of previous data
@@ -131,19 +135,19 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             ArrayList<Media> m = new ArrayList<>();
             switch (searchType) {
                 case Media.CATEGORY_FILMS:
-                    m = JsonConverter.revisedSearchFilms(data);
+                    //m = JsonConverter.revisedSearchFilms(data);
                     break;
                 case Media.CATEGORY_BOOKS:
-                    m = JsonConverter.revisedBookSearchResult(data);
+                    //m = JsonConverter.revisedBookSearchResult(data);
                     break;
                 case Media.CATEGORY_GAMES:
                     break;
                 default:
-                    Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, ""+data, Toast.LENGTH_SHORT).show();
             }
 
-            for (Media a : m) {
-                mediaList.add(a);
+            for (Media d : data) {
+                mediaList.add(d);
             }
 
             updateSearchResultsUI();
@@ -151,7 +155,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<String> loader) {}
+    public void onLoaderReset(android.support.v4.content.Loader<ArrayList<Media>> loader) {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
