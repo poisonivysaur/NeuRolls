@@ -60,6 +60,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
+        holder.image.setImageBitmap(entertainment.getThumbnailBmp());
 
         if(entertainment.getThumbnailBmp() == null) {
             switch (category) {
