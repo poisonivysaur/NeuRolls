@@ -1,5 +1,7 @@
 package com.werelit.neurolls.neurolls.model;
 
+import android.graphics.Bitmap;
+
 public class Media {
 
     /** the ID of the media */
@@ -17,7 +19,9 @@ public class Media {
     /** if the media was archived or not */
     private boolean isArchived = false;
 
-    private String mImageDir = "";
+    private String mImageDir = "";  // replaced with bitmap
+
+    private Bitmap thumbnailBmp;
 
     private String notifSettings = "";
 
@@ -95,5 +99,13 @@ public class Media {
 
     public void setNotifSettings(String notifSettings) {
         this.notifSettings = notifSettings;
+    }
+
+    public Bitmap getThumbnailBmp() {
+        return thumbnailBmp;
+    }
+
+    public void setThumbnailBmp(Bitmap thumbnailBmp) {
+        this.thumbnailBmp = thumbnailBmp;
     }
 }

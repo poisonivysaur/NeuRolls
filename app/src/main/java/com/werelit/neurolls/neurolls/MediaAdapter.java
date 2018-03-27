@@ -60,19 +60,24 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
-        switch (category){
-            case CategoryAdapter.CATEGORY_ALL:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
-                break;
-            case CategoryAdapter.CATEGORY_FILMS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
-                break;
-            case CategoryAdapter.CATEGORY_BOOKS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
-                break;
-            case CategoryAdapter.CATEGORY_GAMES:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
-                break;
+
+        if(entertainment.getThumbnailBmp() == null) {
+            switch (category) {
+                case CategoryAdapter.CATEGORY_ALL:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
+                    break;
+                case CategoryAdapter.CATEGORY_FILMS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
+                    break;
+                case CategoryAdapter.CATEGORY_BOOKS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
+                    break;
+                case CategoryAdapter.CATEGORY_GAMES:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
+                    break;
+            }
+        }else {
+            holder.image.setImageBitmap(entertainment.getThumbnailBmp());
         }
         holder.modelIndex = position;
     }

@@ -1,5 +1,7 @@
 package com.werelit.neurolls.neurolls.model;
 
+import android.graphics.Bitmap;
+
 public class Film extends Media{
 
     /** the ID of the film */
