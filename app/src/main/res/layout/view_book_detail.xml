@@ -67,7 +67,6 @@
             android:id="@+id/item_date_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout_user_name"
             android:orientation="vertical"
             android:padding="10dp">
 

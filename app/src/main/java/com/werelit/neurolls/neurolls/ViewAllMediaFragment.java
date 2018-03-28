@@ -322,7 +322,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
-                entertainments.add(0, film);
+                entertainments.add(film);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -415,7 +415,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
 
-                entertainments.add(0, book);
+                entertainments.add(book);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -508,7 +508,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
 
-                entertainments.add(0, game);
+                entertainments.add(game);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its

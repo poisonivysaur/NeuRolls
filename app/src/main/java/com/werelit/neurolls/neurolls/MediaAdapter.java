@@ -2,8 +2,11 @@ package com.werelit.neurolls.neurolls;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Media;
 
 import java.util.List;
@@ -60,19 +65,35 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
-        switch (category){
-            case CategoryAdapter.CATEGORY_ALL:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
-                break;
-            case CategoryAdapter.CATEGORY_FILMS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
-                break;
-            case CategoryAdapter.CATEGORY_BOOKS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
-                break;
-            case CategoryAdapter.CATEGORY_GAMES:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
-                break;
+        //holder.image.setImageBitmap(entertainment.getThumbnailBmp());
+
+        if(entertainment.getThumbnailBmp() == null) {
+            switch (category) {
+                case CategoryAdapter.CATEGORY_FILMS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
+                    holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
+                    break;
+                case CategoryAdapter.CATEGORY_BOOKS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
+                    holder.image.setImageResource(R.drawable.ic_book_black_24dp);
+                    break;
+                case CategoryAdapter.CATEGORY_GAMES:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
+                    holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                    break;
+                default: // CategoryAdapter.CATEGORY_ALL:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
+                    if (entertainment instanceof Film)
+                        holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
+                    else if (entertainment instanceof Book)
+                        holder.image.setImageResource(R.drawable.ic_book_black_24dp);
+                    else
+                        holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                    break;
+            }
+            holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        }else {
+            holder.image.setImageBitmap(entertainment.getThumbnailBmp());
         }
         holder.modelIndex = position;
     }
@@ -119,24 +140,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
             viewBackground = view.findViewById(R.id.view_background);
             viewForeground = view.findViewById(R.id.view_foreground);
 
-            /*
-            editItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Activity activity = (Activity) itemView.getContext();
-                    Intent intent = new Intent(activity, MainActivity.class);
-
-                    // Make a bundle containing the current restaurant details
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(AddRestaurant.EDIT_MODEL_INDEX_KEY, modelIndex);
-                    bundle.putString(AddRestaurant.RESTAURANT_NAME_KEY, name.getText().toString());
-                    bundle.putString(AddRestaurant.RESTAURANT_DESC_KEY, genre.getText().toString());
-                    bundle.putDouble(AddRestaurant.WEIGHT_KEY, Double.parseDouble(weight.getText().toString()));
-                    // Edit the restaurant item
-                    intent.putExtras(bundle);
-                    activity.startActivityForResult(intent, RestaurantActivity.EDIT_RESTO_REQUEST);
-                }
-            });*/
         }
     }
 }
