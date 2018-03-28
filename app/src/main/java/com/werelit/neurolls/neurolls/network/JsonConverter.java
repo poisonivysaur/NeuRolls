@@ -2,6 +2,7 @@ package com.werelit.neurolls.neurolls.network;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,6 +22,9 @@ import java.util.ArrayList;
 
 public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
+
+    static Bitmap imageBmp = null;
+    static URL imageUrl;
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
         if(TextUtils.isEmpty(filmSearchJson)){
@@ -48,13 +52,24 @@ public class JsonConverter {
                     imageSource = ConnectMovieDB.API_MOVIE_IMAGE_PATH + curObj.getString("poster_path");
                 }
                 */
+
                 String imageSource = "";
-                URL imageUrl;
-                Bitmap imageBmp = null;
+                //URL imageUrl;
                 if(curObj.optString("poster_path") != null){
                     imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
                     imageUrl = new URL(imageSource);
-                    imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            //TODO your background code
+                            try {
+                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
                 Film m = new Film();
                 m.setMediaID(id);
