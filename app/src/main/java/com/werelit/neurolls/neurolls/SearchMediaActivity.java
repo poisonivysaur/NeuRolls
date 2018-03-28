@@ -56,7 +56,11 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private RecyclerView recyclerView;
     private MediaAdapter mediaAdapter;
     private MediaTaskLoader mediaTaskLoader;
-    /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
+
+    /** TextView that is displayed when the list is empty */
+    private TextView mEmptyStateTextView;
+    private View loadingIndicator;
+
     private int searchType = 1;
 
     private boolean hasSearchedFilmAlready;
@@ -79,6 +83,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         // set visibility of the empty view to be GONE initially
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         mEmptyStateTextView.setVisibility(View.GONE);
+
+        loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
 
         hasSearchedFilmAlready = false;
 
@@ -116,7 +123,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
@@ -238,6 +244,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                loadingIndicator.setVisibility(View.VISIBLE);
                 mediaList.clear();
                 if(searchType > 0) {    // if not internal search
                     // Get a reference to the ConnectivityManager to check state of network connectivity
@@ -257,7 +264,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     } else {
                         // Otherwise, display error
                         // First, hide loading indicator so error message will be visible
-                        View loadingIndicator = findViewById(R.id.loading_indicator);
                         loadingIndicator.setVisibility(View.GONE);
                         // Update empty state with no connection error message
                         mEmptyStateTextView.setText(R.string.no_internet_connection);
@@ -265,7 +271,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     }
                 }
                 else {
-                    View loadingIndicator = findViewById(R.id.loading_indicator);
                     loadingIndicator.setVisibility(View.GONE);
                     searchNeuRolls(query);
                 }
@@ -291,6 +296,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public void onSearchViewClosed() {
                 // Do something once the view is closed.
                 recyclerView.setVisibility(View.VISIBLE);
+                if(mediaList.size() > 0) loadingIndicator.setVisibility(View.GONE);
             }
         });
 
@@ -469,7 +475,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             @Override
             public void onSuccess(JSONArray jsonArray) {
                 // Hide loading indicator because the data has been loaded
-                View loadingIndicator = findViewById(R.id.loading_indicator);
                 loadingIndicator.setVisibility(View.GONE);
 
                 mediaList.clear();
