@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -140,6 +141,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView duration = (TextView) findViewById(R.id.duration);
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
+                image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Film object
                 String filmDirector = bundle.getString(MediaKeys.FILM_DIRECTOR_KEY);
@@ -154,7 +156,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
-
+                image.setImageResource(R.drawable.ic_movie_black_24dp);
+                image.setBackgroundColor(getResources().getColor(R.color.films));
+                image.setColorFilter(Color.WHITE);
             }
             // if the recycler view item pressed is a book,
             else if(mediaCategory == CategoryAdapter.CATEGORY_BOOKS) {
@@ -165,6 +169,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView pages = (TextView) findViewById(R.id.pages);
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView description = (TextView) findViewById(R.id.description);
+                image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Book object
                 String bookAuthor = bundle.getString(MediaKeys.BOOK_AUTHOR_KEY);
@@ -177,6 +182,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
+                image.setImageResource(R.drawable.ic_book_black_24dp);
+                image.setBackgroundColor(getResources().getColor(R.color.books));
+                image.setColorFilter(Color.WHITE);
 
             }else if(mediaCategory == CategoryAdapter.CATEGORY_GAMES) {
 
@@ -187,6 +195,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView series = (TextView) findViewById(R.id.series);
                 TextView storyline = (TextView) findViewById(R.id.storyline);
+                image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Game object
                 String gamePlatform = bundle.getString(MediaKeys.GAME_PLATFORM_KEY);
@@ -199,16 +208,20 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 publisher.setText(gamePublisher);
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
+                image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                image.setBackgroundColor(getResources().getColor(R.color.games));
+                image.setColorFilter(Color.WHITE);
             }
 
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
-            image = (ImageView) findViewById(R.id.image);
+
 
             name.setText("" + mediaName);
             genre.setText("" + mediaGenre);
             year.setText("" + mediaYear);
+
 
             // TODO set image url
             //image.setImageResource("TODO");
