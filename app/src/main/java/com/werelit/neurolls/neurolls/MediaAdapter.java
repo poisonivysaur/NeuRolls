@@ -118,25 +118,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
 
             viewBackground = view.findViewById(R.id.view_background);
             viewForeground = view.findViewById(R.id.view_foreground);
-
-            /*
-            editItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Activity activity = (Activity) itemView.getContext();
-                    Intent intent = new Intent(activity, MainActivity.class);
-
-                    // Make a bundle containing the current restaurant details
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(AddRestaurant.EDIT_MODEL_INDEX_KEY, modelIndex);
-                    bundle.putString(AddRestaurant.RESTAURANT_NAME_KEY, name.getText().toString());
-                    bundle.putString(AddRestaurant.RESTAURANT_DESC_KEY, genre.getText().toString());
-                    bundle.putDouble(AddRestaurant.WEIGHT_KEY, Double.parseDouble(weight.getText().toString()));
-                    // Edit the restaurant item
-                    intent.putExtras(bundle);
-                    activity.startActivityForResult(intent, RestaurantActivity.EDIT_RESTO_REQUEST);
-                }
-            });*/
+            
         }
     }
 }
