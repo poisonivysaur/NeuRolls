@@ -87,7 +87,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
                     break;
                 case CategoryAdapter.CATEGORY_GAMES:
                     holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
-                    holder.image.setImageResource(R.drawable.ic_book_black_24dp);
+                    holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
                     break;
             }
             holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
