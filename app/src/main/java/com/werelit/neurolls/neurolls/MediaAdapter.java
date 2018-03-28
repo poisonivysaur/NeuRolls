@@ -91,7 +91,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
                         holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
                     break;
             }
-            holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            holder.image.setColorFilter(Color.WHITE);
         }else {
             holder.image.setImageBitmap(entertainment.getThumbnailBmp());
         }
