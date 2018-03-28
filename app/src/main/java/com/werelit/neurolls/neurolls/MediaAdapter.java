@@ -64,32 +64,36 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
-        //holder.image.setImageBitmap(entertainment.getThumbnailBmp());
+        holder.image.setImageBitmap(entertainment.getThumbnailBmp());
 
-        switch (category){
-            case CategoryAdapter.CATEGORY_ALL:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
-                if(entertainment instanceof Film)
+        if(entertainment.getThumbnailBmp() == null) {
+            switch (category) {
+                case CategoryAdapter.CATEGORY_ALL:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
+                    if (entertainment instanceof Film)
+                        holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
+                    else if (entertainment instanceof Book)
+                        holder.image.setImageResource(R.drawable.ic_book_black_24dp);
+                    else
+                        holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                    break;
+                case CategoryAdapter.CATEGORY_FILMS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
                     holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
-                else if(entertainment instanceof Book)
+                    break;
+                case CategoryAdapter.CATEGORY_BOOKS:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
                     holder.image.setImageResource(R.drawable.ic_book_black_24dp);
-                else
+                    break;
+                case CategoryAdapter.CATEGORY_GAMES:
+                    holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
                     holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
-                break;
-            case CategoryAdapter.CATEGORY_FILMS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
-                holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
-                break;
-            case CategoryAdapter.CATEGORY_BOOKS:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
-                holder.image.setImageResource(R.drawable.ic_book_black_24dp);
-                break;
-            case CategoryAdapter.CATEGORY_GAMES:
-                holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
-                holder.image.setImageResource(R.drawable.ic_book_black_24dp);
-                break;
+                    break;
+            }
+            holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        }else {
+            holder.image.setImageBitmap(entertainment.getThumbnailBmp());
         }
-        holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         holder.modelIndex = position;
     }
 
