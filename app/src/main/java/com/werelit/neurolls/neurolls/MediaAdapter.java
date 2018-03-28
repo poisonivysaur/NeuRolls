@@ -2,6 +2,8 @@ package com.werelit.neurolls.neurolls;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.werelit.neurolls.neurolls.model.Book;
+import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Media;
 
 import java.util.List;
@@ -60,20 +64,32 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
         holder.name.setText(entertainment.getmMediaName());
         holder.genre.setText(entertainment.getmMediaGenre());
         holder.year.setText("" + entertainment.getmMediaYear());
+        //holder.image.setImageBitmap(entertainment.getThumbnailBmp());
+
         switch (category){
             case CategoryAdapter.CATEGORY_ALL:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.colorAccent));
+                if(entertainment instanceof Film)
+                    holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
+                else if(entertainment instanceof Book)
+                    holder.image.setImageResource(R.drawable.ic_book_black_24dp);
+                else
+                    holder.image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
                 break;
             case CategoryAdapter.CATEGORY_FILMS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.films));
+                holder.image.setImageResource(R.drawable.ic_movie_black_24dp);
                 break;
             case CategoryAdapter.CATEGORY_BOOKS:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.books));
+                holder.image.setImageResource(R.drawable.ic_book_black_24dp);
                 break;
             case CategoryAdapter.CATEGORY_GAMES:
                 holder.image.setBackgroundColor(holder.rootView.getContext().getResources().getColor(R.color.games));
+                holder.image.setImageResource(R.drawable.ic_book_black_24dp);
                 break;
         }
+        holder.image.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         holder.modelIndex = position;
     }
 
@@ -118,7 +134,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
 
             viewBackground = view.findViewById(R.id.view_background);
             viewForeground = view.findViewById(R.id.view_foreground);
-            
+
         }
     }
 }
