@@ -33,12 +33,6 @@
         </activity>
 
         <activity
-            android:name=".TestAddActivity"
-            android:label="Test Add Activity"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".ViewMediaDetailsActivity"
             android:label="Media Details"
             android:parentActivityName=".MainActivity"
