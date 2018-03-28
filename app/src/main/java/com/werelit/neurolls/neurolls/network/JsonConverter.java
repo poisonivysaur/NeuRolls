@@ -3,9 +3,12 @@ package com.werelit.neurolls.neurolls.network;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.werelit.neurolls.neurolls.SearchMediaActivity;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
@@ -24,6 +27,7 @@ public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
 
     static Bitmap imageBmp = null;
+    static private  ArrayList<Bitmap> bitmapsToDelivery = new ArrayList<>();
     static URL imageUrl;
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
@@ -58,18 +62,25 @@ public class JsonConverter {
                 if(curObj.optString("poster_path") != null){
                     imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
                     imageUrl = new URL(imageSource);
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            //TODO your background code
-                            try {
-                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+
+//                    AsyncTask.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //TODO your background code
+//                            try {
+//                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+//                                bitmapsToDelivery.add(imageBmp);
+//                                SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+//                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+
+                    ThumbnailTask task = new ThumbnailTask();
+                    task.doInBackground();
+
                 }
                 Film m = new Film();
                 m.setMediaID(id);
@@ -77,14 +88,13 @@ public class JsonConverter {
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
                 m.setImageDir(imageSource);
-                m.setThumbnailBmp(imageBmp);
+                //m.setThumbnailBmp(imageBmp); this will be done in the search media activity
                 films.add(m);
+                Log.e(TAG, "ADDED IMAGEBMP WHETHER NULL OR NOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }catch(JSONException e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -232,4 +242,37 @@ public class JsonConverter {
 
         return returnDate;
     }
+
+
+
+    private static class ThumbnailTask extends AsyncTask<Void, Void, Void> {
+
+        //initiate vars
+        public ThumbnailTask() {
+            super();
+            //my params here
+        }
+
+        protected Void doInBackground(Void... params) {
+            //do stuff
+            try {
+                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //do stuff
+            bitmapsToDelivery.add(imageBmp);
+            SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+        }
+    }
+
+//    private myHandledValueType myMethod(Value myValue) {
+//        //handle value
+//        return myHandledValueType;
+//    }
 }

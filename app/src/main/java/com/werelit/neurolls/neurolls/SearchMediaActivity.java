@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -52,9 +53,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MaterialSearchView searchView;
-    private ArrayList<Media> mediaList;
+    private static ArrayList<Media> mediaList;
+    private static ArrayList<Bitmap> bitmapDelivery;
     private RecyclerView recyclerView;
-    private MediaAdapter mediaAdapter;
+    private static MediaAdapter mediaAdapter;
     private MediaTaskLoader mediaTaskLoader;
     /** TextView that is displayed when the list is empty */    private TextView mEmptyStateTextView;
     private int searchType = 1;
@@ -75,6 +77,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         setupSearchView();
         setupRecyclerView();
+        bitmapDelivery = new ArrayList<>();
 
         // set visibility of the empty view to be GONE initially
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
@@ -762,5 +765,18 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         } else {
             return CategoryAdapter.CATEGORY_GAMES;
         }
+    }
+
+    public ArrayList<Bitmap> getBitmapDelivery() {
+        return bitmapDelivery;
+    }
+
+    public static void setBitmapDelivery(ArrayList<Bitmap> bitmaps) {
+        bitmapDelivery = bitmaps;
+        // bind the thumbnails
+        for(int i = 0; i < mediaList.size(); i++){
+            mediaList.get(i).setThumbnailBmp(bitmapDelivery.get(0));
+        }
+        mediaAdapter.notifyDataSetChanged();
     }
 }
