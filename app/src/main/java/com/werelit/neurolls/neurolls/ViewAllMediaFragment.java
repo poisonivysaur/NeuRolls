@@ -84,7 +84,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         prepareMedias();
         mAdapter.notifyDataSetChanged();
         Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
-        //Log.e(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
     }
 
     @Override
