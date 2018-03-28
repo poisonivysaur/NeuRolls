@@ -96,7 +96,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
-            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
+            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
