@@ -37,6 +37,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -51,12 +52,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
-    private NotificationSettings notifSettings;
+    private ArrayList<NotificationSettings> notifSettings;
     private String notifID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notifSettings = new ArrayList<>();
         setupUI();
         setupClickListeners();
     }
@@ -96,7 +98,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
-            notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
+            notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
@@ -275,12 +277,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         //Calls and displays NotificationSettings dialog
         if (view == findViewById(R.id.notif_settings)) {
             FragmentManager fm = getSupportFragmentManager();
-            notifSettings = new NotificationSettings();
-            notifSettings.show(fm, "Notification Settings");
-            notifSettings.setMediaName(name.getText().toString());////////////////////////////////////////////////
-            notifSettings.setNotifID(notifID);
-            notifSettings.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+            NotificationSettings notif;
 
+            notif = new NotificationSettings();
+            notif.show(fm, "Notification Settings");
+            notif.setMediaName(name.getText().toString());////////////////////////////////////////////////
+            notif.setNotifID(notifID);
+            notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+            notifSettings.add(notif);
             notifID = null;
         }
     }
