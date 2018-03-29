@@ -100,6 +100,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
             notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
+            notifSettings.remove(0);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
