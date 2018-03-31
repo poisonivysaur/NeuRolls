@@ -73,13 +73,14 @@ public class JsonConverter {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        bitmapsToDelivery.add(imageBmp);
-                                        Log.e(TAG, "BITMAPS: "+bitmapsToDelivery.size()+" is it null? "+imageBmp);
+                                        //bitmapsToDelivery.add(imageBmp);
+                                        searchIndex++;
+                                        Log.e(TAG, "INDEX: "+ (searchIndex-1) +" is it null? "+imageBmp);
                                         //SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-                                        SearchMediaActivity.setBitmapImage(searchIndex, imageBmp);
+                                        SearchMediaActivity.setBitmapImage(searchIndex-1, imageBmp);
                                     }
                                 });
-                                searchIndex++;
+
 
                             } catch (MalformedURLException e) {
                                 e.printStackTrace();
