@@ -782,6 +782,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     public static void setBitmapImage(int index, Bitmap bitmap){
+        Log.e(LOG_TAG, "media list length: "+mediaList.size());
         mediaList.get(index).setThumbnailBmp(bitmap);
         mediaAdapter.notifyDataSetChanged();
     }
