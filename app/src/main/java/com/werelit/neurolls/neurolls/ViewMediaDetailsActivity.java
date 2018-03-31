@@ -61,7 +61,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         notifSettings = new ArrayList<>();
         setupUI();
-        setupClickListeners();
+
+        if(isForAdding)
+            setupClickListeners();
     }
 
     @Override
