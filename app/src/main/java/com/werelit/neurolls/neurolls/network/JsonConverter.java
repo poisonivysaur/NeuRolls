@@ -27,7 +27,8 @@ public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
 
     static Bitmap imageBmp = null;
-    static private  ArrayList<Bitmap> bitmapsToDelivery = new ArrayList<>();
+    static private  ArrayList<Bitmap> bitmapsToDelivery;
+    static private int searchIndex;
     static URL imageUrl;
 
     private static Handler handler = new Handler();
@@ -35,6 +36,8 @@ public class JsonConverter {
     private static String imageSource;
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
+        bitmapsToDelivery = new ArrayList<>();
+        searchIndex = 0;
         if(TextUtils.isEmpty(filmSearchJson)){
             Log.wtf(TAG, "FILM IS EMPTY???!!!");
             return null;
@@ -60,7 +63,7 @@ public class JsonConverter {
                     public void run() {
                         imageSource = "";
                         URL imageUrl = null;
-                        //Bitmap imageBmp = null;
+                        imageBmp = null;
                         if(curObj.optString("poster_path") != null){
                             try {
                                 imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
@@ -71,9 +74,12 @@ public class JsonConverter {
                                     @Override
                                     public void run() {
                                         bitmapsToDelivery.add(imageBmp);
-                                        SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+                                        Log.e(TAG, "BITMAPS: "+bitmapsToDelivery.size()+" is it null? "+imageBmp);
+                                        //SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+                                        SearchMediaActivity.setBitmapImage(searchIndex, imageBmp);
                                     }
                                 });
+                                searchIndex++;
 
                             } catch (MalformedURLException e) {
                                 e.printStackTrace();

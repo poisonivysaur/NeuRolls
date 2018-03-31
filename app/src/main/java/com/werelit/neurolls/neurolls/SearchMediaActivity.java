@@ -770,12 +770,19 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     public static void setBitmapDelivery(ArrayList<Bitmap> bitmaps) {
-        Log.e(LOG_TAG, "IN SET BITMAP DELIVERY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         bitmapDelivery = bitmaps;
-        // bind the thumbnails
-        for(int i = 0; i < mediaList.size(); i++){
-            mediaList.get(i).setThumbnailBmp(bitmapDelivery.get(0));
+        Log.e(LOG_TAG, "IN SET BITMAP DELIVERY!!!!!!!!!!!!!!!!!!"+ bitmapDelivery.size() +"!!!!!!!!!!!!!!"+mediaList.size()+"!!!!!!!!!!!!!!!!!!!!");
+        // bind the thumbnails if complete
+        if(bitmapDelivery.size() >= mediaList.size()) {
+            for (int i = 0; i < mediaList.size(); i++) {
+                mediaList.get(i).setThumbnailBmp(bitmapDelivery.get(i));
+            }
+            mediaAdapter.notifyDataSetChanged();
         }
+    }
+
+    public static void setBitmapImage(int index, Bitmap bitmap){
+        mediaList.get(index).setThumbnailBmp(bitmap);
         mediaAdapter.notifyDataSetChanged();
     }
 }
