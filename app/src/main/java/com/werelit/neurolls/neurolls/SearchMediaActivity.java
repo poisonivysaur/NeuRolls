@@ -402,6 +402,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
         // Make a bundle containing the current media details
         bundle = new Bundle();
+
         prepareMediaDetails(film);
         prepareFilmDetails(film);
 

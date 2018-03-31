@@ -54,38 +54,7 @@ public class JsonConverter {
                 String releaseDate = curObj.optString("release_date");
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
-                /*
-                String imageSource = "";
-                if(curObj.optString("poster_path") != null){
-                    imageSource = ConnectMovieDB.API_MOVIE_IMAGE_PATH + curObj.getString("poster_path");
-                }
-                */
 
-//                String imageSource = "";
-//                //URL imageUrl;
-//                if(curObj.optString("poster_path") != null){
-//                    imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
-//                    imageUrl = new URL(imageSource);
-//
-////                    AsyncTask.execute(new Runnable() {
-////                        @Override
-////                        public void run() {
-////                            //TODO your background code
-////                            try {
-////                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-////                                bitmapsToDelivery.add(imageBmp);
-////                                SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-////                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-////                            } catch (IOException e) {
-////                                e.printStackTrace();
-////                            }
-////                        }
-////                    });
-//
-//                    ThumbnailTask task = new ThumbnailTask();
-//                    task.doInBackground();
-//
-//                }
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -217,14 +186,15 @@ public class JsonConverter {
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
 
-            String imageSource = "";
-            URL imageUrl = null;
-            Bitmap imageBmp = null;
-            if(baseObject.optString("poster_path") != null){
-                imageSource = "https://image.tmdb.org/t/p/w300" + baseObject.getString("poster_path");
-                imageUrl = new URL(imageSource);
-                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-            }
+//            String imageSource = "";
+//            URL imageUrl = null;
+//            Bitmap imageBmp = null;
+//            if(baseObject.optString("poster_path") != null){
+//                imageSource = "https://image.tmdb.org/t/p/w300" + baseObject.getString("poster_path");
+//                imageUrl = new URL(imageSource);
+//                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+//            }
+
 
             filmRelease = formatDate(filmRelease);
             String genre = "No Genres";
@@ -243,7 +213,7 @@ public class JsonConverter {
                 synopsis = baseObject.getString("overview");
 
             f = new Film(id, filmTitle, genre, filmRelease, director, duration, productionCompany, synopsis);
-            f.setThumbnailBmp(imageBmp);
+            //f.setThumbnailBmp(imageBmp);
         }catch(Exception e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
