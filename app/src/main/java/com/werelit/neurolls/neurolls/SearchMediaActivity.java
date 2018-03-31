@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -767,11 +768,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-    public ArrayList<Bitmap> getBitmapDelivery() {
-        return bitmapDelivery;
-    }
-
     public static void setBitmapDelivery(ArrayList<Bitmap> bitmaps) {
+        Log.e(LOG_TAG, "IN SET BITMAP DELIVERY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         bitmapDelivery = bitmaps;
         // bind the thumbnails
         for(int i = 0; i < mediaList.size(); i++){

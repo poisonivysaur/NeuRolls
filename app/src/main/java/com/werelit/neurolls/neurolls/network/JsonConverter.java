@@ -30,6 +30,10 @@ public class JsonConverter {
     static private  ArrayList<Bitmap> bitmapsToDelivery = new ArrayList<>();
     static URL imageUrl;
 
+    private static Handler handler = new Handler();
+    private static JSONObject curObj;
+    private static String imageSource;
+
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
         if(TextUtils.isEmpty(filmSearchJson)){
             Log.wtf(TAG, "FILM IS EMPTY???!!!");
@@ -44,7 +48,7 @@ public class JsonConverter {
             JSONArray jsonArr = baseObject.getJSONArray("results");
 
             for(int i = 0; i < jsonArr.length(); i++) {
-                JSONObject curObj = jsonArr.getJSONObject(i);
+                curObj = jsonArr.getJSONObject(i);
                 String id = "" + curObj.getInt("id");
                 String title = curObj.getString("title");
                 String releaseDate = curObj.optString("release_date");
@@ -57,46 +61,76 @@ public class JsonConverter {
                 }
                 */
 
-                String imageSource = "";
-                //URL imageUrl;
-                if(curObj.optString("poster_path") != null){
-                    imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
-                    imageUrl = new URL(imageSource);
+//                String imageSource = "";
+//                //URL imageUrl;
+//                if(curObj.optString("poster_path") != null){
+//                    imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+//                    imageUrl = new URL(imageSource);
+//
+////                    AsyncTask.execute(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            //TODO your background code
+////                            try {
+////                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+////                                bitmapsToDelivery.add(imageBmp);
+////                                SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+////                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+////                            } catch (IOException e) {
+////                                e.printStackTrace();
+////                            }
+////                        }
+////                    });
+//
+//                    ThumbnailTask task = new ThumbnailTask();
+//                    task.doInBackground();
+//
+//                }
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageSource = "";
+                        URL imageUrl = null;
+                        //Bitmap imageBmp = null;
+                        if(curObj.optString("poster_path") != null){
+                            try {
+                                imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+                                imageUrl = new URL(imageSource);
+                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //TODO your background code
-//                            try {
-//                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-//                                bitmapsToDelivery.add(imageBmp);
-//                                SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-//                                Log.e(TAG, "JUST SET THE IMAGEBMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        bitmapsToDelivery.add(imageBmp);
+                                        SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+                                    }
+                                });
 
-                    ThumbnailTask task = new ThumbnailTask();
-                    task.doInBackground();
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+                t.start();
 
-                }
                 Film m = new Film();
                 m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
-                m.setImageDir(imageSource);
-                //m.setThumbnailBmp(imageBmp); this will be done in the search media activity
+                //m.setImageDir(imageSource);
+                //m.setThumbnailBmp(imageBmp); // NEVERMIND this will be done in the search media activity
                 films.add(m);
-                Log.e(TAG, "ADDED IMAGEBMP WHETHER NULL OR NOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                //Log.e(TAG, "ADDED IMAGEBMP WHETHER NULL OR NOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }catch(JSONException e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return films;
@@ -218,8 +252,6 @@ public class JsonConverter {
         return f;
     }
 
-
-
     private static String formatDate(String publishedDate){
         if(TextUtils.isEmpty(publishedDate))
             return "9999-01-01";
@@ -242,37 +274,4 @@ public class JsonConverter {
 
         return returnDate;
     }
-
-
-
-    private static class ThumbnailTask extends AsyncTask<Void, Void, Void> {
-
-        //initiate vars
-        public ThumbnailTask() {
-            super();
-            //my params here
-        }
-
-        protected Void doInBackground(Void... params) {
-            //do stuff
-            try {
-                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //do stuff
-            bitmapsToDelivery.add(imageBmp);
-            SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-        }
-    }
-
-//    private myHandledValueType myMethod(Value myValue) {
-//        //handle value
-//        return myHandledValueType;
-//    }
 }
