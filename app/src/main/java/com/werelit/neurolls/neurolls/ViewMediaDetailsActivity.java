@@ -101,6 +101,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
+            if (notifSettings.size() == 0) {
+                createStartNotif();
+            }
             notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
             notifSettings.remove(0);
         }
@@ -304,6 +307,20 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             notifSettings.add(notif);
             notifID = null;
         }
+    }
+
+    private void createStartNotif() {
+        FragmentManager fm = getSupportFragmentManager();
+        NotificationSettings notif;
+
+        notif = new NotificationSettings();
+        //notif.show(fm, "Notification Settings");
+        notif.setMediaName(name.getText().toString());////////////////////////////////////////////////
+        notif.setNotifID(notifID);
+        notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+        notifSettings.add(notif);
+        notifID = null;
     }
 
     private void saveFilm(){
