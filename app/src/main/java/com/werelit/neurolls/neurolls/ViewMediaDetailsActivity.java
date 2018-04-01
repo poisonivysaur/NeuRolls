@@ -163,6 +163,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
                 TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Film object
@@ -171,6 +172,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
                 String date = bundle.getString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+                String time = bundle.getString(FilmEntry.COLUMN_FILM_NOTIF_TIME);
 
                 notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
 
@@ -185,6 +187,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
+                notif_time_text_view.setText(time);
                 image.setImageResource(R.drawable.ic_movie_black_24dp);
                 image.setBackgroundColor(getResources().getColor(R.color.films));
                 image.setColorFilter(Color.WHITE);
