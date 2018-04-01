@@ -150,8 +150,8 @@ public class JsonConverter {
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
 
-            Thread t = new Thread(new BitmapDelivery(id, baseObject.getString("poster_path")));
-            t.start();
+//            Thread t = new Thread(new BitmapDelivery(id, baseObject.getString("poster_path")));
+//            t.start();
 
             filmRelease = formatDate(filmRelease);
             String genre = "No Genres";

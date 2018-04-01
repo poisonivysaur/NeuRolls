@@ -53,7 +53,8 @@ import br.com.mauker.materialsearchview.MaterialSearchView;
 
 public class SearchMediaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>{
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = SearchMediaActivity.class.getSimpleName();
+    private static final int SCALE = 100;
 
     private MaterialSearchView searchView;
     private static ArrayList<Media> mediaList;
@@ -70,6 +71,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private static boolean hasSearchedFilmAlready;
 
     private static Film completeFilm;
+    private static Bitmap filmBitmap;
     private String incompleteFilmID = "0";
 
     private Bundle bundle;
@@ -132,18 +134,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         if(hasSearchedFilmAlready){
             completeFilm = JsonConverter.revisedSpecificFilm(data);
+            completeFilm.setThumbnailBmp(filmBitmap);
 
-            // if the bitmap has not arrived yet, wait for it
-            if(completeFilm.getThumbnailBmp() == null) {
-                try {
-                    Log.e(LOG_TAG, "Loading bitmap.......");
-                    Thread.sleep(5000); // wait for about 2 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            //Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
-            //retrieveFilmDetails(completeFilm);
+            Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
+            retrieveFilmDetails(completeFilm);
         }
         else {
             // Clear the adapter of previous data
@@ -387,6 +381,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             case Media.CATEGORY_FILMS:
                 hasSearchedFilmAlready = true;
                 incompleteFilmID = mediaList.get(position).getMediaID();
+                filmBitmap = mediaList.get(position).getThumbnailBmp();
                 Bundle queryBundle = new Bundle();
                 queryBundle.putString(MediaKeys.SEARCH_QUERY, "test query");
                 getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
@@ -421,6 +416,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         // Make a bundle containing the current media details
         bundle = new Bundle();
 
+        Log.e(LOG_TAG, "Film bitmap is: "+film.getThumbnailBmp());
+
         prepareMediaDetails(film);
         prepareFilmDetails(film);
 
@@ -437,7 +434,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
-        //bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(media.getThumbnailBmp()));
+        bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
         bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
     }
 
@@ -798,11 +795,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     break;
                 }
             }
-        }else{
-            Log.e(LOG_TAG, "BITMAP OF SPECIFIC FILM DELIVERED!!! "+bitmap);
-            completeFilm.setThumbnailBmp(bitmap);
-            Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
-            retrieveFilmDetails(completeFilm);
+//        }else{
+//            Log.e(LOG_TAG, "BITMAP OF SPECIFIC FILM DELIVERED!!! "+bitmap);
+//            completeFilm.setThumbnailBmp(bitmap);
+//            //retrieveFilmDetails(completeFilm); cannot be non-static
         }
     }
 
@@ -812,5 +808,17 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         byte [] b = baos.toByteArray();
         String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
         return strBitmap;
+    }
+
+    public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
+
+        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
+
+        int h= (int) (newHeight*densityMultiplier);
+        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
+
+        photo=Bitmap.createScaledBitmap(photo, w, h, true);
+
+        return photo;
     }
 }

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
+
+    private static final String LOG_TAG = ViewMediaDetailsActivity.class.getSimpleName();
 
     private TextView name, genre, year;
     private ImageView image;
@@ -128,6 +131,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
             isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             isForAdding = bundle.getBoolean(MediaKeys.ADDING_NEW_MEDIA);
+            String strBitmap = bundle.getString(MediaKeys.MEDIA_IMAGE_KEY);
+            //Log.e(LOG_TAG, "bitmap passed: " + strBitmap);
+            //Toast.makeText(this, "bitmap passed: "+strBitmap, Toast.LENGTH_SHORT).show();
+            boolean hasImage = strBitmap != null;
+            Toast.makeText(this, "" + hasImage, Toast.LENGTH_SHORT).show();
 
             // get the the media category (depending which type of recycler view item was pressed)
             // this only applies for the view ALL media fragment but neverthe less this activity
@@ -159,9 +167,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
-                image.setImageResource(R.drawable.ic_movie_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.films));
-                image.setColorFilter(Color.WHITE);
+
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_movie_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.films));
+                    image.setColorFilter(Color.WHITE);
+                }
             }
             // if the recycler view item pressed is a book,
             else if(mediaCategory == CategoryAdapter.CATEGORY_BOOKS) {
@@ -219,6 +230,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
+            if(hasImage){
+                image.setImageBitmap(stringToBitMap(strBitmap));
+            }
 
 
             name.setText("" + mediaName);
@@ -549,6 +563,21 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         byte [] b = baos.toByteArray();
         String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
         return strBitmap;
+    }
+
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public Bitmap stringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
   
     public boolean isForAdding() {
