@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +37,9 @@ import com.werelit.neurolls.neurolls.model.Media;
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,7 +161,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(rootView.getContext(), media.getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
 
                 prepareData(position);
             }
@@ -169,10 +174,14 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void prepareData(int position){
+
+        Media media = entertainments.get(position);
+
         // Make a bundle containing the current media details
         Bundle bundle = new Bundle();
 
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
+<<<<<<< HEAD
         bundle.putString(MediaKeys.MEDIA_ID_KEY, entertainments.get(position).getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
@@ -180,32 +189,42 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
         bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
         //bundle.putString(MediaKeys.MEDIA_DATE_KEY, entertainments.get(position).)
+=======
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
+        bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, media.isArchived());
+        if(media.getThumbnailBmp() != null)
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(media.getThumbnailBmp()));
+        bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
+
+>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         // TODO add image directory to bundle
 
         // View the details depending what category the media is
-        Media media = entertainments.get(position);
         Intent intent = new Intent(rootView.getContext(), ViewMediaDetailsActivity.class);
 
         if(media instanceof Film){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)entertainments.get(position)).getDuration());
-            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)entertainments.get(position)).getDirector());
-            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)entertainments.get(position)).getProduction());
-            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)entertainments.get(position)).getSynopsis());
+            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)media).getDuration());
+            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)media).getDirector());
+            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
+            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
-            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
-            bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)entertainments.get(position)).getPages());
-            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
-            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
+            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)media).getAuthor());
+            bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)media).getPages());
+            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)media).getPublisher());
+            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
-            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)entertainments.get(position)).getPlatform());
-            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)entertainments.get(position)).getPublisher());
-            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)entertainments.get(position)).getSeries());
-            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)entertainments.get(position)).getStoryline());
+            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)media).getPlatform());
+            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)media).getPublisher());
+            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)media).getSeries());
+            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
         }
 
         intent.putExtras(bundle);
@@ -322,6 +341,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 film.setDateToWatch(currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
+                film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 entertainments.add(film);
             }
@@ -415,7 +435,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
-
+                book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(book);
             }
         } finally {
@@ -508,7 +528,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
-
+                game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(game);
             }
         } finally {

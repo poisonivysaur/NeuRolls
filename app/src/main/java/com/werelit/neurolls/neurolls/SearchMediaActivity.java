@@ -4,6 +4,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,6 +19,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.igdb.api_android_java.callback.onSuccessCallback;
 import com.igdb.api_android_java.model.APIWrapper;
 import com.igdb.api_android_java.model.Parameters;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 import com.werelit.neurolls.neurolls.network.ConnectGameDB;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
@@ -43,18 +48,20 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import br.com.mauker.materialsearchview.MaterialSearchView;
 
 public class SearchMediaActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>{
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = SearchMediaActivity.class.getSimpleName();
+    private static final int SCALE = 100;
 
     private MaterialSearchView searchView;
-    private ArrayList<Media> mediaList;
+    private static ArrayList<Media> mediaList;
     private RecyclerView recyclerView;
-    private MediaAdapter mediaAdapter;
+    private static MediaAdapter mediaAdapter;
     private MediaTaskLoader mediaTaskLoader;
 
     /** TextView that is displayed when the list is empty */
@@ -63,8 +70,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     private int searchType = 1;
 
-    private boolean hasSearchedFilmAlready;
+    private static boolean hasSearchedFilmAlready;
 
+    private static Film completeFilm;
+    private static Bitmap filmBitmap;
     private String incompleteFilmID = "0";
 
     private Bundle bundle;
@@ -126,8 +135,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-            Film completeFilm = JsonConverter.revisedSpecificFilm(data);
-            //Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
+            completeFilm = JsonConverter.revisedSpecificFilm(data);
+            completeFilm.setThumbnailBmp(filmBitmap);
+
+            Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
             retrieveFilmDetails(completeFilm);
         }
         else {
@@ -309,7 +320,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
-//        searchView.setTintAlpha(200);
         searchView.adjustTintAlpha(0.8f);
 
         final Context context = this;
@@ -358,7 +368,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void prepareData(int position){
-
+        Toast.makeText(this, "Hold on... getting data...", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
         Media media = mediaList.get(position);
 
@@ -371,6 +381,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             case Media.CATEGORY_FILMS:
                 hasSearchedFilmAlready = true;
                 incompleteFilmID = mediaList.get(position).getMediaID();
+                filmBitmap = mediaList.get(position).getThumbnailBmp();
                 Bundle queryBundle = new Bundle();
                 queryBundle.putString(MediaKeys.SEARCH_QUERY, "test query");
                 getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
@@ -404,6 +415,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
         // Make a bundle containing the current media details
         bundle = new Bundle();
+
+        Log.e(LOG_TAG, "Film bitmap is: "+film.getThumbnailBmp());
+
         prepareMediaDetails(film);
         prepareFilmDetails(film);
 
@@ -420,6 +434,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
+        if(media.getThumbnailBmp() != null)
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(BitmapConverter.scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
         bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
     }
 
@@ -457,7 +473,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Bundle queryBundle = new Bundle();
         queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
         getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-        //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
     }
 
     private void setupGameSearch(String query){
@@ -499,10 +514,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         getBooks(query);
         getGames(query);
         updateSearchResultsUI();
-
-//        Bundle queryBundle = new Bundle();
-//        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
-//        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
     }
 
     private void getFilms(String query){
@@ -577,6 +588,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 int n = Integer.parseInt(currentArchived);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
+                film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 mediaList.add(0, film);
             }
@@ -658,7 +670,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
-
+                book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 mediaList.add(0, book);
             }
         } finally {
@@ -739,7 +751,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
-
+                game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 mediaList.add(0, game);
             }
         } finally {
@@ -766,6 +778,20 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             return CategoryAdapter.CATEGORY_BOOKS;
         } else {
             return CategoryAdapter.CATEGORY_GAMES;
+        }
+    }
+
+    public static void setBitmapImage(String id, Bitmap bitmap){
+        if(!hasSearchedFilmAlready){
+            Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
+            for(int i = 0; i < mediaList.size(); i++){
+                if(mediaList.get(i).getMediaID().equals(id)){
+                    Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
+                    mediaList.get(i).setThumbnailBmp(bitmap);
+                    mediaAdapter.notifyDataSetChanged();
+                    break;
+                }
+            }
         }
     }
 }
