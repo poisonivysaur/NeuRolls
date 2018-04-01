@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -593,6 +594,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 int n = Integer.parseInt(currentArchived);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
+                film.setThumbnailBmp(stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 mediaList.add(0, film);
             }
@@ -809,6 +811,21 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         byte [] b = baos.toByteArray();
         String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
         return strBitmap;
+    }
+
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public Bitmap stringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
     public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
