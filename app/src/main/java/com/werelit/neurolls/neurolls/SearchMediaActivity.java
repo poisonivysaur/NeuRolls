@@ -799,10 +799,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     break;
                 }
             }
-//        }else{
-//            Log.e(LOG_TAG, "BITMAP OF SPECIFIC FILM DELIVERED!!! "+bitmap);
-//            completeFilm.setThumbnailBmp(bitmap);
-//            //retrieveFilmDetails(completeFilm); cannot be non-static
         }
     }
 }
