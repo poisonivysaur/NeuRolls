@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import com.werelit.neurolls.neurolls.SearchMediaActivity;
@@ -132,13 +133,17 @@ public class JsonConverter {
                     series = curObj.getJSONObject("collection").getString("name");
                 String summary = curObj.getString("summary");
 
-                String imageThumb = "";
+                String imageThumb = null;
                 if(!curObj.isNull("cover")){
                     String hash = curObj.optJSONObject("cover").getString("cloudinary_id") + ".jpg";
                     if(!TextUtils.isEmpty(hash)) {
                         imageThumb = ConnectGameDB.GAME_IMAGE_URL + hash;
+                        Log.e(TAG, "image thumbnail: " + imageThumb);
                     }
                 }
+
+                Thread t = new Thread(new BitmapDelivery2(gameId, imageThumb));
+                t.start();
 
                 //String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
 
@@ -258,6 +263,60 @@ public class JsonConverter {
             else {
                 Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
             }
+        }
+    }
+
+    static class BitmapDelivery2 implements Runnable {
+        String strID;
+        String posterPath;
+        BitmapDelivery2(String id, String url) {
+            strID = id;
+            posterPath = url;
+        }
+        @Override
+        public void run() {
+            Log.e(TAG, "RUNNING RUNNABLE!!!!!!!!!!!!!!");
+            URL imageUrl = null;
+            final Bitmap imageBmp;
+            if(posterPath != null){
+                try {
+                    imageUrl = new URL(posterPath);
+                    imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                    Log.e(TAG, "PASSING TO HANDLER.......... ");
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
+                            SearchMediaActivity.setBitmapImage(strID, imageBmp);
+                        }
+                    });
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
+    }
+
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public static Bitmap stringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
         }
     }
 }
