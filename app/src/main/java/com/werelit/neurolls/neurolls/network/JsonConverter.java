@@ -26,23 +26,14 @@ import java.util.ArrayList;
 public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
 
-//    static Bitmap imageBmp = null;
-//    static private  ArrayList<Bitmap> bitmapsToDelivery;
-//    static private int searchIndex;
-//    static URL imageUrl;
-//    private static JSONObject curObj;
-//    private static String imageSource;
-//    private static JSONObject threadObj;
-
     private static Handler handler = new Handler();
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
-//        bitmapsToDelivery = new ArrayList<>();
-//        searchIndex = 0;
+
         if(TextUtils.isEmpty(filmSearchJson)){
-            Log.wtf(TAG, "FILM IS EMPTY???!!!");
             return null;
         }
+        
         ArrayList<Media> films = new ArrayList<>();
 
         try{
@@ -59,24 +50,15 @@ public class JsonConverter {
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
-                deliverBitmap(id, curObj.getString("poster_path"));
-//                Thread t = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                });
-//                t.start();
+                Thread t = new Thread(new BitmapDelivery(id, curObj.getString("poster_path")));
+                t.start();
 
                 Film m = new Film();
                 m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
-                //m.setImageDir(imageSource);
-                //m.setThumbnailBmp(imageBmp); // NEVERMIND this will be done in the search media activity
                 films.add(m);
-                //Log.e(TAG, "ADDED IMAGEBMP WHETHER NULL OR NOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }catch(JSONException e){
             e.printStackTrace();
@@ -217,12 +199,6 @@ public class JsonConverter {
     }
 
 
-    public static void deliverBitmap(final String mediaID, final String poster) {
-
-        Thread t = new Thread(new BitmapDelivery(mediaID, poster));
-        t.start();
-    }
-
     static class BitmapDelivery implements Runnable {
         String strID;
         String posterPath;
@@ -230,7 +206,6 @@ public class JsonConverter {
             strID = id;
             posterPath = poster;
         }
-
         @Override
         public void run() {
             String imageSource = "";
