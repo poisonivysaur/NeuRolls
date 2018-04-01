@@ -1,8 +1,15 @@
 package com.werelit.neurolls.neurolls.network;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
+import com.werelit.neurolls.neurolls.SearchMediaActivity;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
 import com.werelit.neurolls.neurolls.model.Game;
@@ -12,16 +19,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
 
+    private static Handler handler = new Handler();
+
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
+
         if(TextUtils.isEmpty(filmSearchJson)){
-            Log.wtf(TAG, "FILM IS EMPTY???!!!");
             return null;
         }
+
         ArrayList<Media> films = new ArrayList<>();
 
         try{
@@ -37,16 +50,17 @@ public class JsonConverter {
                 String releaseDate = curObj.optString("release_date");
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
-                String imageSource = "";
-                if(curObj.optString("poster_path") != null){
-                    imageSource = ConnectMovieDB.API_MOVIE_IMAGE_PATH + curObj.getString("poster_path");
-                }
+
+                //Log.e(TAG, "STARTING THREAD...............");
+                String imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+                Thread t = new Thread(new BitmapDelivery(id, imageSource));
+                t.start();
+
                 Film m = new Film();
                 m.setMediaID(id);
                 m.setmMediaName(title);
                 m.setmMediaGenre(genre);
                 m.setmMediaYear(releaseDate);
-                m.setImageDir(imageSource);
                 films.add(m);
             }
         }catch(JSONException e){
@@ -59,6 +73,8 @@ public class JsonConverter {
 
     public static ArrayList<Media> revisedBookSearchResult(String bookSearchJson){
         ArrayList<Media> books = new ArrayList<>();
+
+        Log.v("Sample", "JSON RESPONSE = \n" + bookSearchJson);
 
         try {
             JSONArray items = new JSONObject(bookSearchJson).getJSONArray("items");
@@ -73,6 +89,19 @@ public class JsonConverter {
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
                 String publishedDate = curObj.getJSONObject("volumeInfo").optString("publishedDate");
+
+                //Getting Book image thumbnail
+                String imageThumbnail = "";
+                if(curObj.getJSONObject("volumeInfo").optJSONObject("imageLinks") != null){
+                    imageThumbnail = curObj.getJSONObject("volumeInfo").getJSONObject("imageLinks").optString("thumbnail");
+                    if(TextUtils.isEmpty(imageThumbnail))
+                        imageThumbnail = "";
+                    //Log.e("Hello World", "In if" + imageThumbnail);
+                }
+                Log.e(TAG, "image thumbnail: " + imageThumbnail + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                Thread t = new Thread(new BitmapDelivery(id, imageThumbnail));
+                t.start();
                 publishedDate = formatDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
@@ -111,6 +140,18 @@ public class JsonConverter {
                     series = curObj.getJSONObject("collection").getString("name");
                 String summary = curObj.getString("summary");
 
+                String imageThumb = null;
+                if(!curObj.isNull("cover")){
+                    String hash = curObj.optJSONObject("cover").getString("cloudinary_id") + ".jpg";
+                    if(!TextUtils.isEmpty(hash)) {
+                        imageThumb = ConnectGameDB.GAME_IMAGE_URL + hash;
+                        Log.e(TAG, "image thumbnail: " + imageThumb);
+                    }
+                }
+
+                Thread t = new Thread(new BitmapDelivery(gameId, imageThumb));
+                t.start();
+
                 //String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
 
                 Game g = new Game(gameId, gameName, genre, release, platforms, publishers, series, summary);
@@ -137,6 +178,10 @@ public class JsonConverter {
             String id = Integer.toString(baseObject.getInt("id"));
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
+
+//            Thread t = new Thread(new BitmapDelivery(id, baseObject.getString("poster_path")));
+//            t.start();
+
             filmRelease = formatDate(filmRelease);
             String genre = "No Genres";
             if(genres != null)
@@ -154,6 +199,7 @@ public class JsonConverter {
                 synopsis = baseObject.getString("overview");
 
             f = new Film(id, filmTitle, genre, filmRelease, director, duration, productionCompany, synopsis);
+            //f.setThumbnailBmp(imageBmp);
         }catch(Exception e){
             e.printStackTrace();
             Log.e(TAG, e.toString());
@@ -161,8 +207,6 @@ public class JsonConverter {
 
         return f;
     }
-
-
 
     private static String formatDate(String publishedDate){
         if(TextUtils.isEmpty(publishedDate))
@@ -185,5 +229,45 @@ public class JsonConverter {
         }
 
         return returnDate;
+    }
+
+
+    static class BitmapDelivery implements Runnable {
+        String strID;
+        String posterPath;
+        BitmapDelivery(String id, String url) {
+            strID = id;
+            posterPath = url;
+        }
+        @Override
+        public void run() {
+            Log.e(TAG, "RUNNING RUNNABLE!!!!!!!!!!!!!!");
+            URL imageUrl = null;
+            final Bitmap imageBmp;
+            if(posterPath != null){
+                try {
+                    imageUrl = new URL(posterPath);
+                    imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                    Log.e(TAG, "PASSING TO HANDLER.......... ");
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
+                            SearchMediaActivity.setBitmapImage(strID, imageBmp);
+                        }
+                    });
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
     }
 }

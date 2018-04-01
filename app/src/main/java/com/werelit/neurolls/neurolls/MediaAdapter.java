@@ -93,6 +93,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MyViewHolder
             }
             holder.image.setColorFilter(Color.WHITE);
         }else {
+            holder.image.setBackgroundColor(0x00000000); // transparent
+            holder.image.setColorFilter(null);
             holder.image.setImageBitmap(entertainment.getThumbnailBmp());
         }
         holder.modelIndex = position;

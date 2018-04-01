@@ -8,15 +8,19 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +39,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
+
+    private static final String LOG_TAG = ViewMediaDetailsActivity.class.getSimpleName();
 
     private TextView name, genre, year;
     private ImageView image;
@@ -133,6 +140,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
             isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             isForAdding = bundle.getBoolean(MediaKeys.ADDING_NEW_MEDIA);
+            String strBitmap = bundle.getString(MediaKeys.MEDIA_IMAGE_KEY);
+            boolean hasImage = strBitmap != null;
 
             // get the the media category (depending which type of recycler view item was pressed)
             // this only applies for the view ALL media fragment but neverthe less this activity
@@ -164,9 +173,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
-                image.setImageResource(R.drawable.ic_movie_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.films));
-                image.setColorFilter(Color.WHITE);
+
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_movie_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.films));
+                    image.setColorFilter(Color.WHITE);
+                }
             }
             // if the recycler view item pressed is a book,
             else if(mediaCategory == CategoryAdapter.CATEGORY_BOOKS) {
@@ -190,9 +202,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
-                image.setImageResource(R.drawable.ic_book_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.books));
-                image.setColorFilter(Color.WHITE);
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_book_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.books));
+                    image.setColorFilter(Color.WHITE);
+                }
 
             }else if(mediaCategory == CategoryAdapter.CATEGORY_GAMES) {
 
@@ -216,14 +230,19 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 publisher.setText(gamePublisher);
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
-                image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.games));
-                image.setColorFilter(Color.WHITE);
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.games));
+                    image.setColorFilter(Color.WHITE);
+                }
             }
 
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
+            if(hasImage){
+                image.setImageBitmap(BitmapConverter.stringToBitMap(strBitmap));
+            }
 
 
             name.setText("" + mediaName);
@@ -331,6 +350,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(FilmEntry.COLUMN_FILM_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(FilmEntry.COLUMN_FILM_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(FilmEntry.COLUMN_FILM_DIRECTOR, bundle.getString(MediaKeys.FILM_DIRECTOR_KEY));
         values.put(FilmEntry.COLUMN_FILM_DURATION, bundle.getInt(MediaKeys.FILM_DURATION_KEY));
@@ -339,7 +359,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         // TODO get text from UI for notif settings and date picker
 
-        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
@@ -361,6 +380,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(BookEntry.COLUMN_BOOK_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(BookEntry.COLUMN_BOOK_AUTHOR, bundle.getString(MediaKeys.BOOK_AUTHOR_KEY));
         values.put(BookEntry.COLUMN_BOOK_PAGES, bundle.getInt(MediaKeys.BOOK_PAGES_KEY));
@@ -368,7 +388,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY));
 
         // TODO
-        values.put(BookEntry.COLUMN_BOOK_IMG_DIR, "test/img/dir.png");
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
@@ -384,6 +403,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(GameEntry.COLUMN_GAME_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(GameEntry.COLUMN_GAME_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(GameEntry.COLUMN_GAME_PLATFORM, bundle.getString(MediaKeys.GAME_PLATFORM_KEY));
         values.put(GameEntry.COLUMN_GAME_PUBLISHER, bundle.getString(MediaKeys.GAME_PUBLISHER_KEY));
@@ -391,7 +411,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_STORYLINE, bundle.getString(MediaKeys.GAME_STORYLINE_KEY));
 
         // TODO
-        values.put(GameEntry.COLUMN_GAME_IMG_DIR, "test/img/dir.png");
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
@@ -564,7 +583,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         startActivity(intent);
     }
-  
+
     public boolean isForAdding() {
         return isForAdding;
     }
