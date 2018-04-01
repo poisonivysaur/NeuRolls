@@ -257,7 +257,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public boolean onQueryTextSubmit(String query) {
                 loadingIndicator.setVisibility(View.VISIBLE);
                 mediaList.clear();
-                //completeFilm = null; // reset
                 if(searchType > 0) {    // if not internal search
                     // Get a reference to the ConnectivityManager to check state of network connectivity
                     ConnectivityManager connMgr = (ConnectivityManager)
@@ -321,7 +320,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
-//        searchView.setTintAlpha(200);
         searchView.adjustTintAlpha(0.8f);
 
         final Context context = this;
@@ -475,7 +473,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Bundle queryBundle = new Bundle();
         queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
         getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-        //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
     }
 
     private void setupGameSearch(String query){
@@ -517,10 +514,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         getBooks(query);
         getGames(query);
         updateSearchResultsUI();
-
-//        Bundle queryBundle = new Bundle();
-//        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
-//        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
     }
 
     private void getFilms(String query){
