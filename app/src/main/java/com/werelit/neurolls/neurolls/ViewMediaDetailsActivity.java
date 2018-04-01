@@ -382,7 +382,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         TextView date = findViewById(R.id.date_text_view);
         //if (date.getText().toString().equals("today"))
-            values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
+        Log.d("Date", date.getText().toString());
+        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
 //=======
         //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
 //>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
