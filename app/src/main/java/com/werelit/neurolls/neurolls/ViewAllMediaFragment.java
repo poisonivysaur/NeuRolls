@@ -160,7 +160,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(rootView.getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //Toast.makeText(rootView.getContext(), entertainments.get(position).getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(rootView.getContext(), media.getmMediaName() + " is selected!", Toast.LENGTH_SHORT).show();
 
                 prepareData(position);
             }
@@ -173,45 +173,47 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
     }
 
     private void prepareData(int position){
+
+        Media media = entertainments.get(position);
+
         // Make a bundle containing the current media details
         Bundle bundle = new Bundle();
 
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
-        bundle.putString(MediaKeys.MEDIA_ID_KEY, entertainments.get(position).getMediaID());
-        bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
-        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
-        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
-        bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
-        if(entertainments.get(position).getThumbnailBmp() != null)
-            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(entertainments.get(position).getThumbnailBmp()));
-        bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
+        bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, media.isArchived());
+        if(media.getThumbnailBmp() != null)
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(media.getThumbnailBmp()));
+        bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
 
         // TODO add image directory to bundle
 
         // View the details depending what category the media is
-        Media media = entertainments.get(position);
         Intent intent = new Intent(rootView.getContext(), ViewMediaDetailsActivity.class);
 
         if(media instanceof Film){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_FILMS);
-            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)entertainments.get(position)).getDuration());
-            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)entertainments.get(position)).getDirector());
-            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)entertainments.get(position)).getProduction());
-            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)entertainments.get(position)).getSynopsis());
+            bundle.putInt(MediaKeys.FILM_DURATION_KEY, ((Film)media).getDuration());
+            bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)media).getDirector());
+            bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
+            bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
-            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)entertainments.get(position)).getAuthor());
-            bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)entertainments.get(position)).getPages());
-            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)entertainments.get(position)).getPublisher());
-            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)entertainments.get(position)).getDescription());
+            bundle.putString(MediaKeys.BOOK_AUTHOR_KEY, ((Book)media).getAuthor());
+            bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)media).getPages());
+            bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)media).getPublisher());
+            bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
-            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)entertainments.get(position)).getPlatform());
-            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)entertainments.get(position)).getPublisher());
-            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)entertainments.get(position)).getSeries());
-            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)entertainments.get(position)).getStoryline());
+            bundle.putString(MediaKeys.GAME_PLATFORM_KEY, ((Game)media).getPlatform());
+            bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)media).getPublisher());
+            bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)media).getSeries());
+            bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
         }
 
         intent.putExtras(bundle);
