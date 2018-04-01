@@ -170,7 +170,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
-                String date = bundle.getString(MediaKeys.MEDIA_DATE_KEY);
+                String date = bundle.getString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
 
                 notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
 

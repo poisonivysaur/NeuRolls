@@ -339,8 +339,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
-                //Log.d("Date saved", currentDate);
                 film.setDateToWatch(currentDate);
+                //Log.wtf("Date saved", currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
