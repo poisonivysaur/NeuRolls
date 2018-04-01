@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.Log;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -232,7 +233,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
             if(hasImage){
-                image.setImageBitmap(stringToBitMap(strBitmap));
+                image.setImageBitmap(BitmapConverter.stringToBitMap(strBitmap));
             }
 
 
@@ -560,21 +561,21 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     }
 
 
-    /**
-     * @param encodedString
-     * @return bitmap (from given string)
-     */
-    public Bitmap stringToBitMap(String encodedString){
-        try {
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-  
+//    /**
+//     * @param encodedString
+//     * @return bitmap (from given string)
+//     */
+//    public Bitmap stringToBitMap(String encodedString){
+//        try {
+//            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+//            return bitmap;
+//        } catch(Exception e) {
+//            e.getMessage();
+//            return null;
+//        }
+//    }
+//
     public boolean isForAdding() {
         return isForAdding;
     }
