@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +46,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import br.com.mauker.materialsearchview.MaterialSearchView;
@@ -55,7 +57,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     private MaterialSearchView searchView;
     private static ArrayList<Media> mediaList;
-    private static ArrayList<Bitmap> bitmapDelivery;
     private RecyclerView recyclerView;
     private static MediaAdapter mediaAdapter;
     private MediaTaskLoader mediaTaskLoader;
@@ -66,8 +67,9 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     private int searchType = 1;
 
-    private boolean hasSearchedFilmAlready;
+    private static boolean hasSearchedFilmAlready;
 
+    private static Film completeFilm;
     private String incompleteFilmID = "0";
 
     private Bundle bundle;
@@ -82,7 +84,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         setupSearchView();
         setupRecyclerView();
-        bitmapDelivery = new ArrayList<>();
 
         // set visibility of the empty view to be GONE initially
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
@@ -130,9 +131,19 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         loadingIndicator.setVisibility(View.GONE);
 
         if(hasSearchedFilmAlready){
-            Film completeFilm = JsonConverter.revisedSpecificFilm(data);
-            //Toast.makeText(this, "" + completeFilm.getMediaID(),Toast.LENGTH_SHORT).show();
-            retrieveFilmDetails(completeFilm);
+            completeFilm = JsonConverter.revisedSpecificFilm(data);
+
+            // if the bitmap has not arrived yet, wait for it
+            if(completeFilm.getThumbnailBmp() == null) {
+                try {
+                    Log.e(LOG_TAG, "Loading bitmap.......");
+                    Thread.sleep(5000); // wait for about 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            //Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
+            //retrieveFilmDetails(completeFilm);
         }
         else {
             // Clear the adapter of previous data
@@ -250,6 +261,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public boolean onQueryTextSubmit(String query) {
                 loadingIndicator.setVisibility(View.VISIBLE);
                 mediaList.clear();
+                //completeFilm = null; // reset
                 if(searchType > 0) {    // if not internal search
                     // Get a reference to the ConnectivityManager to check state of network connectivity
                     ConnectivityManager connMgr = (ConnectivityManager)
@@ -425,6 +437,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
+        //bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(media.getThumbnailBmp()));
         bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
     }
 
@@ -775,14 +788,29 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     public static void setBitmapImage(String id, Bitmap bitmap){
-        Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
-        for(int i = 0; i < mediaList.size(); i++){
-            if(mediaList.get(i).getMediaID().equals(id)){
-                Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
-                mediaList.get(i).setThumbnailBmp(bitmap);
-                mediaAdapter.notifyDataSetChanged();
-                break;
+        if(!hasSearchedFilmAlready){
+            Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
+            for(int i = 0; i < mediaList.size(); i++){
+                if(mediaList.get(i).getMediaID().equals(id)){
+                    Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
+                    mediaList.get(i).setThumbnailBmp(bitmap);
+                    mediaAdapter.notifyDataSetChanged();
+                    break;
+                }
             }
+        }else{
+            Log.e(LOG_TAG, "BITMAP OF SPECIFIC FILM DELIVERED!!! "+bitmap);
+            completeFilm.setThumbnailBmp(bitmap);
+            Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
+            retrieveFilmDetails(completeFilm);
         }
+    }
+
+    public String bitmapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b = baos.toByteArray();
+        String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
+        return strBitmap;
     }
 }

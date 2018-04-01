@@ -50,7 +50,7 @@ public class JsonConverter {
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
-                Log.e(TAG, "STARTING THREAD...............");
+                //Log.e(TAG, "STARTING THREAD...............");
                 Thread t = new Thread(new BitmapDelivery(id, curObj.getString("poster_path")));
                 t.start();
 
@@ -149,6 +149,9 @@ public class JsonConverter {
             String id = Integer.toString(baseObject.getInt("id"));
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
+
+            Thread t = new Thread(new BitmapDelivery(id, baseObject.getString("poster_path")));
+            t.start();
 
             filmRelease = formatDate(filmRelease);
             String genre = "No Genres";
