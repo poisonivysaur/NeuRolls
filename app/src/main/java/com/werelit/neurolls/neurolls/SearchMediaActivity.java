@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,9 +54,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MaterialSearchView searchView;
-    private ArrayList<Media> mediaList;
+    private static ArrayList<Media> mediaList;
+    private static ArrayList<Bitmap> bitmapDelivery;
     private RecyclerView recyclerView;
-    private MediaAdapter mediaAdapter;
+    private static MediaAdapter mediaAdapter;
     private MediaTaskLoader mediaTaskLoader;
 
     /** TextView that is displayed when the list is empty */
@@ -79,6 +82,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
         setupSearchView();
         setupRecyclerView();
+        bitmapDelivery = new ArrayList<>();
 
         // set visibility of the empty view to be GONE initially
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
@@ -404,6 +408,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
         // Make a bundle containing the current media details
         bundle = new Bundle();
+
         prepareMediaDetails(film);
         prepareFilmDetails(film);
 
@@ -766,6 +771,30 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             return CategoryAdapter.CATEGORY_BOOKS;
         } else {
             return CategoryAdapter.CATEGORY_GAMES;
+        }
+    }
+
+    public static void setBitmapDelivery(ArrayList<Bitmap> bitmaps) {
+        bitmapDelivery = bitmaps;
+        Log.e(LOG_TAG, "IN SET BITMAP DELIVERY!!!!!!!!!!!!!!!!!!"+ bitmapDelivery.size() +"!!!!!!!!!!!!!!"+mediaList.size()+"!!!!!!!!!!!!!!!!!!!!");
+        // bind the thumbnails if complete
+        if(bitmapDelivery.size() >= mediaList.size()) {
+            for (int i = 0; i < mediaList.size(); i++) {
+                mediaList.get(i).setThumbnailBmp(bitmapDelivery.get(i));
+            }
+            mediaAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public static void setBitmapImage(String id, Bitmap bitmap){
+        Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
+        for(int i = 0; i < mediaList.size(); i++){
+            if(mediaList.get(i).getMediaID().equals(id)){
+                Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
+                mediaList.get(i).setThumbnailBmp(bitmap);
+                mediaAdapter.notifyDataSetChanged();
+                break;
+            }
         }
     }
 }
