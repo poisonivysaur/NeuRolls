@@ -34,6 +34,7 @@ public class JsonConverter {
     private static Handler handler = new Handler();
     private static JSONObject curObj;
     private static String imageSource;
+    private static JSONObject threadObj;
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
         bitmapsToDelivery = new ArrayList<>();
@@ -58,41 +59,14 @@ public class JsonConverter {
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageSource = "";
-                        URL imageUrl = null;
-                        imageBmp = null;
-                        if(curObj.optString("poster_path") != null){
-                            try {
-                                imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
-                                imageUrl = new URL(imageSource);
-                                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //bitmapsToDelivery.add(imageBmp);
-                                        searchIndex++;
-                                        Log.e(TAG, "INDEX: "+ (searchIndex-1) +" is it null? "+imageBmp);
-                                        //SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-                                        SearchMediaActivity.setBitmapImage(searchIndex-1, imageBmp);
-                                    }
-                                });
-
-
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-                t.start();
+                deliverBitmap(id);
+//                Thread t = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                    }
+//                });
+//                t.start();
 
                 Film m = new Film();
                 m.setMediaID(id);
@@ -250,5 +224,52 @@ public class JsonConverter {
         }
 
         return returnDate;
+    }
+
+
+    public static void deliverBitmap(final String mediaID) {
+        class BitmapDelivery implements Runnable {
+            String str;
+            BitmapDelivery(String s) { str = s; }
+
+            @Override
+            public void run() {
+                imageSource = "";
+                URL imageUrl = null;
+                imageBmp = null;
+                if(curObj.optString("poster_path") != null){
+                    try {
+                        imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+                        imageUrl = new URL(imageSource);
+                        imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //bitmapsToDelivery.add(imageBmp);
+                                searchIndex++;
+                                Log.e(TAG, "INDEX: "+ (searchIndex-1) +" ID: "+ mediaID);
+                                //SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
+                                SearchMediaActivity.setBitmapImage(mediaID, imageBmp);
+                                try {
+                                    SearchMediaActivity.setBitmapImage(""+curObj.getInt("id"), imageBmp);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        Thread t = new Thread(new BitmapDelivery(mediaID));
+        t.start();
     }
 }
