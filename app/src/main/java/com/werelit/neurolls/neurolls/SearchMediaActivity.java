@@ -670,7 +670,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
-
+                book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 mediaList.add(0, book);
             }
         } finally {
@@ -751,7 +751,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
-
+                game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 mediaList.add(0, game);
             }
         } finally {

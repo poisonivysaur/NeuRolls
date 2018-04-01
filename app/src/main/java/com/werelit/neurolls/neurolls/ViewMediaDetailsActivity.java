@@ -363,7 +363,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY));
 
         // TODO
-        values.put(BookEntry.COLUMN_BOOK_IMG_DIR, "test/img/dir.png");
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
