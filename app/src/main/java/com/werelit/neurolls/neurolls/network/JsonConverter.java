@@ -73,6 +73,8 @@ public class JsonConverter {
     public static ArrayList<Media> revisedBookSearchResult(String bookSearchJson){
         ArrayList<Media> books = new ArrayList<>();
 
+        Log.v("Sample", "JSON RESPONSE = \n" + bookSearchJson);
+
         try {
             JSONArray items = new JSONObject(bookSearchJson).getJSONArray("items");
 
@@ -89,12 +91,13 @@ public class JsonConverter {
 
                 //Getting Book image thumbnail
                 String imageThumbnail = "";
-                if(curObj.optJSONObject("imageLinks") != null){
-                    imageThumbnail = curObj.getJSONObject("imageLinks").optString("thumbnail");
+                if(curObj.getJSONObject("volumeInfo").optJSONObject("imageLinks") != null){
+                    imageThumbnail = curObj.getJSONObject("volumeInfo").getJSONObject("imageLinks").optString("thumbnail");
                     if(TextUtils.isEmpty(imageThumbnail))
                         imageThumbnail = "";
+                    //Log.e("Hello World", "In if" + imageThumbnail);
                 }
-
+                //Log.e("Hello World", "After If" + imageThumbnail);
                 publishedDate = formatDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
