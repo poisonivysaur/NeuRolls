@@ -782,12 +782,13 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     public static void setBitmapImage(String id, Bitmap bitmap){
-        Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id: "+id);
+        Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
         for(int i = 0; i < mediaList.size(); i++){
             if(mediaList.get(i).getMediaID().equals(id)){
-                Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id);
+                Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
                 mediaList.get(i).setThumbnailBmp(bitmap);
                 mediaAdapter.notifyDataSetChanged();
+                break;
             }
         }
     }

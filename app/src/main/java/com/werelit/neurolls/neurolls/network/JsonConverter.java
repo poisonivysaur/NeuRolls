@@ -26,19 +26,19 @@ import java.util.ArrayList;
 public class JsonConverter {
     private static final String TAG = JsonConverter.class.getSimpleName();
 
-    static Bitmap imageBmp = null;
-    static private  ArrayList<Bitmap> bitmapsToDelivery;
-    static private int searchIndex;
-    static URL imageUrl;
+//    static Bitmap imageBmp = null;
+//    static private  ArrayList<Bitmap> bitmapsToDelivery;
+//    static private int searchIndex;
+//    static URL imageUrl;
+//    private static JSONObject curObj;
+//    private static String imageSource;
+//    private static JSONObject threadObj;
 
     private static Handler handler = new Handler();
-    private static JSONObject curObj;
-    private static String imageSource;
-    private static JSONObject threadObj;
 
     public static ArrayList<Media> revisedSearchFilms(String filmSearchJson){
-        bitmapsToDelivery = new ArrayList<>();
-        searchIndex = 0;
+//        bitmapsToDelivery = new ArrayList<>();
+//        searchIndex = 0;
         if(TextUtils.isEmpty(filmSearchJson)){
             Log.wtf(TAG, "FILM IS EMPTY???!!!");
             return null;
@@ -52,14 +52,14 @@ public class JsonConverter {
             JSONArray jsonArr = baseObject.getJSONArray("results");
 
             for(int i = 0; i < jsonArr.length(); i++) {
-                curObj = jsonArr.getJSONObject(i);
+                JSONObject curObj = jsonArr.getJSONObject(i);
                 String id = "" + curObj.getInt("id");
                 String title = curObj.getString("title");
                 String releaseDate = curObj.optString("release_date");
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
-                deliverBitmap(id);
+                deliverBitmap(id, curObj.getString("poster_path"));
 //                Thread t = new Thread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -167,16 +167,6 @@ public class JsonConverter {
             String filmTitle = baseObject.getString("title");
             String filmRelease = baseObject.optString("release_date");
 
-//            String imageSource = "";
-//            URL imageUrl = null;
-//            Bitmap imageBmp = null;
-//            if(baseObject.optString("poster_path") != null){
-//                imageSource = "https://image.tmdb.org/t/p/w300" + baseObject.getString("poster_path");
-//                imageUrl = new URL(imageSource);
-//                imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-//            }
-
-
             filmRelease = formatDate(filmRelease);
             String genre = "No Genres";
             if(genres != null)
@@ -227,49 +217,46 @@ public class JsonConverter {
     }
 
 
-    public static void deliverBitmap(final String mediaID) {
-        class BitmapDelivery implements Runnable {
-            String str;
-            BitmapDelivery(String s) { str = s; }
+    public static void deliverBitmap(final String mediaID, final String poster) {
 
-            @Override
-            public void run() {
-                imageSource = "";
-                URL imageUrl = null;
-                imageBmp = null;
-                if(curObj.optString("poster_path") != null){
-                    try {
-                        imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
-                        imageUrl = new URL(imageSource);
-                        imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+        Thread t = new Thread(new BitmapDelivery(mediaID, poster));
+        t.start();
+    }
 
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //bitmapsToDelivery.add(imageBmp);
-                                searchIndex++;
-                                Log.e(TAG, "INDEX: "+ (searchIndex-1) +" ID: "+ mediaID);
-                                //SearchMediaActivity.setBitmapDelivery(bitmapsToDelivery);
-                                SearchMediaActivity.setBitmapImage(mediaID, imageBmp);
-                                try {
-                                    SearchMediaActivity.setBitmapImage(""+curObj.getInt("id"), imageBmp);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+    static class BitmapDelivery implements Runnable {
+        String strID;
+        String posterPath;
+        BitmapDelivery(String id, String poster) {
+            strID = id;
+            posterPath = poster;
+        }
 
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        @Override
+        public void run() {
+            String imageSource = "";
+            URL imageUrl = null;
+            final Bitmap imageBmp;
+            if(posterPath != null){
+                try {
+                    imageSource = "https://image.tmdb.org/t/p/w300" + posterPath;
+                    imageUrl = new URL(imageSource);
+                    imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //searchIndex++;
+                            Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
+                            SearchMediaActivity.setBitmapImage(strID, imageBmp);
+                        }
+                    });
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
-        Thread t = new Thread(new BitmapDelivery(mediaID));
-        t.start();
     }
 }
