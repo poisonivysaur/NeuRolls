@@ -39,17 +39,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".SearchableActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-
-        <activity
             android:name=".SearchMediaActivity"
             android:label="Search Media"
             android:parentActivityName=".MainActivity"
