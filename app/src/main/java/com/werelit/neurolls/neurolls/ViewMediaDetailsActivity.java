@@ -509,6 +509,27 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         finish();
     }
 
+    public void saveDateTime(String date, String time) {
+        ContentValues values = new ContentValues();
+
+        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
+
+        Uri currentUri = getCurrentUri(getContentUri());
+
+        int rowsAffected = getContentResolver().update(currentUri, values, null, null);
+
+        // Show a toast message depending on whether or not the update was successful.
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
+        }
+        finish();
+    }
+
     private void deleteMedia(Uri uri){
         Uri currentUri = getCurrentUri(uri);
 
@@ -611,9 +632,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void saveDateTime() {
-        saveFilm();
-    }
+
 
     public boolean isForAdding() {
         return isForAdding;

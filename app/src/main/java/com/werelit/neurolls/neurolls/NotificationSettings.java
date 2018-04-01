@@ -124,11 +124,11 @@ public class NotificationSettings extends DialogFragment {
 
                         if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
                             scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
+                            ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
                             Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
                         }
 
                         etTime.setText(time);
-                        ((ViewMediaDetailsActivity) getContext()).saveDateTime();
                         /*SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt("count", count);
