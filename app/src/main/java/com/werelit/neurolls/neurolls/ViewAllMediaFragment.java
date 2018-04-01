@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,6 +182,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
+        if(entertainments.get(position).getThumbnailBmp() != null)
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(entertainments.get(position).getThumbnailBmp()));
         bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
 
         // TODO add image directory to bundle
@@ -321,6 +327,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 int n = Integer.parseInt(currentArchived);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
+                film.setThumbnailBmp(stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 entertainments.add(film);
             }
@@ -698,6 +705,29 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             return BookEntry.CONTENT_URI;
         } else {
             return GameEntry.CONTENT_URI;
+        }
+    }
+
+    public String bitmapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b = baos.toByteArray();
+        String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
+        return strBitmap;
+    }
+
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public Bitmap stringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
         }
     }
 }

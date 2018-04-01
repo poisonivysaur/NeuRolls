@@ -368,7 +368,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void prepareData(int position){
-
+        Toast.makeText(this, "Hold on... getting data...", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ViewMediaDetailsActivity.class);
         Media media = mediaList.get(position);
 
@@ -434,8 +434,8 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
-        if(media.getThumbnailBmp() != null);
-        bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
+        if(media.getThumbnailBmp() != null)
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
         bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
     }
 

@@ -132,10 +132,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             isArchived = bundle.getBoolean(MediaKeys.MEDIA_ARCHIVED);
             isForAdding = bundle.getBoolean(MediaKeys.ADDING_NEW_MEDIA);
             String strBitmap = bundle.getString(MediaKeys.MEDIA_IMAGE_KEY);
-            //Log.e(LOG_TAG, "bitmap passed: " + strBitmap);
-            //Toast.makeText(this, "bitmap passed: "+strBitmap, Toast.LENGTH_SHORT).show();
             boolean hasImage = strBitmap != null;
-            Toast.makeText(this, "" + hasImage, Toast.LENGTH_SHORT).show();
 
             // get the the media category (depending which type of recycler view item was pressed)
             // this only applies for the view ALL media fragment but neverthe less this activity
@@ -323,6 +320,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(FilmEntry.COLUMN_FILM_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(FilmEntry.COLUMN_FILM_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(FilmEntry.COLUMN_FILM_DIRECTOR, bundle.getString(MediaKeys.FILM_DIRECTOR_KEY));
         values.put(FilmEntry.COLUMN_FILM_DURATION, bundle.getInt(MediaKeys.FILM_DURATION_KEY));
@@ -331,7 +329,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         // TODO get text from UI for notif settings and date picker
 
-        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
