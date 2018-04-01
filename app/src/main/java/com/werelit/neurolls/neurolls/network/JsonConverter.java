@@ -33,7 +33,7 @@ public class JsonConverter {
         if(TextUtils.isEmpty(filmSearchJson)){
             return null;
         }
-        
+
         ArrayList<Media> films = new ArrayList<>();
 
         try{
