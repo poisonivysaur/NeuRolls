@@ -211,7 +211,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)media).getDirector());
             bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
             bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
-            bundle.putString(MediaKeys.MEDIA_DATE_KEY, ((Film)media).getDateToWatch());
+            bundle.putString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, ((Film)media).getDateToWatch());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
@@ -339,7 +339,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
-                //film.setDateToWatch(currentDate);
+                //Log.d("Date saved", currentDate);
+                film.setDateToWatch(currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
