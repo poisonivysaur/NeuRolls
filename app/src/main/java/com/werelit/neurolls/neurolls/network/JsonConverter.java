@@ -50,6 +50,7 @@ public class JsonConverter {
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
+                Log.e(TAG, "STARTING THREAD...............");
                 Thread t = new Thread(new BitmapDelivery(id, curObj.getString("poster_path")));
                 t.start();
 
@@ -208,6 +209,7 @@ public class JsonConverter {
         }
         @Override
         public void run() {
+            Log.e(TAG, "RUNNING RUNNABLE!!!!!!!!!!!!!!");
             String imageSource = "";
             URL imageUrl = null;
             final Bitmap imageBmp;
@@ -217,10 +219,11 @@ public class JsonConverter {
                     imageUrl = new URL(imageSource);
                     imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 
+                    Log.e(TAG, "PASSING TO HANDLER.......... ");
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            //searchIndex++;
+
                             Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
                             SearchMediaActivity.setBitmapImage(strID, imageBmp);
                         }
@@ -231,6 +234,9 @@ public class JsonConverter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+            else {
+                Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }
     }
