@@ -37,6 +37,7 @@ import com.werelit.neurolls.neurolls.model.Media;
 import com.werelit.neurolls.neurolls.data.MediaContract.FilmEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.BookEntry;
 import com.werelit.neurolls.neurolls.data.MediaContract.GameEntry;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -186,7 +187,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, media.isArchived());
         if(media.getThumbnailBmp() != null)
-            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(media.getThumbnailBmp()));
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(media.getThumbnailBmp()));
         bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
 
         // TODO add image directory to bundle
@@ -329,7 +330,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 int n = Integer.parseInt(currentArchived);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
-                film.setThumbnailBmp(stringToBitMap(currentImage));
+                film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 entertainments.add(film);
             }
@@ -423,7 +424,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
-
+                book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(book);
             }
         } finally {
@@ -516,7 +517,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
-
+                game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(game);
             }
         } finally {
@@ -707,29 +708,6 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             return BookEntry.CONTENT_URI;
         } else {
             return GameEntry.CONTENT_URI;
-        }
-    }
-
-    public String bitmapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b = baos.toByteArray();
-        String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
-        return strBitmap;
-    }
-
-    /**
-     * @param encodedString
-     * @return bitmap (from given string)
-     */
-    public Bitmap stringToBitMap(String encodedString){
-        try {
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
         }
     }
 }

@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.Log;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 import com.werelit.neurolls.neurolls.network.StringUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -193,9 +194,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
-                image.setImageResource(R.drawable.ic_book_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.books));
-                image.setColorFilter(Color.WHITE);
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_book_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.books));
+                    image.setColorFilter(Color.WHITE);
+                }
 
             }else if(mediaCategory == CategoryAdapter.CATEGORY_GAMES) {
 
@@ -219,16 +222,18 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 publisher.setText(gamePublisher);
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
-                image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
-                image.setBackgroundColor(getResources().getColor(R.color.games));
-                image.setColorFilter(Color.WHITE);
+                if(!hasImage) {
+                    image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
+                    image.setBackgroundColor(getResources().getColor(R.color.games));
+                    image.setColorFilter(Color.WHITE);
+                }
             }
 
             name = (TextView) findViewById(R.id.name);
             genre = (TextView) findViewById(R.id.genre);
             year = (TextView) findViewById(R.id.year);
             if(hasImage){
-                image.setImageBitmap(stringToBitMap(strBitmap));
+                image.setImageBitmap(BitmapConverter.stringToBitMap(strBitmap));
             }
 
 
@@ -350,6 +355,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(BookEntry.COLUMN_BOOK_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(BookEntry.COLUMN_BOOK_YEAR_PUBLISHED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(BookEntry.COLUMN_BOOK_AUTHOR, bundle.getString(MediaKeys.BOOK_AUTHOR_KEY));
         values.put(BookEntry.COLUMN_BOOK_PAGES, bundle.getInt(MediaKeys.BOOK_PAGES_KEY));
@@ -373,6 +379,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_NAME, bundle.getString(MediaKeys.MEDIA_NAME_KEY));
         values.put(GameEntry.COLUMN_GAME_GENRE, bundle.getString(MediaKeys.MEDIA_GENRE_KEY));
         values.put(GameEntry.COLUMN_GAME_YEAR_RELEASED, bundle.getString(MediaKeys.MEDIA_YEAR_KEY));
+        values.put(FilmEntry.COLUMN_FILM_IMG_DIR, bundle.getString(MediaKeys.MEDIA_IMAGE_KEY));
 
         values.put(GameEntry.COLUMN_GAME_PLATFORM, bundle.getString(MediaKeys.GAME_PLATFORM_KEY));
         values.put(GameEntry.COLUMN_GAME_PUBLISHER, bundle.getString(MediaKeys.GAME_PUBLISHER_KEY));
@@ -380,7 +387,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_STORYLINE, bundle.getString(MediaKeys.GAME_STORYLINE_KEY));
 
         // TODO
-        values.put(GameEntry.COLUMN_GAME_IMG_DIR, "test/img/dir.png");
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
@@ -554,22 +560,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-
-    /**
-     * @param encodedString
-     * @return bitmap (from given string)
-     */
-    public Bitmap stringToBitMap(String encodedString){
-        try {
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-  
     public boolean isForAdding() {
         return isForAdding;
     }

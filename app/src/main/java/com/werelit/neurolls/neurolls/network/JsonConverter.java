@@ -52,7 +52,8 @@ public class JsonConverter {
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
                 //Log.e(TAG, "STARTING THREAD...............");
-                Thread t = new Thread(new BitmapDelivery(id, curObj.getString("poster_path")));
+                String imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+                Thread t = new Thread(new BitmapDelivery(id, imageSource));
                 t.start();
 
                 Film m = new Film();
@@ -97,7 +98,10 @@ public class JsonConverter {
                         imageThumbnail = "";
                     //Log.e("Hello World", "In if" + imageThumbnail);
                 }
-                //Log.e("Hello World", "After If" + imageThumbnail);
+                Log.e(TAG, "image thumbnail: " + imageThumbnail + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                Thread t = new Thread(new BitmapDelivery(id, imageThumbnail));
+                t.start();
                 publishedDate = formatDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
@@ -145,7 +149,7 @@ public class JsonConverter {
                     }
                 }
 
-                Thread t = new Thread(new BitmapDelivery2(gameId, imageThumb));
+                Thread t = new Thread(new BitmapDelivery(gameId, imageThumb));
                 t.start();
 
                 //String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
@@ -231,48 +235,7 @@ public class JsonConverter {
     static class BitmapDelivery implements Runnable {
         String strID;
         String posterPath;
-        BitmapDelivery(String id, String poster) {
-            strID = id;
-            posterPath = poster;
-        }
-        @Override
-        public void run() {
-            Log.e(TAG, "RUNNING RUNNABLE!!!!!!!!!!!!!!");
-            String imageSource = "";
-            URL imageUrl = null;
-            final Bitmap imageBmp;
-            if(posterPath != null){
-                try {
-                    imageSource = "https://image.tmdb.org/t/p/w300" + posterPath;
-                    imageUrl = new URL(imageSource);
-                    imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-
-                    Log.e(TAG, "PASSING TO HANDLER.......... ");
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
-                            SearchMediaActivity.setBitmapImage(strID, imageBmp);
-                        }
-                    });
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
-            }
-        }
-    }
-
-    static class BitmapDelivery2 implements Runnable {
-        String strID;
-        String posterPath;
-        BitmapDelivery2(String id, String url) {
+        BitmapDelivery(String id, String url) {
             strID = id;
             posterPath = url;
         }
@@ -305,21 +268,6 @@ public class JsonConverter {
             else {
                 Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
             }
-        }
-    }
-
-    /**
-     * @param encodedString
-     * @return bitmap (from given string)
-     */
-    public static Bitmap stringToBitMap(String encodedString){
-        try {
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
         }
     }
 }

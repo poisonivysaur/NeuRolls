@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.igdb.api_android_java.callback.onSuccessCallback;
 import com.igdb.api_android_java.model.APIWrapper;
 import com.igdb.api_android_java.model.Parameters;
+import com.werelit.neurolls.neurolls.network.BitmapConverter;
 import com.werelit.neurolls.neurolls.network.ConnectGameDB;
 import com.werelit.neurolls.neurolls.model.Book;
 import com.werelit.neurolls.neurolls.model.Film;
@@ -256,7 +257,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             public boolean onQueryTextSubmit(String query) {
                 loadingIndicator.setVisibility(View.VISIBLE);
                 mediaList.clear();
-                //completeFilm = null; // reset
                 if(searchType > 0) {    // if not internal search
                     // Get a reference to the ConnectivityManager to check state of network connectivity
                     ConnectivityManager connMgr = (ConnectivityManager)
@@ -320,7 +320,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
-//        searchView.setTintAlpha(200);
         searchView.adjustTintAlpha(0.8f);
 
         final Context context = this;
@@ -436,7 +435,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, media.getmMediaYear());
         if(media.getThumbnailBmp() != null)
-            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, bitmapToString(scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
+            bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(BitmapConverter.scaleDownBitmap(media.getThumbnailBmp(), SCALE, this)));
         bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, getCategoryCode(media));
     }
 
@@ -474,7 +473,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         Bundle queryBundle = new Bundle();
         queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
         getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
-        //intent.putExtra(MediaKeys.FAB_PRESSED, intent.getIntExtra(MediaKeys.FAB_PRESSED, 1));
     }
 
     private void setupGameSearch(String query){
@@ -516,10 +514,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         getBooks(query);
         getGames(query);
         updateSearchResultsUI();
-
-//        Bundle queryBundle = new Bundle();
-//        queryBundle.putString(MediaKeys.SEARCH_QUERY, query);
-//        getSupportLoaderManager().restartLoader(0, queryBundle, SearchMediaActivity.this);
     }
 
     private void getFilms(String query){
@@ -594,7 +588,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                 int n = Integer.parseInt(currentArchived);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
-                film.setThumbnailBmp(stringToBitMap(currentImage));
+                film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 mediaList.add(0, film);
             }
@@ -798,45 +792,6 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
                     break;
                 }
             }
-//        }else{
-//            Log.e(LOG_TAG, "BITMAP OF SPECIFIC FILM DELIVERED!!! "+bitmap);
-//            completeFilm.setThumbnailBmp(bitmap);
-//            //retrieveFilmDetails(completeFilm); cannot be non-static
         }
-    }
-
-    public String bitmapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos = new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b = baos.toByteArray();
-        String strBitmap = Base64.encodeToString(b, Base64.DEFAULT);
-        return strBitmap;
-    }
-
-    /**
-     * @param encodedString
-     * @return bitmap (from given string)
-     */
-    public Bitmap stringToBitMap(String encodedString){
-        try {
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch(Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-    public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
-
-        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
-
-        int h= (int) (newHeight*densityMultiplier);
-        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
-
-        photo=Bitmap.createScaledBitmap(photo, w, h, true);
-
-        return photo;
     }
 }
