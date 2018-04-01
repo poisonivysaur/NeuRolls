@@ -51,13 +51,13 @@ import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
 
-<<<<<<< HEAD
-    private TextView name, genre, year, date_text_view;
-=======
+//<<<<<<< HEAD
+    private TextView name, genre, year;
+//=======
     private static final String LOG_TAG = ViewMediaDetailsActivity.class.getSimpleName();
 
-    private TextView name, genre, year;
->>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
+    //private TextView name, genre, year;
+//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
     private ImageView image;
     private View rootView;
     private boolean isArchived = false;
@@ -73,7 +73,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         notifSettings = new ArrayList<>();
         setupUI();
 
-        if(isForAdding)
+        //if(isForAdding)
             setupClickListeners();
     }
 
@@ -162,7 +162,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView duration = (TextView) findViewById(R.id.duration);
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
-                //TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView date_text_view = findViewById(R.id.date_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Film object
@@ -179,23 +179,23 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
-<<<<<<< HEAD
-                /*if (date == null || date.isEmpty())
+//<<<<<<< HEAD
+                if (date == null || date.isEmpty())
                     date_text_view.setText("today");
                 else
-                    date_text_view.setText(date);*/
+                    date_text_view.setText(date);
 
                 image.setImageResource(R.drawable.ic_movie_black_24dp);
                 image.setBackgroundColor(getResources().getColor(R.color.films));
                 image.setColorFilter(Color.WHITE);
-=======
+//=======
 
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_movie_black_24dp);
                     image.setBackgroundColor(getResources().getColor(R.color.films));
                     image.setColorFilter(Color.WHITE);
                 }
->>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
+//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
             }
             // if the recycler view item pressed is a book,
             else if(mediaCategory == CategoryAdapter.CATEGORY_BOOKS) {
@@ -276,7 +276,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         // TODO set up date picker, notification modal
         LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
-        final TextView dateTextView = date_text_view;
+        final TextView dateTextView = (TextView) findViewById(R.id.date_text_view);
 
         scheduledDate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -377,12 +377,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         // TODO get text from UI for notif settings and date picker
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
-        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, bundle.getString(MediaKeys.MEDIA_DATE_KEY));
-=======
-        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
->>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
+
+        TextView date = findViewById(R.id.date_text_view);
+        //if (date.getText().toString().equals("today"))
+            values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
+//=======
+        //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
+//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false

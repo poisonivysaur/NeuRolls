@@ -181,7 +181,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         Bundle bundle = new Bundle();
 
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
-<<<<<<< HEAD
+//<<<<<<< HEAD
         bundle.putString(MediaKeys.MEDIA_ID_KEY, entertainments.get(position).getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
@@ -189,7 +189,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
         bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
         //bundle.putString(MediaKeys.MEDIA_DATE_KEY, entertainments.get(position).)
-=======
+//=======
         bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
@@ -199,7 +199,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(media.getThumbnailBmp()));
         bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
 
->>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
+//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         // TODO add image directory to bundle
 
         // View the details depending what category the media is
@@ -211,6 +211,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)media).getDirector());
             bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
             bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
+            bundle.putString(MediaKeys.MEDIA_DATE_KEY, ((Film)media).getDateToWatch());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
@@ -338,7 +339,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
-                film.setDateToWatch(currentDate);
+                //film.setDateToWatch(currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
