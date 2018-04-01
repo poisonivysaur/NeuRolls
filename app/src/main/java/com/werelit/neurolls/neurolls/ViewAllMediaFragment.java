@@ -212,6 +212,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
             bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
             bundle.putString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, ((Film)media).getDateToWatch());
+            bundle.putString(FilmEntry.COLUMN_FILM_NOTIF_TIME, ((Film)media).getTimeToWatch());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
@@ -287,6 +288,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
                 FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
+                FilmEntry.COLUMN_FILM_NOTIF_TIME,
                 FilmEntry.COLUMN_FILM_WATCHED,
                 FilmEntry.COLUMN_FILM_ARCHIVED };
 
@@ -313,6 +315,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
 
             int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+            int timeColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_TIME);
             int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
             int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
             int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
@@ -333,6 +336,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentSynopsis = cursor.getString(synopsisColumnIndex);
 
                 String currentDate = cursor.getString(dateColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
@@ -340,6 +344,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 film.setDateToWatch(currentDate);
+                film.setTimeToWatch(currentTime);
                 //Log.wtf("Date saved", currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);

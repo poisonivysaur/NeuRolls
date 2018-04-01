@@ -39,7 +39,7 @@ public class NotificationSettings extends DialogFragment {
     private boolean isForAdding = true;
     private String notifID;
     private String mediaName;
-    private TextView etDate;
+    private TextView etDate, etTime;
     private String days, time;
 
     @Override
@@ -49,6 +49,7 @@ public class NotificationSettings extends DialogFragment {
         //this.count = settings.getInt("count", 0);
 
         etDate = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.date_text_view);
+        etTime = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.notif_time_text_view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -126,6 +127,8 @@ public class NotificationSettings extends DialogFragment {
                             Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
                         }
 
+                        etTime.setText(time);
+                        ((ViewMediaDetailsActivity) getContext()).saveDateTime();
                         /*SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt("count", count);

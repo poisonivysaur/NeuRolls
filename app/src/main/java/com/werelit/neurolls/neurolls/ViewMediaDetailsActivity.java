@@ -381,11 +381,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
 
         TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
         //if (date.getText().toString().equals("today"))
         Log.d("Date", date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
-//=======
-        //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time.getText().toString());
 //>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
@@ -609,6 +609,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
 
         startActivity(intent);
+    }
+
+    public void saveDateTime() {
+        saveFilm();
     }
 
     public boolean isForAdding() {
