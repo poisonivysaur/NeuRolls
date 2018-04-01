@@ -179,7 +179,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
         bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
-
+        //bundle.putString(MediaKeys.MEDIA_DATE_KEY, entertainments.get(position).)
         // TODO add image directory to bundle
 
         // View the details depending what category the media is
@@ -319,6 +319,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                film.setDateToWatch(currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);

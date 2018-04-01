@@ -46,7 +46,7 @@ import java.util.Locale;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
 
-    private TextView name, genre, year;
+    private TextView name, genre, year, date_text_view;
     private ImageView image;
     private View rootView;
     private boolean isArchived = false;
@@ -149,6 +149,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView duration = (TextView) findViewById(R.id.duration);
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
+                //TextView date_text_view = findViewById(R.id.date_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Film object
@@ -156,6 +157,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
+                String date = bundle.getString(MediaKeys.MEDIA_DATE_KEY);
 
                 notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
 
@@ -164,6 +166,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
+                /*if (date == null || date.isEmpty())
+                    date_text_view.setText("today");
+                else
+                    date_text_view.setText(date);*/
+
                 image.setImageResource(R.drawable.ic_movie_black_24dp);
                 image.setBackgroundColor(getResources().getColor(R.color.films));
                 image.setColorFilter(Color.WHITE);
@@ -240,7 +247,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         // TODO set up date picker, notification modal
         LinearLayout scheduledDate = (LinearLayout) findViewById(R.id.scheduled_date);
-        final TextView dateTextView = (TextView) findViewById(R.id.date_text_view);
+        final TextView dateTextView = date_text_view;
+
         scheduledDate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -340,7 +348,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         // TODO get text from UI for notif settings and date picker
 
         values.put(FilmEntry.COLUMN_FILM_IMG_DIR, "test/img/dir.png");
-        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
+        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, bundle.getString(MediaKeys.MEDIA_DATE_KEY));
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
