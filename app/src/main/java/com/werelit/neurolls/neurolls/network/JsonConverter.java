@@ -85,6 +85,15 @@ public class JsonConverter {
                 String desc = curObj.getJSONObject("volumeInfo").getString("description");
                 String publisher = curObj.getJSONObject("volumeInfo").getString("publisher");
                 String publishedDate = curObj.getJSONObject("volumeInfo").optString("publishedDate");
+
+                //Getting Book image thumbnail
+                String imageThumbnail = "";
+                if(curObj.optJSONObject("imageLinks") != null){
+                    imageThumbnail = curObj.getJSONObject("imageLinks").optString("thumbnail");
+                    if(TextUtils.isEmpty(imageThumbnail))
+                        imageThumbnail = "";
+                }
+
                 publishedDate = formatDate(publishedDate);
                 Book b = new Book(id, title, genres, publishedDate, author, pageCount, publisher, desc);
                 books.add(b);
@@ -122,6 +131,14 @@ public class JsonConverter {
                 if (!curObj.isNull("collection"))
                     series = curObj.getJSONObject("collection").getString("name");
                 String summary = curObj.getString("summary");
+
+                String imageThumb = "";
+                if(!curObj.isNull("cover")){
+                    String hash = curObj.optJSONObject("cover").getString("cloudinary_id") + ".jpg";
+                    if(!TextUtils.isEmpty(hash)) {
+                        imageThumb = ConnectGameDB.GAME_IMAGE_URL + hash;
+                    }
+                }
 
                 //String developers = ConnectGameDB.getCompany(curObj.getJSONArray("developers"));
 
