@@ -423,7 +423,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 book.setArchived((n == 1)? true : false);
-
+                book.setThumbnailBmp(stringToBitMap(currentImage));
                 entertainments.add(book);
             }
         } finally {
@@ -516,7 +516,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
                 game.setArchived((n == 1)? true : false);
-
+                game.setThumbnailBmp(stringToBitMap(currentImage));
                 entertainments.add(game);
             }
         } finally {

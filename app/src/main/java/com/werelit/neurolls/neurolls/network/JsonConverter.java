@@ -52,7 +52,8 @@ public class JsonConverter {
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
                 //Log.e(TAG, "STARTING THREAD...............");
-                Thread t = new Thread(new BitmapDelivery(id, curObj.getString("poster_path")));
+                String imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
+                Thread t = new Thread(new BitmapDelivery2(id, imageSource));
                 t.start();
 
                 Film m = new Film();
