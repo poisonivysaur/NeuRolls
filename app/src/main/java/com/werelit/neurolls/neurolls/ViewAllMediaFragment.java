@@ -181,15 +181,14 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         Bundle bundle = new Bundle();
 
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
-//<<<<<<< HEAD
+
         bundle.putString(MediaKeys.MEDIA_ID_KEY, entertainments.get(position).getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
         bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
-        bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
-        //bundle.putString(MediaKeys.MEDIA_DATE_KEY, entertainments.get(position).)
-//=======
+        //bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
+
         bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
@@ -197,7 +196,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, media.isArchived());
         if(media.getThumbnailBmp() != null)
             bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(media.getThumbnailBmp()));
-        bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
+        //bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
 
 //>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         // TODO add image directory to bundle
@@ -213,6 +212,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
             bundle.putString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, ((Film)media).getDateToWatch());
             bundle.putString(FilmEntry.COLUMN_FILM_NOTIF_TIME, ((Film)media).getTimeToWatch());
+            bundle.putString(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, ((Film)media).getNotifSettings());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
@@ -222,6 +222,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
             bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Book)media).getDateToRead());
             bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Book)media).getTimeToRead());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, ((Book)media).getNotifSettings());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
@@ -231,6 +232,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
             bundle.putString(GameEntry.COLUMN_GAME_DATE_TO_PLAY, ((Game)media).getDateToPlay());
             bundle.putString(GameEntry.COLUMN_GAME_NOTIF_TIME, ((Game)media).getTimeToPlay());
+            bundle.putString(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, ((Game)media).getNotifSettings());
         }
 
         intent.putExtras(bundle);
@@ -451,6 +453,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 book.setDateToRead(currentDate);
                 book.setTimeToRead(currentTime);
                 book.setArchived((n == 1)? true : false);
+                book.setNotifSettings(currentNotif);
                 book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(book);
             }
@@ -549,6 +552,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 game.setDateToPlay(currentDate);
                 game.setTimeToPlay(currentTime);
                 game.setArchived((n == 1)? true : false);
+                game.setNotifSettings(currentNotif);
                 game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(game);
             }

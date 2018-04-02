@@ -174,7 +174,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String date = bundle.getString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
                 String time = bundle.getString(FilmEntry.COLUMN_FILM_NOTIF_TIME);
 
-                notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
+                notifID = bundle.getString(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);///////////////////////////////////////////////////////////////
 
                 // set the views of the xml layout to the attribute values
                 duration.setText("" + filmDuration);
@@ -225,6 +225,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String date = bundle.getString(BookEntry.COLUMN_BOOK_DATE_TO_READ);
                 String time = bundle.getString(BookEntry.COLUMN_BOOK_NOTIF_TIME);
 
+                notifID = bundle.getString(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
+
                 // set the views of the xml layout to the attribute values
                 author.setText(bookAuthor);
                 pages.setText("" + bookPages);
@@ -267,6 +269,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String gameStoryline = bundle.getString(MediaKeys.GAME_STORYLINE_KEY);
                 String date = bundle.getString(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
                 String time = bundle.getString(GameEntry.COLUMN_GAME_NOTIF_TIME);
+
+                notifID = bundle.getString(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
 
                 // set the views of the xml layout to the attribute values
                 platform.setText(gamePlatform);
@@ -379,7 +383,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
 
             notifSettings.add(notif);
-            notifID = null;
+            //notifID = null;
         }
     }
 
@@ -394,7 +398,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
 
         notifSettings.add(notif);
-        notifID = null;
+        //notifID = null;
     }
 
     private void saveFilm(){
@@ -424,7 +428,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time.getText().toString());
 //>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
-        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, notifID);////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
 
@@ -458,7 +462,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         Log.d("Date", date.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time.getText().toString());
-        values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, notifID);
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
         showFeedback(newUri);
@@ -486,7 +490,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         Log.d("Date", date.getText().toString());
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date.getText().toString());
         values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time.getText().toString());
-        values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
+        values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, notifID);
 
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
         showFeedback(newUri);

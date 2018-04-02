@@ -258,6 +258,11 @@ public class NotificationSettings extends DialogFragment {
         this.mediaName = mediaName;
     }
 
+    public String getNotifID()
+    {
+        return notifID;
+    }
+
     /*@Override
     public void onStop() {
         super.onStop();
