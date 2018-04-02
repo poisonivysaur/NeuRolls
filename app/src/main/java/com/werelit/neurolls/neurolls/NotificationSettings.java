@@ -112,15 +112,15 @@ public class NotificationSettings extends DialogFragment {
                         long hrsToMillis = selectedHrs - currentHrs;
                         long secsToMillis = 60 - currentSecs;
 
-                        Log.d("DAYS", "" + daysToMillis);
+                        /*Log.d("DAYS", "" + daysToMillis);
                         Log.d("HRS", "" + hrsToMillis);
                         Log.d("MINS", "" + minsToMillis);
                         Log.d("YEARS", "" + yearsToMillis);
                         Log.d("MONTHS", "" + monthsToMillis);
-                        Log.d("SECONDS", "" + secsToMillis);
+                        Log.d("SECONDS", "" + secsToMillis);*/
 
                         delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
-                        Log.d("TOTAL", delay + "");
+                        //Log.d("TOTAL", delay + "");
 
                         if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
                             scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
@@ -207,7 +207,7 @@ public class NotificationSettings extends DialogFragment {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1); //adds notificationpublisher id constant 1
         if (notifID != null) {
             notificationIntent.setAction(notifID);
-            Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
             //Log.d("NOTIFID", "" + notifID);
         } else {
             notifID = UUID.randomUUID().toString();
