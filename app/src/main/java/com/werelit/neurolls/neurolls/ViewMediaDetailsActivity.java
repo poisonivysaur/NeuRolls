@@ -187,9 +187,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (time == null || time.isEmpty())
-                    notif_time_text_view.setText("12:00");
-                else
+                if (time == null || time.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else
                     notif_time_text_view.setText(time);
 
                 if(!hasImage) {
@@ -234,9 +235,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (time == null || time.isEmpty())
-                    notif_time_text_view.setText("12:00");
-                else
+                if (time == null || time.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else
                     notif_time_text_view.setText(time);
 
                 if(!hasImage) {
@@ -281,9 +283,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (time == null || time.isEmpty())
-                    notif_time_text_view.setText("12:00");
-                else
+                if (time == null || time.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else
                     notif_time_text_view.setText(time);
 
                 if(!hasImage) {
