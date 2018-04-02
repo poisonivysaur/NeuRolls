@@ -125,7 +125,7 @@ public class NotificationSettings extends DialogFragment {
 
                         if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
                             scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
-                            ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
+                            ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, days + time);
                             //Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
                         }
 
