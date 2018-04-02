@@ -235,7 +235,7 @@ public class NotificationSettings extends DialogFragment {
         Notification.Builder builder = new Notification.Builder(context);///////////////////////////////////
 
         //sets notificationbuilder properties
-        builder.setContentTitle("Time to check off that movie ;)");
+        builder.setContentTitle("Time to check this out!");
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_movie_filter);
         builder.setDefaults(Notification.DEFAULT_SOUND);
