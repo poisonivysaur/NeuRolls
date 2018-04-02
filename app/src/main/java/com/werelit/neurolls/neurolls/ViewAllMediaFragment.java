@@ -181,6 +181,14 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         Bundle bundle = new Bundle();
 
         bundle.putBoolean(MediaKeys.ADDING_NEW_MEDIA, false);
+
+        bundle.putString(MediaKeys.MEDIA_ID_KEY, entertainments.get(position).getMediaID());
+        bundle.putString(MediaKeys.MEDIA_NAME_KEY, entertainments.get(position).getmMediaName());
+        bundle.putString(MediaKeys.MEDIA_GENRE_KEY, entertainments.get(position).getmMediaGenre());
+        bundle.putString(MediaKeys.MEDIA_YEAR_KEY, entertainments.get(position).getmMediaYear());
+        bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, entertainments.get(position).isArchived());
+        //bundle.putString(MediaKeys.NOTIFICATION_ID, entertainments.get(position).getNotifSettings());/////////////////////////////////////////////////////////////////////
+
         bundle.putString(MediaKeys.MEDIA_ID_KEY, media.getMediaID());
         bundle.putString(MediaKeys.MEDIA_NAME_KEY, media.getmMediaName());
         bundle.putString(MediaKeys.MEDIA_GENRE_KEY, media.getmMediaGenre());
@@ -188,8 +196,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         bundle.putBoolean(MediaKeys.MEDIA_ARCHIVED, media.isArchived());
         if(media.getThumbnailBmp() != null)
             bundle.putString(MediaKeys.MEDIA_IMAGE_KEY, BitmapConverter.bitmapToString(media.getThumbnailBmp()));
-        bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
+        //bundle.putString(MediaKeys.NOTIFICATION_ID, media.getNotifSettings());/////////////////////////////////////////////////////////////////////
 
+//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
         // TODO add image directory to bundle
 
         // View the details depending what category the media is
@@ -201,6 +210,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.FILM_DIRECTOR_KEY, ((Film)media).getDirector());
             bundle.putString(MediaKeys.FILM_PRODUCTION_KEY, ((Film)media).getProduction());
             bundle.putString(MediaKeys.FILM_SYNOPSIS_KEY, ((Film)media).getSynopsis());
+            bundle.putString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, ((Film)media).getDateToWatch());
+            bundle.putString(FilmEntry.COLUMN_FILM_NOTIF_TIME, ((Film)media).getTimeToWatch());
+            bundle.putString(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, ((Film)media).getNotifSettings());
         }
         else if(media instanceof Book){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_BOOKS);
@@ -208,6 +220,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)media).getPages());
             bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)media).getPublisher());
             bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
+            bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Book)media).getDateToRead());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Book)media).getTimeToRead());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, ((Book)media).getNotifSettings());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
@@ -215,6 +230,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)media).getPublisher());
             bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)media).getSeries());
             bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
+            bundle.putString(GameEntry.COLUMN_GAME_DATE_TO_PLAY, ((Game)media).getDateToPlay());
+            bundle.putString(GameEntry.COLUMN_GAME_NOTIF_TIME, ((Game)media).getTimeToPlay());
+            bundle.putString(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, ((Game)media).getNotifSettings());
         }
 
         intent.putExtras(bundle);
@@ -276,6 +294,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 FilmEntry.COLUMN_FILM_DATE_TO_WATCH,
                 FilmEntry.COLUMN_FILM_NOTIF_SETTINGS,
+                FilmEntry.COLUMN_FILM_NOTIF_TIME,
                 FilmEntry.COLUMN_FILM_WATCHED,
                 FilmEntry.COLUMN_FILM_ARCHIVED };
 
@@ -302,6 +321,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             int synopsisColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_SYNOPSIS);
 
             int dateColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+            int timeColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_TIME);
             int notifColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);
             int watchedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_WATCHED);
             int archivedColumnIndex = cursor.getColumnIndex(FilmEntry.COLUMN_FILM_ARCHIVED);
@@ -322,12 +342,16 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentSynopsis = cursor.getString(synopsisColumnIndex);
 
                 String currentDate = cursor.getString(dateColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
                 Film film = new Film(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                film.setDateToWatch(currentDate);
+                film.setTimeToWatch(currentTime);
+                //Log.wtf("Date saved", currentDate);
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
@@ -359,6 +383,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 BookEntry.COLUMN_BOOK_DATE_TO_READ,
                 BookEntry.COLUMN_BOOK_NOTIF_SETTINGS,
+                BookEntry.COLUMN_BOOK_NOTIF_TIME,
                 BookEntry.COLUMN_BOOK_READ,
                 BookEntry.COLUMN_BOOK_ARCHIVED };
 
@@ -398,6 +423,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             int dateColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DATE_TO_READ);
             int notifColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
+            int timeColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_TIME);
             int watchedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_READ);
             int archivedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ARCHIVED);
 
@@ -417,13 +443,17 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentSynopsis = cursor.getString(synopsisColumnIndex);
 
                 String currentDate = cursor.getString(dateColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                book.setDateToRead(currentDate);
+                book.setTimeToRead(currentTime);
                 book.setArchived((n == 1)? true : false);
+                book.setNotifSettings(currentNotif);
                 book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(book);
             }
@@ -452,6 +482,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 GameEntry.COLUMN_GAME_DATE_TO_PLAY,
                 GameEntry.COLUMN_GAME_NOTIF_SETTINGS,
+                GameEntry.COLUMN_GAME_NOTIF_TIME,
                 GameEntry.COLUMN_GAME_PLAYED,
                 GameEntry.COLUMN_GAME_ARCHIVED };
 
@@ -491,6 +522,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             int dateColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
             int notifColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
+            int timeColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_TIME);
             int watchedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLAYED);
             int archivedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ARCHIVED);
 
@@ -511,12 +543,16 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 String currentDate = cursor.getString(dateColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                game.setDateToPlay(currentDate);
+                game.setTimeToPlay(currentTime);
                 game.setArchived((n == 1)? true : false);
+                game.setNotifSettings(currentNotif);
                 game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(game);
             }

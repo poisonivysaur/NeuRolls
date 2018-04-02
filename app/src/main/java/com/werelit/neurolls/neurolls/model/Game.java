@@ -18,6 +18,7 @@ public class Game extends Media{
     private String storyline;
 
     private String dateToPlay = "";
+    private String timeToPlay = "";
 
     private boolean isPlayed = false;
 
@@ -82,5 +83,13 @@ public class Game extends Media{
 
     public void setDateToPlay(String dateToPlay) {
         this.dateToPlay = dateToPlay;
+    }
+
+    public String getTimeToPlay() {
+        return timeToPlay;
+    }
+
+    public void setTimeToPlay(String timeToPlay) {
+        this.timeToPlay = timeToPlay;
     }
 }
