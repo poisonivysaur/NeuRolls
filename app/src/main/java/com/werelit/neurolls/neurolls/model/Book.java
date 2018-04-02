@@ -18,7 +18,6 @@ public class Book extends Media{
     private String description;
 
     private String dateToRead = "";
-    private String timeToRead = "";
 
     private boolean isRead = false;
 
@@ -94,13 +93,5 @@ public class Book extends Media{
 
     public void setDateToRead(String dateToRead) {
         this.dateToRead = dateToRead;
-    }
-
-    public String getTimeToRead() {
-        return timeToRead;
-    }
-
-    public void setTimeToRead(String timeToRead) {
-        this.timeToRead = timeToRead;
     }
 }

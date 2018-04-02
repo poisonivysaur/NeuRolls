@@ -26,31 +26,25 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class NotificationSettings extends DialogFragment {
     private TextView tv;
+    private Spinner days;
     private NotificationSettingsListener listener;
     private Spinner spinner;
     public static final String PREFS_NAME = "MyPrefsFile";
-    //private int count;
+    private int count;
     private long delay;
     private boolean isForAdding = true;
     private String notifID;
     private String mediaName;
-    private TextView etDate, etTime;
-    private String days, time;
-    private String mediaType;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        //SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
-        //this.count = settings.getInt("count", 0);
-
-        etDate = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.date_text_view);
-        etTime = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.notif_time_text_view);
+        SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
+        this.count = settings.getInt("count", 0);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -68,9 +62,8 @@ public class NotificationSettings extends DialogFragment {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) { //this is where notif scheduling happens
-
-                        days = spinner.getSelectedItem().toString();
-                        time = tv.getText().toString();
+                        String days = spinner.getSelectedItem().toString();
+                        String time = tv.getText().toString();
 
                         String hrs = time.substring(0, time.indexOf(":"));
                         String mins = time.substring(time.indexOf(":") + 1);
@@ -85,6 +78,7 @@ public class NotificationSettings extends DialogFragment {
                         int iSecs = c.get(Calendar.SECOND);
 
                         //gets the sched date
+                        TextView etDate = ((ViewMediaDetailsActivity) getContext()).findViewById(R.id.date_text_view);
                         String date = etDate.getText().toString();
                         Calendar cal = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
@@ -121,21 +115,20 @@ public class NotificationSettings extends DialogFragment {
                         Log.d("SECONDS", "" + secsToMillis);
 
                         delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
+
                         Log.d("TOTAL", delay + "");
 
                         if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
                             scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
-                            ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
-                            Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), mediaName, Toast.LENGTH_SHORT).show();
                         }
 
-                        etTime.setText(time);
-                        /*SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt("count", count);
 
                         editor.apply();
-                        Log.d("WORKING?", "count saved" + count);*/
+                        Log.d("WORKING?", "count saved" + count);
                     }
                 });
 
@@ -200,7 +193,6 @@ public class NotificationSettings extends DialogFragment {
 //    }
 
     public void scheduleNotification(Notification notification, long delay, Context context) {
-        //delay = computeDelay();
 
         //initiates new notification intent
         Intent notificationIntent = new Intent(context, NotificationPublisher.class);///////////////////////////////////////////////////////
@@ -209,12 +201,9 @@ public class NotificationSettings extends DialogFragment {
         if (notifID != null) {
             notificationIntent.setAction(notifID);
             Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
-            Log.d("NOTIFID", "" + notifID);
         } else {
-            notificationIntent.setAction("" + UUID.randomUUID().toString());
-            //notificationIntent.setAction("" + count);
-            //count ++;
-            Log.d("RANDOM ID", UUID.randomUUID().toString());
+            notificationIntent.setAction("" + count);
+            count ++;
         }
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
@@ -258,11 +247,6 @@ public class NotificationSettings extends DialogFragment {
         this.mediaName = mediaName;
     }
 
-    public String getNotifID()
-    {
-        return notifID;
-    }
-
     /*@Override
     public void onStop() {
         super.onStop();
@@ -273,60 +257,5 @@ public class NotificationSettings extends DialogFragment {
 
         editor.apply();
         Log.d("onStop", "count saved" + count);
-    }*/
-
-    /*public long computeDelay() {
-
-        String hrs = time.substring(0, time.indexOf(":"));
-        String mins = time.substring(time.indexOf(":") + 1);
-
-        //gets the current date and time
-        Calendar c = Calendar.getInstance();
-        int iYear = c.get(Calendar.YEAR);
-        int iMonths = c.get(Calendar.MONTH);
-        int iDays = c.get(Calendar.DAY_OF_MONTH);
-        int iHrs = c.get(Calendar.HOUR_OF_DAY);
-        int iMins = c.get(Calendar.MINUTE);
-        int iSecs = c.get(Calendar.SECOND);
-
-        //gets the sched date
-        String date = etDate.getText().toString();
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
-
-        try {
-            cal.setTime(sdf.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        long yearsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.YEAR) - iYear) * c.getActualMaximum(Calendar.DAY_OF_YEAR));
-        long monthsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.MONTH) - iMonths) * c.getActualMaximum(Calendar.MONTH));
-        long daysToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.DAY_OF_MONTH) - Integer.parseInt(days)) - iDays);
-
-        //converts selected date and time to milliseconds
-        long selectedMins = TimeUnit.MINUTES.toMillis(Integer.parseInt(mins));
-        long selectedHrs = TimeUnit.HOURS.toMillis(Integer.parseInt(hrs));
-
-        //converts current date and time to milliseconds
-        long currentHrs = TimeUnit.HOURS.toMillis(iHrs);
-        long currentMins = TimeUnit.MINUTES.toMillis(iMins);
-        long currentSecs = TimeUnit.SECONDS.toMillis(iSecs);
-
-        //computes for the notification delay
-        long minsToMillis = selectedMins - currentMins;
-        long hrsToMillis = selectedHrs - currentHrs;
-        long secsToMillis = 60 - currentSecs;
-
-        Log.d("DAYS", "" + daysToMillis);
-        Log.d("HRS", "" + hrsToMillis);
-        Log.d("MINS", "" + minsToMillis);
-        Log.d("YEARS", "" + yearsToMillis);
-        Log.d("MONTHS", "" + monthsToMillis);
-        Log.d("SECONDS", "" + secsToMillis);
-
-        delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
-        Log.d("TOTAL", delay + "");
-        return delay;
     }*/
 }

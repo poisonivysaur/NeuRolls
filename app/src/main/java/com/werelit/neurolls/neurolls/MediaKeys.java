@@ -6,7 +6,6 @@ public class MediaKeys {
     public final static String MEDIA_GENRE_KEY = "MEDIA_GENRE_KEY";
     public final static String MEDIA_YEAR_KEY = "MEDIA_YEAR_KEY";
     public final static String MEDIA_IMAGE_KEY = "MEDIA_IMAGE_KEY";
-    public final static String MEDIA_DATE_KEY = "MEDIA_DATE_KEY";
 
     public final static String FILM_DIRECTOR_KEY = "FILM_DIRECTOR_KEY";
     public final static String FILM_DURATION_KEY = "FILM_DURATION_KEY";

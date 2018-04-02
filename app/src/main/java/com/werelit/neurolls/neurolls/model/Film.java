@@ -21,8 +21,6 @@ public class Film extends Media{
 
     private boolean isWatched = false;
 
-    private String timeToWatch = "";
-
     public Film(){
 
     }
@@ -86,9 +84,4 @@ public class Film extends Media{
         this.dateToWatch = dateToWatch;
     }
 
-    public String getTimeToWatch() { return timeToWatch; }
-
-    public void setTimeToWatch(String timeToWatch) {
-        this.timeToWatch = timeToWatch;
-    }
 }
