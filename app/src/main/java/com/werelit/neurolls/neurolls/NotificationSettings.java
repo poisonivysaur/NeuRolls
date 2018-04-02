@@ -208,14 +208,14 @@ public class NotificationSettings extends DialogFragment {
         if (notifID != null) {
             notificationIntent.setAction(notifID);
             Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
-            Log.d("NOTIFID", "" + notifID);
+            //Log.d("NOTIFID", "" + notifID);
         } else {
             notifID = UUID.randomUUID().toString();
-            Log.d("NOTIF notifsettings", "" + notifID);
+            //Log.d("NOTIF notifsettings", "" + notifID);
             notificationIntent.setAction("" + notifID);
             //notificationIntent.setAction("" + count);
             //count ++;
-            Log.d("RANDOM ID", UUID.randomUUID().toString());
+            //Log.d("RANDOM ID", UUID.randomUUID().toString());
         }
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
