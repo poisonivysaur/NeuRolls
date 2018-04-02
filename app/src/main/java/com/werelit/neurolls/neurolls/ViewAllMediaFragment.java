@@ -229,8 +229,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)media).getPublisher());
             bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)media).getSeries());
             bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
-            bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Game)media).getDateToPlay());
-            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Game)media).getTimeToPlay());
+            bundle.putString(GameEntry.COLUMN_GAME_DATE_TO_PLAY, ((Game)media).getDateToPlay());
+            bundle.putString(GameEntry.COLUMN_GAME_NOTIF_TIME, ((Game)media).getTimeToPlay());
         }
 
         intent.putExtras(bundle);

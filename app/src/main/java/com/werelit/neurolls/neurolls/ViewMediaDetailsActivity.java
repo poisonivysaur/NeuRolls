@@ -187,7 +187,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (date == null || date.isEmpty())
+                if (time == null || time.isEmpty())
                     notif_time_text_view.setText("12:00");
                 else
                     notif_time_text_view.setText(time);
@@ -236,7 +236,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (date == null || date.isEmpty())
+                if (time == null || time.isEmpty())
                     notif_time_text_view.setText("12:00");
                 else
                     notif_time_text_view.setText(time);
@@ -279,7 +279,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                if (date == null || date.isEmpty())
+                if (time == null || time.isEmpty())
                     notif_time_text_view.setText("12:00");
                 else
                     notif_time_text_view.setText(time);
@@ -561,8 +561,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
         //values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
-        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
-        values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
+        //values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
+        //values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
+        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date);
+        values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time);
 
         Uri currentUri = getCurrentUri(getContentUri());
 
@@ -576,7 +578,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             // Otherwise, the update was successful and we can display a toast.
             Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
         }
-        finish();
     }
 
     private void deleteMedia(Uri uri){
