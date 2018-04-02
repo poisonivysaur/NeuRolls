@@ -1,10 +1,13 @@
 package com.werelit.neurolls.neurolls;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -48,6 +51,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
 
@@ -92,6 +96,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_archive) {
             updateMedia(getContentUri());
+
+            Intent notificationIntent = new Intent(this, NotificationPublisher.class);///////////////////////////////////////////////////////
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1); //adds notificationpublisher id constant 1
+            notificationIntent.setAction(notifID);
+
+            //notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
+            //PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();

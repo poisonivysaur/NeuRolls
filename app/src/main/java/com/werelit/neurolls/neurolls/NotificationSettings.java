@@ -222,7 +222,7 @@ public class NotificationSettings extends DialogFragment {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        //PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
         //sets notification runtime in milliseconds
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         //gets system alarm service
