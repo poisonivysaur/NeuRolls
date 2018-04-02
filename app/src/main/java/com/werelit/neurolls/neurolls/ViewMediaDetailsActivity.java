@@ -559,12 +559,20 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     public void saveDateTime(String date, String time) {
         ContentValues values = new ContentValues();
 
-        //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
-        //values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
-        //values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
-        //values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
-        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date);
-        values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time);
+        switch (mediaCategory) {
+            case CategoryAdapter.CATEGORY_FILMS:
+                values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
+                values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
+                break;
+            case CategoryAdapter.CATEGORY_BOOKS:
+                values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
+                values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
+                break;
+            case CategoryAdapter.CATEGORY_GAMES:
+                values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date);
+                values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time);
+                break;
+        }
 
         Uri currentUri = getCurrentUri(getContentUri());
 
