@@ -66,6 +66,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notifSettings = new ArrayList<>();
         setupUI();
         setupClickListeners();
     }
@@ -104,12 +105,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             //shareToTwitter();
         }
         else if(item.getItemId() == R.id.action_save) {
-            saveMedia();
             if (notifSettings.size() == 0) {
                 createStartNotif();
             }
             notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
+            notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
             notifSettings.remove(0);
+
+            Log.d("NOTIF", "" + notifID);
+            saveMedia();
             //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
@@ -176,8 +180,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
 
-                if (date == null || date.isEmpty())
-                    date_text_view.setText("" + Calendar.getInstance().getTime());
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
                 else
                     date_text_view.setText(date);
 
@@ -221,8 +227,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
 
-                if (date == null || date.isEmpty())
-                    date_text_view.setText("" + Calendar.getInstance().getTime());
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
                 else
                     date_text_view.setText(date);
 
@@ -266,8 +274,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
 
-                if (date == null || date.isEmpty())
-                    date_text_view.setText("" + Calendar.getInstance().getTime());
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
                 else
                     date_text_view.setText(date);
 
@@ -410,7 +420,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         Log.d("Date", date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time.getText().toString());
-//>>>>>>> bda761fd5275653e75909f4cd46d75d7bf38d619
+
         values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, notifID);////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
@@ -574,7 +584,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
         }
     }
-    
+
     private void deleteMedia(Uri uri){
         Uri currentUri = getCurrentUri(uri);
 

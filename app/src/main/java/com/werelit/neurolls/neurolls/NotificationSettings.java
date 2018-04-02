@@ -210,7 +210,9 @@ public class NotificationSettings extends DialogFragment {
             Toast.makeText(context, notifID, Toast.LENGTH_SHORT).show();
             Log.d("NOTIFID", "" + notifID);
         } else {
-            notificationIntent.setAction("" + UUID.randomUUID().toString());
+            notifID = UUID.randomUUID().toString();
+            Log.d("NOTIF notifsettings", "" + notifID);
+            notificationIntent.setAction("" + notifID);
             //notificationIntent.setAction("" + count);
             //count ++;
             Log.d("RANDOM ID", UUID.randomUUID().toString());
@@ -257,6 +259,7 @@ public class NotificationSettings extends DialogFragment {
         this.mediaName = mediaName;
     }
 
+    public String getNotifID() { return notifID; }
     /*@Override
     public void onStop() {
         super.onStop();
