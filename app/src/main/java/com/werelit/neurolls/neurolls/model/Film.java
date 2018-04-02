@@ -18,6 +18,7 @@ public class Film extends Media{
     private String synopsis;
 
     private String dateToWatch = "";
+    private String timeToWatch = "";
 
     private boolean isWatched = false;
 
@@ -82,6 +83,12 @@ public class Film extends Media{
 
     public void setDateToWatch(String dateToWatch) {
         this.dateToWatch = dateToWatch;
+    }
+
+    public String getTimeToWatch() { return timeToWatch; }
+
+    public void setTimeToWatch(String timeToWatch) {
+        this.timeToWatch = timeToWatch;
     }
 
 }
