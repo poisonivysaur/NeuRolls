@@ -41,6 +41,7 @@ public class NotificationSettings extends DialogFragment {
     private String mediaName;
     private TextView etDate, etTime;
     private String days, time;
+    private String mediaType;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

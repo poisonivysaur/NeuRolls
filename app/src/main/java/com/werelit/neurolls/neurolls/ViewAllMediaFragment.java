@@ -221,7 +221,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)media).getPublisher());
             bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
             bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Book)media).getDateToRead());
-            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Book)media).getDateToRead());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Book)media).getTimeToRead());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
@@ -229,6 +229,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putString(MediaKeys.GAME_PUBLISHER_KEY, ((Game)media).getPublisher());
             bundle.putString(MediaKeys.GAME_SERIES_KEY, ((Game)media).getSeries());
             bundle.putString(MediaKeys.GAME_STORYLINE_KEY, ((Game)media).getStoryline());
+            bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Game)media).getDateToPlay());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Game)media).getTimeToPlay());
         }
 
         intent.putExtras(bundle);

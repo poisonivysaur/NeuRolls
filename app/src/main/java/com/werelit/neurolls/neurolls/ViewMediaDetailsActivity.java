@@ -256,6 +256,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView series = (TextView) findViewById(R.id.series);
                 TextView storyline = (TextView) findViewById(R.id.storyline);
+                TextView date_text_view = findViewById(R.id.date_text_view);
                 TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
@@ -264,12 +265,25 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String gamePublisher = bundle.getString(MediaKeys.GAME_PUBLISHER_KEY);
                 String gameSeries = bundle.getString(MediaKeys.GAME_SERIES_KEY);
                 String gameStoryline = bundle.getString(MediaKeys.GAME_STORYLINE_KEY);
+                String date = bundle.getString(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
+                String time = bundle.getString(GameEntry.COLUMN_GAME_NOTIF_TIME);
 
                 // set the views of the xml layout to the attribute values
                 platform.setText(gamePlatform);
                 publisher.setText(gamePublisher);
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
+
+                if (date == null || date.isEmpty())
+                    date_text_view.setText("today");
+                else
+                    date_text_view.setText(date);
+
+                if (date == null || date.isEmpty())
+                    notif_time_text_view.setText("12:00");
+                else
+                    notif_time_text_view.setText(time);
+
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
                     image.setBackgroundColor(getResources().getColor(R.color.games));
@@ -438,7 +452,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY));
 
         // TODO
-        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
+        TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
+        //if (date.getText().toString().equals("today"))
+        Log.d("Date", date.getText().toString());
+        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date.getText().toString());
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
@@ -461,7 +480,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_STORYLINE, bundle.getString(MediaKeys.GAME_STORYLINE_KEY));
 
         // TODO
-        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
+        TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
+        //if (date.getText().toString().equals("today"))
+        Log.d("Date", date.getText().toString());
+        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date.getText().toString());
+        values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time.getText().toString());
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
 
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
@@ -535,8 +559,10 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     public void saveDateTime(String date, String time) {
         ContentValues values = new ContentValues();
 
-        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
-        values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
+        //values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
+        //values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
+        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
 
         Uri currentUri = getCurrentUri(getContentUri());
 
