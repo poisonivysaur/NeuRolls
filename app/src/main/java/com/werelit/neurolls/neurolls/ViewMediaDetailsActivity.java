@@ -120,16 +120,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             //shareToTwitter();
         }
         else if(item.getItemId() == R.id.action_save) {
-            if (notifSettings.size() == 0) {
-                createStartNotif();
-            }
-            notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
-            notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
-            notifSettings.remove(0);
-
-            Log.d("NOTIF", "" + notifID);
             saveMedia();
-            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
@@ -536,6 +527,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         if (releaseYear.compareTo(today) <= 0) {
             System.out.println("earlier");
+            if (notifSettings.size() == 0) {
+                createStartNotif();
+            }
+            notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
+            notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
+            notifSettings.remove(0);
+
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
                     // Save film to db
