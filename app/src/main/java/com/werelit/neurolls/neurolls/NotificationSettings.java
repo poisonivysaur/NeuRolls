@@ -139,6 +139,7 @@ public class NotificationSettings extends DialogFragment {
                 });
 
         tv = view.findViewById(R.id.time);
+        tv.setText(etTime.getText().toString());
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
