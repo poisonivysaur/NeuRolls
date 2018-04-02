@@ -210,22 +210,22 @@ public class JsonConverter {
 
     private static String formatDate(String publishedDate){
         if(TextUtils.isEmpty(publishedDate))
-            return "9999-01-01";
+            return "2018-12-31";
         String returnDate = "";
         String[] splitPublishedDate = publishedDate.split("-");
 
         switch (splitPublishedDate.length){
             case 1:
-                returnDate = splitPublishedDate[0] + "-01-01";
+                returnDate = splitPublishedDate[0] + "-12-31";
                 break;
             case 2:
-                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-01";
+                returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-31";
                 break;
             case 3:
                 returnDate = splitPublishedDate[0] + "-" + splitPublishedDate[1] + "-" + splitPublishedDate[2];
                 break;
             default:
-                returnDate = "9999-01-01";
+                returnDate = "2018-12-31";
         }
 
         return returnDate;
