@@ -233,11 +233,17 @@ public class NotificationSettings extends DialogFragment {
     }
 
     public Notification getNotification(String content, Context context) {
+        Intent notIntent = new Intent(context, MainActivity.class);
+        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendInt = PendingIntent.getActivity(context, 0,
+                notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         //initiates notification builder
         Notification.Builder builder = new Notification.Builder(context);///////////////////////////////////
 
         //sets notificationbuilder properties
         builder.setContentTitle("Time to check this out!");
+        builder.setContentIntent(pendInt);
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_movie_filter);
         builder.setDefaults(Notification.DEFAULT_SOUND);
