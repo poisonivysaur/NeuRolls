@@ -30,5 +30,5 @@ public class MediaKeys {
     public final static String FAB_PRESSED = "FAB_PRESSED";
 
     public final static String SEARCH_QUERY = "SEARCH_QUERY";
-    public final static String NOTIFICATION_ID = "NOTIF_ID";
+    public final static String NOTIF_DAYS_BEFORE = "NOTIF_DAYS_BEFORE";
 }
