@@ -187,7 +187,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 else
                     date_text_view.setText(date);
 
-                notif_time_text_view.setText(time);
+                if (date == null || date.isEmpty())
+                    notif_time_text_view.setText("12:00");
+                else
+                    notif_time_text_view.setText(time);
+
                 image.setImageResource(R.drawable.ic_movie_black_24dp);
                 image.setBackgroundColor(getResources().getColor(R.color.films));
                 image.setColorFilter(Color.WHITE);
@@ -209,6 +213,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView pages = (TextView) findViewById(R.id.pages);
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView description = (TextView) findViewById(R.id.description);
+                TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Book object
@@ -216,12 +222,25 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int bookPages = bundle.getInt(MediaKeys.BOOK_PAGES_KEY);
                 String bookPublisher = bundle.getString(MediaKeys.BOOK_PUBLISHER_KEY);
                 String bookDescription = bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY);
+                String date = bundle.getString(BookEntry.COLUMN_BOOK_DATE_TO_READ);
+                String time = bundle.getString(BookEntry.COLUMN_BOOK_NOTIF_TIME);
 
                 // set the views of the xml layout to the attribute values
                 author.setText(bookAuthor);
                 pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
+
+                if (date == null || date.isEmpty())
+                    date_text_view.setText("today");
+                else
+                    date_text_view.setText(date);
+
+                if (date == null || date.isEmpty())
+                    notif_time_text_view.setText("12:00");
+                else
+                    notif_time_text_view.setText(time);
+
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_book_black_24dp);
                     image.setBackgroundColor(getResources().getColor(R.color.books));
@@ -237,6 +256,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView series = (TextView) findViewById(R.id.series);
                 TextView storyline = (TextView) findViewById(R.id.storyline);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Game object

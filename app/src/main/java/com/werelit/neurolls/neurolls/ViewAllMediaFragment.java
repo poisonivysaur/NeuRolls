@@ -220,6 +220,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
             bundle.putInt(MediaKeys.BOOK_PAGES_KEY, ((Book)media).getPages());
             bundle.putString(MediaKeys.BOOK_PUBLISHER_KEY, ((Book)media).getPublisher());
             bundle.putString(MediaKeys.BOOK_DESCRIPTION_KEY, ((Book)media).getDescription());
+            bundle.putString(BookEntry.COLUMN_BOOK_DATE_TO_READ, ((Book)media).getDateToRead());
+            bundle.putString(BookEntry.COLUMN_BOOK_NOTIF_TIME, ((Book)media).getDateToRead());
         }
         else if(media instanceof Game){
             bundle.putInt(MediaKeys.MEDIA_CATEGORY_KEY, CategoryAdapter.CATEGORY_GAMES);
@@ -377,6 +379,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 BookEntry.COLUMN_BOOK_DATE_TO_READ,
                 BookEntry.COLUMN_BOOK_NOTIF_SETTINGS,
+                BookEntry.COLUMN_BOOK_NOTIF_TIME,
                 BookEntry.COLUMN_BOOK_READ,
                 BookEntry.COLUMN_BOOK_ARCHIVED };
 
@@ -416,6 +419,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             int dateColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_DATE_TO_READ);
             int notifColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
+            int timeColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NOTIF_TIME);
             int watchedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_READ);
             int archivedColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_ARCHIVED);
 
@@ -435,12 +439,15 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 String currentSynopsis = cursor.getString(synopsisColumnIndex);
 
                 String currentDate = cursor.getString(dateColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
                 Book book = new Book(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                book.setDateToRead(currentDate);
+                book.setTimeToRead(currentTime);
                 book.setArchived((n == 1)? true : false);
                 book.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(book);
@@ -470,6 +477,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 GameEntry.COLUMN_GAME_DATE_TO_PLAY,
                 GameEntry.COLUMN_GAME_NOTIF_SETTINGS,
+                GameEntry.COLUMN_GAME_NOTIF_TIME,
                 GameEntry.COLUMN_GAME_PLAYED,
                 GameEntry.COLUMN_GAME_ARCHIVED };
 
@@ -509,6 +517,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
             int dateColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
             int notifColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
+            int timeColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_NOTIF_TIME);
             int watchedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_PLAYED);
             int archivedColumnIndex = cursor.getColumnIndex(GameEntry.COLUMN_GAME_ARCHIVED);
 
@@ -529,11 +538,14 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
 
                 String currentDate = cursor.getString(dateColumnIndex);
                 String currentNotif = cursor.getString(notifColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
                 String currentWatched = cursor.getString(watchedColumnIndex);
                 String currentArchived = cursor.getString(archivedColumnIndex);
 
                 Game game = new Game(currentID, currentName, currentGenre, currentYear, currentDirector, currentDuration, currentProd, currentSynopsis);
                 int n = Integer.parseInt(currentArchived);
+                game.setDateToPlay(currentDate);
+                game.setTimeToPlay(currentTime);
                 game.setArchived((n == 1)? true : false);
                 game.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
                 entertainments.add(game);
