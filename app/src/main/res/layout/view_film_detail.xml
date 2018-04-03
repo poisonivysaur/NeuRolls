@@ -64,6 +64,7 @@
             android:id="@+id/item_date_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_border"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -209,11 +210,12 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/year"
                     tools:text="1h 53" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/year"
-                    android:text=" mins" />
+                    android:text=" mins"
+                    android:textColor="@color/year" />
 
             </LinearLayout>
 
