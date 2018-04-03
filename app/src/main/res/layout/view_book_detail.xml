@@ -71,6 +71,7 @@
                 android:id="@+id/scheduled_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -108,13 +109,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="10dp"
-                android:background="@color/dividerColor" />
+                android:layout_margin="10dp" />
 
             <LinearLayout
                 android:id="@+id/notif_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/custom_border"
                 android:orientation="horizontal">
 
                 <ImageView
