@@ -1,10 +1,13 @@
 package com.werelit.neurolls.neurolls;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -43,10 +46,12 @@ import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class ViewMediaDetailsActivity extends AppCompatActivity{
 
@@ -59,12 +64,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     private boolean isForAdding = false;
     private Bundle bundle;
     private int mediaCategory;
-    private NotificationSettings notifSettings;
+    private ArrayList<NotificationSettings> notifSettings;
     private String notifID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notifSettings = new ArrayList<>();
         setupUI();
         setupClickListeners();
     }
@@ -90,6 +96,17 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_archive) {
             updateMedia(getContentUri());
+
+            Intent notificationIntent = new Intent(this, NotificationPublisher.class);///////////////////////////////////////////////////////
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1); //adds notificationpublisher id constant 1
+            notificationIntent.setAction(notifID);
+
+            //notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //adds the created notification
+            //PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
         }
         else if(item.getItemId() == R.id.action_share) {
             Intent shareIntent = new Intent();
@@ -104,7 +121,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         }
         else if(item.getItemId() == R.id.action_save) {
             saveMedia();
-            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
@@ -150,6 +166,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView duration = (TextView) findViewById(R.id.duration);
                 TextView production = (TextView) findViewById(R.id.production);
                 TextView synopsis = (TextView) findViewById(R.id.synopsis);
+                TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
+                TextView notif_days_before_text_view = findViewById(R.id.notif_days_before_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Film object
@@ -157,14 +176,33 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int filmDuration = bundle.getInt(MediaKeys.FILM_DURATION_KEY);
                 String filmProduction = bundle.getString(MediaKeys.FILM_PRODUCTION_KEY);
                 String filmSynopsis = bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY);
+                String date = bundle.getString(FilmEntry.COLUMN_FILM_DATE_TO_WATCH);
+                String time = bundle.getString(FilmEntry.COLUMN_FILM_NOTIF_TIME);
 
-                notifID = bundle.getString(MediaKeys.NOTIFICATION_ID);///////////////////////////////////////////////////////////////
+                notifID = bundle.getString(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS);///////////////////////////////////////////////////////////////
 
                 // set the views of the xml layout to the attribute values
                 duration.setText("" + filmDuration);
                 director.setText(filmDirector);
                 production.setText(filmProduction);
                 synopsis.setText(filmSynopsis);
+
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
+                else
+                    date_text_view.setText(date);
+
+                if (time == null || time.isEmpty()) {
+                    notif_days_before_text_view.setText("0");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else {
+                    notif_days_before_text_view.setText(time.substring(0, 1));
+                    notif_time_text_view.setText(time.substring(1));
+                }
+
 
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_movie_black_24dp);
@@ -181,6 +219,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView pages = (TextView) findViewById(R.id.pages);
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView description = (TextView) findViewById(R.id.description);
+                TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
+                TextView notif_days_before_text_view = findViewById(R.id.notif_days_before_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Book object
@@ -188,12 +229,33 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 int bookPages = bundle.getInt(MediaKeys.BOOK_PAGES_KEY);
                 String bookPublisher = bundle.getString(MediaKeys.BOOK_PUBLISHER_KEY);
                 String bookDescription = bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY);
+                String date = bundle.getString(BookEntry.COLUMN_BOOK_DATE_TO_READ);
+                String time = bundle.getString(BookEntry.COLUMN_BOOK_NOTIF_TIME);
+
+                notifID = bundle.getString(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS);
 
                 // set the views of the xml layout to the attribute values
                 author.setText(bookAuthor);
                 pages.setText("" + bookPages);
                 publisher.setText(bookPublisher);
                 description.setText(bookDescription);
+
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
+                else
+                    date_text_view.setText(date);
+
+                if (time == null || time.isEmpty()) {
+                    notif_days_before_text_view.setText("0");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else {
+                    notif_days_before_text_view.setText(time.substring(0, 1));
+                    notif_time_text_view.setText(time.substring(1));
+                }
+
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_book_black_24dp);
                     image.setBackgroundColor(getResources().getColor(R.color.books));
@@ -209,6 +271,9 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 TextView publisher = (TextView) findViewById(R.id.publisher);
                 TextView series = (TextView) findViewById(R.id.series);
                 TextView storyline = (TextView) findViewById(R.id.storyline);
+                TextView date_text_view = findViewById(R.id.date_text_view);
+                TextView notif_time_text_view = findViewById(R.id.notif_time_text_view);
+                TextView notif_days_before_text_view = findViewById(R.id.notif_days_before_text_view);
                 image = (ImageView) findViewById(R.id.image);
 
                 // get the attributes for a Game object
@@ -216,12 +281,33 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 String gamePublisher = bundle.getString(MediaKeys.GAME_PUBLISHER_KEY);
                 String gameSeries = bundle.getString(MediaKeys.GAME_SERIES_KEY);
                 String gameStoryline = bundle.getString(MediaKeys.GAME_STORYLINE_KEY);
+                String date = bundle.getString(GameEntry.COLUMN_GAME_DATE_TO_PLAY);
+                String time = bundle.getString(GameEntry.COLUMN_GAME_NOTIF_TIME);
+
+                notifID = bundle.getString(GameEntry.COLUMN_GAME_NOTIF_SETTINGS);
 
                 // set the views of the xml layout to the attribute values
                 platform.setText(gamePlatform);
                 publisher.setText(gamePublisher);
                 series.setText(gameSeries);
                 storyline.setText(gameStoryline);
+
+                if (date == null || date.isEmpty()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+                    date_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                }
+                else
+                    date_text_view.setText(date);
+
+                if (time == null || time.isEmpty()) {
+                    notif_days_before_text_view.setText("0");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                } else {
+                    notif_days_before_text_view.setText(time.substring(0, 1));
+                    notif_time_text_view.setText(time.substring(1));
+                }
+
                 if(!hasImage) {
                     image.setImageResource(R.drawable.ic_videogame_asset_black_24dp);
                     image.setBackgroundColor(getResources().getColor(R.color.games));
@@ -307,14 +393,31 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         //Calls and displays NotificationSettings dialog
         if (view == findViewById(R.id.notif_settings)) {
             FragmentManager fm = getSupportFragmentManager();
-            notifSettings = new NotificationSettings();
-            notifSettings.show(fm, "Notification Settings");
-            notifSettings.setMediaName(name.getText().toString());////////////////////////////////////////////////
-            notifSettings.setNotifID(notifID);
-            notifSettings.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+            NotificationSettings notif;
 
-            notifID = null;
+            notif = new NotificationSettings();
+            notif.show(fm, "Notification Settings");
+            notif.setMediaName(name.getText().toString());////////////////////////////////////////////////
+            notif.setNotifID(notifID);
+            notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+            notifSettings.add(notif);
+            //notifID = null;
         }
+    }
+
+    private void createStartNotif() {
+        FragmentManager fm = getSupportFragmentManager();
+        NotificationSettings notif;
+
+        notif = new NotificationSettings();
+        //notif.show(fm, "Notification Settings");
+        notif.setMediaName(name.getText().toString());////////////////////////////////////////////////
+        notif.setNotifID(notifID);
+        notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
+
+        notifSettings.add(notif);
+        //notifID = null;
     }
 
     private void saveFilm(){
@@ -333,9 +436,15 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(FilmEntry.COLUMN_FILM_SYNOPSIS, bundle.getString(MediaKeys.FILM_SYNOPSIS_KEY));
 
         // TODO get text from UI for notif settings and date picker
+        TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
+        TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
+        //if (date.getText().toString().equals("today"))
+        Log.d("Date", date.getText().toString());
+        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
 
-        values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, "2018-03-10");
-        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, bundle.getString(MediaKeys.NOTIFICATION_ID));////////////////////////////////////////////////////////////////////////////////////
+        values.put(FilmEntry.COLUMN_FILM_NOTIF_SETTINGS, notifID);////////////////////////////////////////////////////////////////////////////////////
 
         // Determine if this is a new or existing film by checking if isForAdding is true or false
 
@@ -363,8 +472,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(BookEntry.COLUMN_BOOK_DESCRIPTION, bundle.getString(MediaKeys.BOOK_DESCRIPTION_KEY));
 
         // TODO
-        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, "2018-03-10");
-        values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, "test notif settings");
+        TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
+        TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
+        //if (date.getText().toString().equals("today"))
+        Log.d("Date", date.getText().toString());
+        values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date.getText().toString());
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
+        values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, notifID);
 
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
         showFeedback(newUri);
@@ -386,8 +501,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         values.put(GameEntry.COLUMN_GAME_STORYLINE, bundle.getString(MediaKeys.GAME_STORYLINE_KEY));
 
         // TODO
-        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, "2018-03-10");
-        values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, "test notif settings");
+        TextView date = findViewById(R.id.date_text_view);
+        TextView time = findViewById(R.id.notif_time_text_view);
+        TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
+        //if (date.getText().toString().equals("today"))
+        Log.d("Date", date.getText().toString());
+        values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date.getText().toString());
+        values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
+        values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, notifID);
 
         Uri newUri = getContentResolver().insert(GameEntry.CONTENT_URI, values);
         showFeedback(newUri);
@@ -406,6 +527,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         if (releaseYear.compareTo(today) <= 0) {
             System.out.println("earlier");
+            if (notifSettings.size() == 0) {
+                createStartNotif();
+            }
+            notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), this), notifSettings.get(notifSettings.size() - 1).getDelay(), this);
+            notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
+            notifSettings.remove(0);
+
             switch (mediaCategory){
                 case Media.CATEGORY_FILMS:
                     // Save film to db
@@ -455,6 +583,38 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
         }
         finish();
+    }
+
+    public void saveDateTime(String date, String time) {
+        ContentValues values = new ContentValues();
+
+        switch (mediaCategory) {
+            case CategoryAdapter.CATEGORY_FILMS:
+                values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date);
+                values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, time);
+                break;
+            case CategoryAdapter.CATEGORY_BOOKS:
+                values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date);
+                values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, time);
+                break;
+            case CategoryAdapter.CATEGORY_GAMES:
+                values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date);
+                values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, time);
+                break;
+        }
+
+        Uri currentUri = getCurrentUri(getContentUri());
+
+        int rowsAffected = getContentResolver().update(currentUri, values, null, null);
+
+        // Show a toast message depending on whether or not the update was successful.
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void deleteMedia(Uri uri){
