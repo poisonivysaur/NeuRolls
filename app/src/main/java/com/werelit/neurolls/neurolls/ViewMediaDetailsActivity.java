@@ -365,6 +365,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
                                 //String month = c.getDisplayName(monthOfYear, Calendar.SHORT, Locale.getDefault());
+
                                 c.set(year, monthOfYear, dayOfMonth);
 
                                 //get selected date from datepicker dialog
@@ -373,6 +374,12 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 //date format in US: e.g. September 14, 1998
                                 DateFormat dateformat_US = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
                                 String StringDateformat_US = dateformat_US.format(SelectedDate);
+
+                                if (SelectedDate.before(Calendar.getInstance().getTime())) {
+                                    Toast.makeText(getApplicationContext(), "Date is before today", Toast.LENGTH_SHORT).show();
+                                    StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
+                                }
+
                                 dateTextView.setText(StringDateformat_US);
                             }
                         }, mYear, mMonth, mDay);

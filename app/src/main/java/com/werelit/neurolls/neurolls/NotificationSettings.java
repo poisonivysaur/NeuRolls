@@ -71,47 +71,65 @@ public class NotificationSettings extends DialogFragment {
 
                         days = spinner.getSelectedItem().toString();
                         time = tv.getText().toString();
-
                         String hrs = time.substring(0, time.indexOf(":"));
                         String mins = time.substring(time.indexOf(":") + 1);
 
-                        //gets the current date and time
-                        Calendar c = Calendar.getInstance();
-                        int iYear = c.get(Calendar.YEAR);
-                        int iMonths = c.get(Calendar.MONTH);
-                        int iDays = c.get(Calendar.DAY_OF_MONTH);
-                        int iHrs = c.get(Calendar.HOUR_OF_DAY);
-                        int iMins = c.get(Calendar.MINUTE);
-                        int iSecs = c.get(Calendar.SECOND);
-
-                        //gets the sched date
                         String date = etDate.getText().toString();
                         Calendar cal = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
 
                         try {
                             cal.setTime(sdf.parse(date));
+                            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hrs));
+                            cal.set(Calendar.MINUTE, Integer.parseInt(mins));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        long yearsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.YEAR) - iYear) * c.getActualMaximum(Calendar.DAY_OF_YEAR));
-                        long monthsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.MONTH) - iMonths) * c.getActualMaximum(Calendar.MONTH));
-                        long daysToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.DAY_OF_MONTH) - Integer.parseInt(days)) - iDays);
+                        cal.add(Calendar.DATE, -Integer.parseInt(days));
 
-                        //converts selected date and time to milliseconds
-                        long selectedMins = TimeUnit.MINUTES.toMillis(Integer.parseInt(mins));
-                        long selectedHrs = TimeUnit.HOURS.toMillis(Integer.parseInt(hrs));
+                        if (cal.getTime().before(Calendar.getInstance().getTime())) {
+                            Toast.makeText(getContext(), "Notif date is before today" + cal.getTime(), Toast.LENGTH_SHORT).show();
+                        } else {
 
-                        //converts current date and time to milliseconds
-                        long currentHrs = TimeUnit.HOURS.toMillis(iHrs);
-                        long currentMins = TimeUnit.MINUTES.toMillis(iMins);
-                        long currentSecs = TimeUnit.SECONDS.toMillis(iSecs);
+                            //gets the current date and time
+                            Calendar c = Calendar.getInstance();
+                            int iYear = c.get(Calendar.YEAR);
+                            int iMonths = c.get(Calendar.MONTH);
+                            int iDays = c.get(Calendar.DAY_OF_MONTH);
+                            int iHrs = c.get(Calendar.HOUR_OF_DAY);
+                            int iMins = c.get(Calendar.MINUTE);
+                            int iSecs = c.get(Calendar.SECOND);
 
-                        //computes for the notification delay
-                        long minsToMillis = selectedMins - currentMins;
-                        long hrsToMillis = selectedHrs - currentHrs;
-                        long secsToMillis = 60 - currentSecs;
+                        /*//gets the sched date
+                        String date = etDate.getText().toString();
+                        Calendar cal = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+
+
+                        try {
+                            cal.setTime(sdf.parse(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }*/
+
+                            long yearsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.YEAR) - iYear) * c.getActualMaximum(Calendar.DAY_OF_YEAR));
+                            long monthsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.MONTH) - iMonths) * c.getActualMaximum(Calendar.MONTH));
+                            long daysToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.DAY_OF_MONTH) - Integer.parseInt(days)) - iDays);
+
+                            //converts selected date and time to milliseconds
+                            long selectedMins = TimeUnit.MINUTES.toMillis(Integer.parseInt(mins));
+                            long selectedHrs = TimeUnit.HOURS.toMillis(Integer.parseInt(hrs));
+
+                            //converts current date and time to milliseconds
+                            long currentHrs = TimeUnit.HOURS.toMillis(iHrs);
+                            long currentMins = TimeUnit.MINUTES.toMillis(iMins);
+                            long currentSecs = TimeUnit.SECONDS.toMillis(iSecs);
+
+                            //computes for the notification delay
+                            long minsToMillis = selectedMins - currentMins;
+                            long hrsToMillis = selectedHrs - currentHrs;
+                            long secsToMillis = 60 - currentSecs;
 
                         /*Log.d("DAYS", "" + daysToMillis);
                         Log.d("HRS", "" + hrsToMillis);
@@ -120,22 +138,23 @@ public class NotificationSettings extends DialogFragment {
                         Log.d("MONTHS", "" + monthsToMillis);
                         Log.d("SECONDS", "" + secsToMillis);*/
 
-                        delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
-                        //Log.d("TOTAL", delay + "");
+                            delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
+                            //Log.d("TOTAL", delay + "");
 
-                        if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
-                            scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
-                            ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
-                            //Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
-                        }
+                            if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
+                                scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
+                                ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
+                                //Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
+                            }
 
-                        etTime.setText(time);
-                        etDays.setText(days);
+                            etTime.setText(time);
+                            etDays.setText(days);
                         /*SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt("count", count);
                         editor.apply();
                         Log.d("WORKING?", "count saved" + count);*/
+                        }
                     }
                 });
 
