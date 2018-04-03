@@ -365,10 +365,23 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
                                 //String month = c.getDisplayName(monthOfYear, Calendar.SHORT, Locale.getDefault());
+                                /*TextView time_text_view = findViewById(R.id.notif_time_text_view);
+                                TextView daysbefore_text_view = findViewById(R.id.notif_days_before_text_view);
+
+                                String time = time_text_view.getText().toString();
+
+                                String hrs = time.substring(0, time.indexOf(":"));
+                                String mins = time.substring(time.indexOf(":") + 1);
+                                int daysbefore = Integer.parseInt(daysbefore_text_view.getText().toString());
 
                                 c.set(year, monthOfYear, dayOfMonth);
+                                c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hrs));
+                                c.set(Calendar.MINUTE, Integer.parseInt(mins));
 
-                                //get selected date from datepicker dialog
+                                c.add(Calendar.DATE, -daysbefore);
+                                c.add(Calendar.SECOND, 59);
+
+                                //get selected date from datepicker dialog*/
                                 Date SelectedDate = c.getTime();
 
                                 //date format in US: e.g. September 14, 1998
@@ -376,7 +389,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 String StringDateformat_US = dateformat_US.format(SelectedDate);
 
                                 if (SelectedDate.before(Calendar.getInstance().getTime())) {
-                                    Toast.makeText(getApplicationContext(), "Date is before today", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Date is before today" + SelectedDate, Toast.LENGTH_LONG).show();
                                     StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
                                 }
 

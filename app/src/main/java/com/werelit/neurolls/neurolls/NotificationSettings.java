@@ -143,18 +143,19 @@ public class NotificationSettings extends DialogFragment {
 
                             if (!isForAdding) {///////////////////////////////////////////////////////////////////////////////////
                                 scheduleNotification(getNotification(mediaName, getContext()), delay, getContext());
-                                ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, time);
+                                ((ViewMediaDetailsActivity) getContext()).saveDateTime(date, days + time);
                                 //Toast.makeText(getContext(), mediaName + " in " + delay, Toast.LENGTH_SHORT).show();
                             }
 
-                            etTime.setText(time);
-                            etDays.setText(days);
                         /*SharedPreferences settings = getContext().getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt("count", count);
                         editor.apply();
                         Log.d("WORKING?", "count saved" + count);*/
                         }
+
+                        etTime.setText(time);
+                        etDays.setText(days);
                     }
                 });
 
