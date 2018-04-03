@@ -608,7 +608,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
         */
     }
-    
+
     private void shouldDisplayEmptyView(){
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
