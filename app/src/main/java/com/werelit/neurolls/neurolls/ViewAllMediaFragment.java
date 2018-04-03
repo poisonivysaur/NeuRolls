@@ -553,9 +553,10 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-    /*
+
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        /*
         if (viewHolder instanceof MediaAdapter.MyViewHolder) {
             // get the removed item name to display it in snack bar
             String name = entertainments.get(viewHolder.getAdapterPosition()).getmMediaName();
@@ -605,8 +606,9 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 snackbar.show();
             }
         }
+        */
     }
-    */
+    
     private void shouldDisplayEmptyView(){
         if(entertainments.isEmpty()){
             mRecyclerView.setVisibility(View.GONE);
