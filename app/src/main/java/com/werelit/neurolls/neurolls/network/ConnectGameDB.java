@@ -10,8 +10,8 @@ public class ConnectGameDB {
 
     private static final String TAG = ConnectGameDB.class.getSimpleName();
 
-    //public static final String USER_KEY = "dfdc187e8ee5ee5673d66e5b5435a37d";
-    public static final String USER_KEY = "a2fc64829017cd594a7ebecaf2959029";
+    public static final String USER_KEY = "dfdc187e8ee5ee5673d66e5b5435a37d";
+    //public static final String USER_KEY = "a2fc64829017cd594a7ebecaf2959029";
     public static final String API_ENDPOINT = "https://api-endpoint.igdb.com";
 
     public static final String GAME = "/games";
