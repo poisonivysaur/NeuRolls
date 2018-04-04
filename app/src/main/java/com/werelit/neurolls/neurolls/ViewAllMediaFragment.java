@@ -43,7 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class ViewAllMediaFragment extends Fragment{//} implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     public static final String LOG_TAG = ViewAllMediaFragment.class.getSimpleName();
     /** The list containing Media objects */                    private List<Media> entertainments;
@@ -153,8 +153,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+        //ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        //new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
 
 
         // add a click listener to go to the restaurant details for editing an existing item
@@ -553,7 +553,7 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
         }
     }
 
-
+    /*
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         /*
@@ -606,8 +606,8 @@ public class ViewAllMediaFragment extends Fragment implements RecyclerItemTouchH
                 snackbar.show();
             }
         }
-        */
-    }
+
+    }*/
 
     private void shouldDisplayEmptyView(){
         if(entertainments.isEmpty()){
