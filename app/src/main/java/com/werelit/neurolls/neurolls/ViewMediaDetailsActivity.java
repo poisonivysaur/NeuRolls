@@ -365,7 +365,8 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
                                 //String month = c.getDisplayName(monthOfYear, Calendar.SHORT, Locale.getDefault());
-                                /*TextView time_text_view = findViewById(R.id.notif_time_text_view);
+
+                                TextView time_text_view = findViewById(R.id.notif_time_text_view);
                                 TextView daysbefore_text_view = findViewById(R.id.notif_days_before_text_view);
 
                                 String time = time_text_view.getText().toString();
@@ -377,21 +378,32 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 c.set(year, monthOfYear, dayOfMonth);
                                 c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hrs));
                                 c.set(Calendar.MINUTE, Integer.parseInt(mins));
+                                Calendar copy = c;
 
                                 c.add(Calendar.DATE, -daysbefore);
-                                c.add(Calendar.SECOND, 59);
+                                //c.add(Calendar.SECOND, 59);
 
-                                //get selected date from datepicker dialog*/
+                                //get selected date from datepicker dialog
                                 Date SelectedDate = c.getTime();
 
                                 //date format in US: e.g. September 14, 1998
                                 DateFormat dateformat_US = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
-                                String StringDateformat_US = dateformat_US.format(SelectedDate);
+                                String StringDateformat_US = dateformat_US.format(copy.getTime());
+
+                                /*Calendar cal = Calendar.getInstance();
+                                int curyr = cal.get(Calendar.YEAR);
+                                int curmon = cal.get(Calendar.MONTH);
+                                int curday = cal.get(Calendar.DAY_OF_MONTH);*/
 
                                 if (SelectedDate.before(Calendar.getInstance().getTime())) {
-                                    Toast.makeText(getApplicationContext(), "Date is before today" + SelectedDate, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Date is before today" + SelectedDate, Toast.LENGTH_SHORT).show();
                                     StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
                                 }
+
+                                /*if (year < curyr || monthOfYear < curmon || dayOfMonth < curday) {
+                                    Toast.makeText(getApplicationContext(), "Date is before today" + SelectedDate, Toast.LENGTH_SHORT).show();
+                                    StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
+                                }*/
 
                                 dateTextView.setText(StringDateformat_US);
                             }

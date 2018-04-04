@@ -160,7 +160,12 @@ public class NotificationSettings extends DialogFragment {
                 });
 
         tv = view.findViewById(R.id.time);
-        tv.setText(etTime.getText().toString());
+
+        String defaulttime = etTime.getText().toString();
+        int hrs = Integer.parseInt(defaulttime.substring(0, defaulttime.indexOf(":")));
+        int mins = Integer.parseInt(defaulttime.substring(defaulttime.indexOf(":") + 1)) + 1;
+
+        tv.setText(hrs + ":" + mins);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
