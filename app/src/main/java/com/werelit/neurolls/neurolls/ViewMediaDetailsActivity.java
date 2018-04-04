@@ -378,7 +378,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 c.set(year, monthOfYear, dayOfMonth);
                                 c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hrs));
                                 c.set(Calendar.MINUTE, Integer.parseInt(mins));
-                                Calendar copy = c;
+                                Calendar copy = (Calendar) c.clone();
 
                                 c.add(Calendar.DATE, -daysbefore);
                                 //c.add(Calendar.SECOND, 59);
@@ -398,6 +398,16 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                 if (SelectedDate.before(Calendar.getInstance().getTime())) {
                                     Toast.makeText(getApplicationContext(), "Date is before today" + SelectedDate, Toast.LENGTH_SHORT).show();
                                     StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
+                                    dateTextView.setText(StringDateformat_US);
+                                } else {
+                                    dateTextView.setText(StringDateformat_US);
+                                    createStartNotif();
+                                    if (!isForAdding) {
+                                        notifSettings.get(notifSettings.size() - 1).scheduleNotification(notifSettings.get(notifSettings.size() - 1).getNotification(name.getText().toString(), getApplicationContext()), notifSettings.get(notifSettings.size() - 1).getDelay(), getApplicationContext());
+                                        notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
+                                        notifSettings.remove(0);
+                                    }
+                                    saveDateTime(StringDateformat_US, daysbefore_text_view.getText().toString() + time);
                                 }
 
                                 /*if (year < curyr || monthOfYear < curmon || dayOfMonth < curday) {
@@ -405,7 +415,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                                     StringDateformat_US = dateformat_US.format(Calendar.getInstance().getTime());
                                 }*/
 
-                                dateTextView.setText(StringDateformat_US);
                             }
                         }, mYear, mMonth, mDay);
                 if(!isArchived){
@@ -453,8 +462,11 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
 
         notif = new NotificationSettings();
         //notif.show(fm, "Notification Settings");
+        //notif.dismiss();
         notif.setMediaName(name.getText().toString());////////////////////////////////////////////////
         notif.setNotifID(notifID);
+        notif.setTextViews((TextView) findViewById(R.id.date_text_view), (TextView) findViewById(R.id.notif_time_text_view), (TextView) findViewById(R.id.notif_days_before_text_view));
+        notif.computeDelay();
         notif.setForAdding(isForAdding);///////////////////////////////////////////////////////////////
 
         notifSettings.add(notif);
@@ -642,12 +654,14 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         int rowsAffected = getContentResolver().update(currentUri, values, null, null);
 
         // Show a toast message depending on whether or not the update was successful.
-        if (rowsAffected == 0) {
-            // If no rows were affected, then there was an error with the update.
-            Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
+        if (!isForAdding) {
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_update_media_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_update_media_successful), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

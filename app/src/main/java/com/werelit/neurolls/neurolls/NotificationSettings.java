@@ -91,6 +91,7 @@ public class NotificationSettings extends DialogFragment {
                         if (cal.getTime().before(Calendar.getInstance().getTime())) {
                             Toast.makeText(getContext(), "Notif date is before today" + cal.getTime(), Toast.LENGTH_SHORT).show();
                         } else {
+                            cal.add(Calendar.DATE, Integer.parseInt(days));
 
                             //gets the current date and time
                             Calendar c = Calendar.getInstance();
@@ -105,7 +106,6 @@ public class NotificationSettings extends DialogFragment {
                         String date = etDate.getText().toString();
                         Calendar cal = Calendar.getInstance();
                         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
-
 
                         try {
                             cal.setTime(sdf.parse(date));
@@ -152,10 +152,9 @@ public class NotificationSettings extends DialogFragment {
                         editor.putInt("count", count);
                         editor.apply();
                         Log.d("WORKING?", "count saved" + count);*/
+                            etTime.setText(time);
+                            etDays.setText(days);
                         }
-
-                        etTime.setText(time);
-                        etDays.setText(days);
                     }
                 });
 
@@ -250,6 +249,7 @@ public class NotificationSettings extends DialogFragment {
         //PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT).cancel();
         //sets notification runtime in milliseconds
+        //Toast.makeText(context, "" + delay, Toast.LENGTH_LONG).show();
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         //gets system alarm service
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -301,10 +301,25 @@ public class NotificationSettings extends DialogFragment {
         Log.d("onStop", "count saved" + count);
     }*/
 
-    /*public long computeDelay() {
+    public void computeDelay() {
+
+        String time = etTime.getText().toString();
+        String days = etDays.getText().toString();
 
         String hrs = time.substring(0, time.indexOf(":"));
         String mins = time.substring(time.indexOf(":") + 1);
+
+        String date = etDate.getText().toString();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+
+        try {
+            cal.setTime(sdf.parse(date));
+            /*cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hrs));
+            cal.set(Calendar.MINUTE, Integer.parseInt(mins));*/
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //gets the current date and time
         Calendar c = Calendar.getInstance();
@@ -315,16 +330,7 @@ public class NotificationSettings extends DialogFragment {
         int iMins = c.get(Calendar.MINUTE);
         int iSecs = c.get(Calendar.SECOND);
 
-        //gets the sched date
-        String date = etDate.getText().toString();
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
-
-        try {
-            cal.setTime(sdf.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //Log.d("DAYOFMONTH", "" + TimeUnit.DAYS.toMillis(((cal.get(Calendar.DAY_OF_MONTH) - Integer.parseInt(days)) - iDays)));
 
         long yearsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.YEAR) - iYear) * c.getActualMaximum(Calendar.DAY_OF_YEAR));
         long monthsToMillis = TimeUnit.DAYS.toMillis((cal.get(Calendar.MONTH) - iMonths) * c.getActualMaximum(Calendar.MONTH));
@@ -344,15 +350,19 @@ public class NotificationSettings extends DialogFragment {
         long hrsToMillis = selectedHrs - currentHrs;
         long secsToMillis = 60 - currentSecs;
 
-        Log.d("DAYS", "" + daysToMillis);
+        /*Log.d("DAYS", "" + daysToMillis);
         Log.d("HRS", "" + hrsToMillis);
         Log.d("MINS", "" + minsToMillis);
         Log.d("YEARS", "" + yearsToMillis);
         Log.d("MONTHS", "" + monthsToMillis);
-        Log.d("SECONDS", "" + secsToMillis);
+        Log.d("SECONDS", "" + secsToMillis);*/
 
         delay = yearsToMillis + monthsToMillis + daysToMillis + minsToMillis + hrsToMillis + secsToMillis;
-        Log.d("TOTAL", delay + "");
-        return delay;
-    }*/
+    }
+
+    public void setTextViews(TextView etDate, TextView etTime, TextView etDays) {
+        this.etDate = etDate;
+        this.etTime = etTime;
+        this.etDays = etDays;
+    }
 }
