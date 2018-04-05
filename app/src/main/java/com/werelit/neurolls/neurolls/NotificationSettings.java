@@ -89,7 +89,7 @@ public class NotificationSettings extends DialogFragment {
                         cal.add(Calendar.DATE, -Integer.parseInt(days));
 
                         if (cal.getTime().before(Calendar.getInstance().getTime())) {
-                            Toast.makeText(getContext(), "Notif date is before today" + cal.getTime(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Notif date is before today", Toast.LENGTH_SHORT).show();
                         } else {
                             cal.add(Calendar.DATE, Integer.parseInt(days));
 
@@ -267,6 +267,8 @@ public class NotificationSettings extends DialogFragment {
 
         //sets notificationbuilder properties
         builder.setContentTitle("Time to check this out!");
+        builder.setShowWhen(true);
+        builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(pendInt);
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_movie_filter);
