@@ -206,7 +206,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 if (time == null || time.isEmpty()) {
                     notif_days_before_text_view.setText("0");
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                    String currenttime = sdf.format(Calendar.getInstance().getTime());
+
+                    int hrs = Integer.parseInt(currenttime.substring(0, currenttime.indexOf(":")));
+                    int minutes = Integer.parseInt(currenttime.substring(currenttime.indexOf(":") + 1)) + 1;
+                    String mins = String.format(Locale.getDefault(), "%02d", minutes);
+
+                    notif_time_text_view.setText(hrs + ":" + mins);
                 } else {
                     notif_days_before_text_view.setText(time.substring(0, 1));
                     notif_time_text_view.setText(time.substring(1));
@@ -259,7 +265,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 if (time == null || time.isEmpty()) {
                     notif_days_before_text_view.setText("0");
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                    String currenttime = sdf.format(Calendar.getInstance().getTime());
+
+                    int hrs = Integer.parseInt(currenttime.substring(0, currenttime.indexOf(":")));
+                    int minutes = Integer.parseInt(currenttime.substring(currenttime.indexOf(":") + 1)) + 1;
+                    String mins = String.format(Locale.getDefault(), "%02d", minutes);
+
+                    notif_time_text_view.setText(hrs + ":" + mins);
                 } else {
                     notif_days_before_text_view.setText(time.substring(0, 1));
                     notif_time_text_view.setText(time.substring(1));
@@ -311,7 +323,13 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
                 if (time == null || time.isEmpty()) {
                     notif_days_before_text_view.setText("0");
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-                    notif_time_text_view.setText("" + sdf.format(Calendar.getInstance().getTime()));
+                    String currenttime = sdf.format(Calendar.getInstance().getTime());
+
+                    int hrs = Integer.parseInt(currenttime.substring(0, currenttime.indexOf(":")));
+                    int minutes = Integer.parseInt(currenttime.substring(currenttime.indexOf(":") + 1)) + 1;
+                    String mins = String.format(Locale.getDefault(), "%02d", minutes);
+
+                    notif_time_text_view.setText(hrs + ":" + mins);
                 } else {
                     notif_days_before_text_view.setText(time.substring(0, 1));
                     notif_time_text_view.setText(time.substring(1));

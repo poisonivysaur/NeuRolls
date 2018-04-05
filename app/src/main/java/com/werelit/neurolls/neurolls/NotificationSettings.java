@@ -162,7 +162,7 @@ public class NotificationSettings extends DialogFragment {
 
         String defaulttime = etTime.getText().toString();
         int hrs = Integer.parseInt(defaulttime.substring(0, defaulttime.indexOf(":")));
-        int minutes = Integer.parseInt(defaulttime.substring(defaulttime.indexOf(":") + 1)) + 1;
+        int minutes = Integer.parseInt(defaulttime.substring(defaulttime.indexOf(":") + 1));
         String mins = String.format(Locale.getDefault(), "%02d", minutes);
 
         tv.setText(hrs + ":" + mins);
