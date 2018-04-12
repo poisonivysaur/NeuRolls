@@ -138,7 +138,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
             completeFilm = JsonConverter.revisedSpecificFilm(data);
             completeFilm.setThumbnailBmp(filmBitmap);
 
-            Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
+            //Log.e(LOG_TAG, "RETRIEVING FILM DETAILS.......");
             retrieveFilmDetails(completeFilm);
         }
         else {
@@ -416,7 +416,7 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
         // Make a bundle containing the current media details
         bundle = new Bundle();
 
-        Log.e(LOG_TAG, "Film bitmap is: "+film.getThumbnailBmp());
+        //Log.e(LOG_TAG, "Film bitmap is: "+film.getThumbnailBmp());
 
         prepareMediaDetails(film);
         prepareFilmDetails(film);
@@ -783,10 +783,10 @@ public class SearchMediaActivity extends AppCompatActivity implements LoaderMana
 
     public static void setBitmapImage(String id, Bitmap bitmap){
         if(!hasSearchedFilmAlready){
-            Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
+            //Log.e(LOG_TAG, "media list length: "+mediaList.size()+ " id from runnable: "+id);
             for(int i = 0; i < mediaList.size(); i++){
                 if(mediaList.get(i).getMediaID().equals(id)){
-                    Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
+                    //Log.e(LOG_TAG, "MEDIA ID: " + mediaList.get(i).getMediaID() + " id: "+id + " INDEX: "+i);
                     mediaList.get(i).setThumbnailBmp(bitmap);
                     mediaAdapter.notifyDataSetChanged();
                     break;
