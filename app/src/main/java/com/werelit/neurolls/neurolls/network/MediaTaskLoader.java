@@ -53,7 +53,7 @@ public class MediaTaskLoader extends AsyncTaskLoader<String> { // TODO change cl
             //Log.wtf(LOG_TAG, "MEDIA TASK LOADER IN HAS SEARCHED FILM ALREADY HAHAHA " + ConnectMovieDB.getMovieDetails(filmdID));
             return ConnectMovieDB.getMovieDetails(filmdID);
         }else {
-            Log.wtf(LOG_TAG, "GOING INSIDE ELSE ");
+            //Log.wtf(LOG_TAG, "GOING INSIDE ELSE ");
             // depending on what is the value of media category set in searchable activity
             switch (mediaCategory) {
                 case Media.CATEGORY_FILMS:

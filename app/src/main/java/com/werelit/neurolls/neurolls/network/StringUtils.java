@@ -13,7 +13,7 @@ public class StringUtils {
             return URLEncoder.encode(s, "UTF-8");
         }
         catch (UnsupportedEncodingException e) {
-            Log.wtf(TAG, "UTF-8 should always be supported", e);
+            //Log.wtf(TAG, "UTF-8 should always be supported", e);
             throw new RuntimeException("URLEncoder.encode() failed for " + s);
         }
     }

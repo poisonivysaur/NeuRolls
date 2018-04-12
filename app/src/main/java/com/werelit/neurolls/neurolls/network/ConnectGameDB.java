@@ -71,7 +71,7 @@ public class ConnectGameDB {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
             return "No Platform available";
         }
 
@@ -90,7 +90,7 @@ public class ConnectGameDB {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
             return "No Developer/Publisher Found";
         }
 
@@ -108,7 +108,7 @@ public class ConnectGameDB {
             releaseYear = getReleaseDate(releaseYear);
         }catch (JSONException e){
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
             return "No Release yet";
         }
 

@@ -84,7 +84,7 @@ public class ConnectMovieDB {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
         }
 
         return genre.substring(0, genre.length() - 1);
@@ -100,7 +100,7 @@ public class ConnectMovieDB {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
         }
 
         return genre.substring(0, genre.length() - 1);
@@ -116,7 +116,7 @@ public class ConnectMovieDB {
                 production += productions.getJSONObject(i).getString("name") + ",";
         }catch(Exception e){
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
         }
 
         return production.substring(0, production.length() - 1);
@@ -137,7 +137,7 @@ public class ConnectMovieDB {
             }
         }catch(Exception e){
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            //Log.e(TAG, e.toString());
             return "";
         }
 

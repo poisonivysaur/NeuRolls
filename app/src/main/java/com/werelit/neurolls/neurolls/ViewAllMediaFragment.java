@@ -88,7 +88,7 @@ public class ViewAllMediaFragment extends Fragment{//} implements RecyclerItemTo
         super.onResume();
         prepareMedias();
         mAdapter.notifyDataSetChanged();
-        Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
+        //Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
     }
 
     @Override

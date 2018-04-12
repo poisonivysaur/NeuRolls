@@ -197,12 +197,12 @@ public class NotificationSettings extends DialogFragment {
             // An item was selected. You can retrieve the selected item using
             // parent.getItemAtPosition(pos)
 
-            Log.d("SPINNER", "SELECTED " + parent.getItemAtPosition(pos));
+            //Log.d("SPINNER", "SELECTED " + parent.getItemAtPosition(pos));
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
-            Log.d("SPINNER", "NOTHING SELECTED");
+            //Log.d("SPINNER", "NOTHING SELECTED");
         }
     }
 
