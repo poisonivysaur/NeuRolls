@@ -1,5 +1,6 @@
 package com.werelit.neurolls.neurolls;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -62,6 +63,7 @@ public class ViewAllMediaFragment extends Fragment{//} implements RecyclerItemTo
 
     }
 
+    @SuppressLint("ValidFragment")
     public ViewAllMediaFragment(int mediaCategory){
         this.mediaCategory = mediaCategory;
     }
