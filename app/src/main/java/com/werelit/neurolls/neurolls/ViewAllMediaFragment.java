@@ -88,7 +88,6 @@ public class ViewAllMediaFragment extends Fragment{//} implements RecyclerItemTo
         super.onResume();
         prepareMedias();
         mAdapter.notifyDataSetChanged();
-        //Log.wtf(LOG_TAG, "VIEW ALL MEDIA FRAGMENT ON RESUME CALLED");
     }
 
     @Override
@@ -345,7 +344,6 @@ public class ViewAllMediaFragment extends Fragment{//} implements RecyclerItemTo
                 film.setArchived((n == 1)? true : false);
                 film.setNotifSettings(currentNotif);
                 film.setThumbnailBmp(BitmapConverter.stringToBitMap(currentImage));
-                //Log.wtf(LOG_TAG, "CURRENT ARCHIVED: " + n);
                 entertainments.add(film);
             }
         } finally {

@@ -55,6 +55,5 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         String time = hr + ":" + min;
         tv.setText(time);
-        //Log.d("ONTIMESET", "WORKING");
     }
 }

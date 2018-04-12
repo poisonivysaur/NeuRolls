@@ -127,9 +127,7 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
             notifID = notifSettings.get(notifSettings.size() - 1).getNotifID();
             notifSettings.remove(0);
 
-            //..Log.d("NOTIF", "" + notifID);
             saveMedia();
-            //notifSettings.scheduleNotification(notifSettings.getNotification(name.getText().toString(), this), notifSettings.getDelay(), this);
         }
         else if(item.getItemId() == R.id.action_cancel) {
             this.finish();
@@ -511,7 +509,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         TextView time = findViewById(R.id.notif_time_text_view);
         TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
         //if (date.getText().toString().equals("today"))
-        //Log.d("Date", date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_DATE_TO_WATCH, date.getText().toString());
         values.put(FilmEntry.COLUMN_FILM_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
 
@@ -547,7 +544,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         TextView time = findViewById(R.id.notif_time_text_view);
         TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
         //if (date.getText().toString().equals("today"))
-        //Log.d("Date", date.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_DATE_TO_READ, date.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
         values.put(BookEntry.COLUMN_BOOK_NOTIF_SETTINGS, notifID);
@@ -576,7 +572,6 @@ public class ViewMediaDetailsActivity extends AppCompatActivity{
         TextView time = findViewById(R.id.notif_time_text_view);
         TextView daysbefore = findViewById(R.id.notif_days_before_text_view);
         //if (date.getText().toString().equals("today"))
-        //Log.d("Date", date.getText().toString());
         values.put(GameEntry.COLUMN_GAME_DATE_TO_PLAY, date.getText().toString());
         values.put(GameEntry.COLUMN_GAME_NOTIF_TIME, daysbefore.getText().toString() + time.getText().toString());
         values.put(GameEntry.COLUMN_GAME_NOTIF_SETTINGS, notifID);

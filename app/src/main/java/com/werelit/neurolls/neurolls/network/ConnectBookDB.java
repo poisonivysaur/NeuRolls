@@ -45,7 +45,6 @@ public class ConnectBookDB {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
             return "No Authors found";
         }
 
@@ -63,7 +62,6 @@ public class ConnectBookDB {
                 genre += genres.getString(i) + "/";
         } catch (JSONException e) {
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
         }
         return genre.substring(0, genre.length() - 1);
     }

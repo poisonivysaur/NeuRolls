@@ -53,7 +53,6 @@ public class NetworkUtils {
 
             //System.out.println("Response Code: " + conn.getResponseCode());
             if(conn.getResponseCode() == 200){
-                //Log.wtf(TAG, "CODE IS 200");
                 inputStream = conn.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             }else{
@@ -70,7 +69,6 @@ public class NetworkUtils {
             }
             System.setProperty("http.proxyHost", "");
         }
-        //Log.wtf(TAG, jsonResponse);
         return jsonResponse;
     }
 

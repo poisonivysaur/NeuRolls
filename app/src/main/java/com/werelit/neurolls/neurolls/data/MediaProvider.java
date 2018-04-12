@@ -229,11 +229,9 @@ public class MediaProvider extends ContentProvider {
             status = database.insertOrThrow(tableName, null, values);
             // If the ID is -1, then the insertion failed. Log an error and return null.
         }catch (SQLiteConstraintException e){
-            //Log.e(LOG_TAG, "Media already exists!" + uri);
             return null;
         }
         if (status == -1) {
-            //Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
         // Notify all listeners that the data has changed for the media content URI

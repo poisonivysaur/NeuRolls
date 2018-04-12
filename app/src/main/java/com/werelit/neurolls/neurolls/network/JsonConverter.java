@@ -51,7 +51,6 @@ public class JsonConverter {
                 releaseDate = formatDate(releaseDate);
                 String genre = ConnectMovieDB.getGenre(curObj.getJSONArray("genre_ids"));
 
-                //Log.e(TAG, "STARTING THREAD...............");
                 String imageSource = "https://image.tmdb.org/t/p/w300" + curObj.getString("poster_path");
                 Thread t = new Thread(new BitmapDelivery(id, imageSource));
                 t.start();
@@ -65,7 +64,6 @@ public class JsonConverter {
             }
         }catch(JSONException e){
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
         }
 
         return films;
@@ -73,8 +71,6 @@ public class JsonConverter {
 
     public static ArrayList<Media> revisedBookSearchResult(String bookSearchJson){
         ArrayList<Media> books = new ArrayList<>();
-
-        //Log.v("Sample", "JSON RESPONSE = \n" + bookSearchJson);
 
         try {
             JSONArray items = new JSONObject(bookSearchJson).getJSONArray("items");
@@ -96,9 +92,7 @@ public class JsonConverter {
                     imageThumbnail = curObj.getJSONObject("volumeInfo").getJSONObject("imageLinks").optString("thumbnail");
                     if(TextUtils.isEmpty(imageThumbnail))
                         imageThumbnail = "";
-                    //Log.e("Hello World", "In if" + imageThumbnail);
                 }
-                //Log.e(TAG, "image thumbnail: " + imageThumbnail + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                 Thread t = new Thread(new BitmapDelivery(id, imageThumbnail));
                 t.start();
@@ -108,7 +102,6 @@ public class JsonConverter {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
         }
 
         return books;
@@ -145,7 +138,6 @@ public class JsonConverter {
                     String hash = curObj.optJSONObject("cover").getString("cloudinary_id") + ".jpg";
                     if(!TextUtils.isEmpty(hash)) {
                         imageThumb = ConnectGameDB.GAME_IMAGE_URL + hash;
-                        //Log.e(TAG, "image thumbnail: " + imageThumb);
                     }
                 }
 
@@ -159,7 +151,6 @@ public class JsonConverter {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
         }
 
         return games;
@@ -202,7 +193,6 @@ public class JsonConverter {
             //f.setThumbnailBmp(imageBmp);
         }catch(Exception e){
             e.printStackTrace();
-            //Log.e(TAG, e.toString());
         }
 
         return f;
@@ -241,7 +231,6 @@ public class JsonConverter {
         }
         @Override
         public void run() {
-            //Log.e(TAG, "RUNNING RUNNABLE!!!!!!!!!!!!!!");
             URL imageUrl = null;
             final Bitmap imageBmp;
             if(posterPath != null){
@@ -249,12 +238,10 @@ public class JsonConverter {
                     imageUrl = new URL(posterPath);
                     imageBmp = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
 
-                    //Log.e(TAG, "PASSING TO HANDLER.......... ");
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
 
-                            //Log.e(TAG, "ID passed in runnable: "+ strID + " bitmap is: " + imageBmp);
                             SearchMediaActivity.setBitmapImage(strID, imageBmp);
                         }
                     });
@@ -264,9 +251,6 @@ public class JsonConverter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
-                //Log.e(TAG, "Poster path is nul!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }
     }
